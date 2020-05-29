@@ -30,9 +30,12 @@
 	export default {
 		created() {
 			this.doKeyCode();
-			this.menuTrees = JSON.parse(this.store.state.loginData);
-			if(document.cookie.indexOf('lqcms_token')>-1) {
+
+			if(document.cookie.indexOf('lqcms_token') > -1 && this.store.state.loginData) {
+				this.menuTrees = JSON.parse(this.store.state.loginData);
 				this.$router.push('/template/List/' + this.menuTrees[0].name);
+			}else{
+				this.$store.commit(types.LOGOUT);
 			}
 
 		},
@@ -82,7 +85,9 @@
 		methods: {
 			//表单验证
 			doLogin(formName) {
+					this.$store.commit(types.LOGOUT);
 				const that = this;
+				
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						that.$post("/admin/v1/login", {
