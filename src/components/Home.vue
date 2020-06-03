@@ -130,7 +130,7 @@
 						if(response.retCode == 0) {
 							this.$store.commit(types.LOGOUT);
 							this.$router.replace({
-								path: '/login',
+								path: '/',
 								query: {
 									redirect: this.$router.currentRoute.path
 								}
