@@ -11,8 +11,8 @@
 		<el-card class="box-card">
 			<div class="align-center" style="width: 100%;">
 				<el-form ref="form" :model="form" :rules="rules" label-width="20%" label-position="right">
-					<el-form-item v-for="(item,index) in formData" :label="item.name+':'" :prop="item.name" :key="index">
-						<el-input style="width:400px" v-if="item.data.type=='input'" :placeholder="'Please fill in'+item.name" maxlength="" v-model="form[item.name]">
+					<el-form-item v-for="(item,index) in formData" :label="item&&item.name+':'" :prop="item&&item.name" :key="index" v-if="item">
+						<el-input style="width:400px" v-if="item.data.type=='input'" :placeholder="'Please fill in '+item.name" maxlength="" v-model="form[item.name]">
 						</el-input>
 						<el-tree :default-expand-all="true" v-if="item.data.type=='tree'" ref="tree" :props="defaultProps" style="width:400px" :data="item.data.source[0].name?item.data.source:[]" :key="item.data.id" :highlight-current="true" node-key="id" :label="item.name" :value="item.id" accordion @node-click="handleNodeClick">
 						</el-tree>
@@ -449,9 +449,10 @@
 		height: 128px;
 		display: block;
 	}
-	
-	/deep/ .w-e-menu,
-	/deep/ .w-e-text-container {
-		z-index: 1000!important;
+	/deep/ .w-e-text-container{
+		z-index: 1999!important;
+	}
+	/deep/ .w-e-menu{
+		z-index: 2000!important;
 	}
 </style>

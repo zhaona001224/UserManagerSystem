@@ -16,23 +16,23 @@
 				<el-table-column header-align="left" prop="id" label="id" width="90px">
 				</el-table-column>
 
-				<el-table-column :sortable="item.name=='name'" v-for="(item,index) in formData" :key="item.id" v-if="item.data.type!='textarea'&&item.data.type!='file'" header-align="left" :prop="item.name" :label="item.name" width="140px">
+				<el-table-column :sortable="item&&item.name=='name'" v-for="(item,index) in formData" :key="item&&item.id" v-if="item&&item.data.type!='textarea'&&item.data.type!='file'" header-align="left" :prop="item&&item.name" :label="item&&item.name" width="140px">
 				</el-table-column>
 
-				<el-table-column v-for="(item,index) in formData" :key="item.id" v-if="item.data.type=='file'" cell-style="text-align:center" header-align="center" :prop="item.name" :label="item.name" width="110px">
+				<el-table-column v-for="(item,index) in formData" :key="item.id" v-if="item&&item.data.type=='file'" cell-style="text-align:center" header-align="center" :prop="item&&item.name" :label="item&&item.name" width="120px">
 					<template slot-scope="scope">
-						<img v-if="scope.row[item.name]" style="width: 80px;height: 80px;" :src="imgUrl+scope.row[item.name]" />
+						<img v-if="scope.row[item&&item.name]" style="width: 80px;height: 80px;" :src="imgUrl+scope.row[item&&item.name]" />
 					</template>
 				</el-table-column>
 
 				<el-table-column prop="updated" sortable label="updateTime" width="160px" cell-class-name="center" header-align="center">
 				</el-table-column>
-				<el-table-column label="operation" width="240px" cell-class-name="center" header-align="center">
+				<el-table-column label="operation" min-width="240px" cell-class-name="center" header-align="center">
 					<template slot-scope="scope">
 						<!--<el-button type="text" size="small" v-if="scope.row.online" @click="handleStatus(scope.row)">{{scope.row.online?'outLine':'online'}}</el-button>-->
 						<el-button type="text" size="small" @click="handleEdit(scope.row)">Edit</el-button>
 						<el-button type="text" size="small" @click="handleDelete(scope.row)">Delete</el-button>
-						<el-button type="text" class="clip" size="small" :data-clipboard-text="getFromData(scope.row)" @click="copy">copy</el-button>
+						<el-button type="text" class="clip" size="small" :data-clipboard-text="getFromData(scope.row)" @click="copy(scope.row.id)">Copy</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -72,11 +72,22 @@
 				}
 				return true;
 			},
-			getFromData(item) {
-				var string = "";
-				for(var key in item) {
-					string = string + item[key] + " " + " " + " " + " " + " " + " " + " "
-				}
+			getFromData(data) {
+				var string = data.id + " " + " " + " " + " " + " " + " " + " "
+				this.formData.map((item, index) => {
+					if(this.dataSource.formData.data[item.name] && this.dataSource.formData.data[item.name].type != "textarea" && this.dataSource.formData.data[item.name].type != "file") {
+
+						var str = data[item.name] ? data[item.name] : ''
+						string = string + str + " " + " " + " " + " " + " " + " " + " "
+					}
+				})
+				this.formData.map((item, index) => {
+					if(this.dataSource.formData.data[item.name] && this.dataSource.formData.data[item.name].type == "file") {
+						var str = data[item.name] ? data[item.name] : ''
+						string = string + str + " " + " " + " " + " " + " " + " " + " "
+					}
+				})
+				string = string + data.updated + " " + " " + " " + " " + " " + " " + " "
 				return string
 
 			},
@@ -84,19 +95,49 @@
 				this.$router.push('/template/Add/' + this.$route.params.key + '?id=' + item.id)
 			},
 
-			copy() {
-				var clipboard1 = new this.clipboard('.clip')
-				clipboard1.on('success', e => {
-					console.log('复制成功')
-					// 释放内存
-					clipboard1.destroy()
+			copy(id) {
+				var that = this;
+				//				var clipboard1 = new this.clipboard('.clip')
+				//				clipboard1.on('success', e => {
+				//					console.log('复制成功')
+				//					// 释放内存
+				//					clipboard1.destroy()
+				//				})
+				//				clipboard1.on('error', e => {
+				//					// 不支持复制
+				//					console.log('该浏览器不支持自动复制')
+				//					// 释放内存
+				//					clipboard.destroy()
+				//				})
+				var data = this.originTable.filter((item, index) => {
+
+					return item.id == id
 				})
-				clipboard1.on('error', e => {
-					// 不支持复制
-					console.log('该浏览器不支持自动复制')
-					// 释放内存
-					clipboard.destroy()
+				var obj = {}
+				for(var key in this.dataSource.formData.data) {
+					if(key == "name") {
+						obj[key] = data[0][key] + "(复制)"
+					} else {
+						obj[key] = data[0][key]
+					}
+
+				}
+				that.$post("/admin/v1/content?type=" + this.$route.params.key, obj).then(response => {
+					if(response.retCode == 0) {
+						that.$message({
+							type: 'success',
+							message: "Copy success"
+						});
+						that.search();
+					} else {
+						that.$message({
+							type: 'warning',
+							message: response.message
+						});
+					}
+
 				})
+
 			},
 			//删除
 			handleStatus(item) {
@@ -148,7 +189,9 @@
 
 					if(response.retCode == 0) {
 						this.notSearch = true;
+			
 						this.tableData = response.data || [];
+						this.originTable = JSON.parse(JSON.stringify(this.tableData))
 						this.tableData.sort((a, b) => {
 							//排序基于的数据
 							return b.updated - a.updated;
@@ -168,7 +211,7 @@
 							item.updated = this.$util.formatTime(item.updated, 'YYYY-MM-DD HH:mm:ss');
 
 						})
-						
+
 						this.total = response.meta.total ? parseInt(response.meta.total) : 0;
 					} else {
 
@@ -239,6 +282,7 @@
 		created() {
 			this.imgUrl = this.store.state.imgUrl
 			var menuTrees = JSON.parse(this.store.state.loginData);
+			
 			menuTrees.map((item, index) => {
 				if(item.name == this.$route.params.key) {
 					this.dataSource = item

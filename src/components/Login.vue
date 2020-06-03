@@ -30,12 +30,9 @@
 	export default {
 		created() {
 			this.doKeyCode();
-
-			if(document.cookie.indexOf('lqcms_token') > -1 && this.store.state.loginData) {
-				this.menuTrees = JSON.parse(this.store.state.loginData);
+			this.menuTrees = JSON.parse(this.store.state.loginData);
+			if(document.cookie.indexOf('lqcms_token') > -1) {
 				this.$router.push('/template/List/' + this.menuTrees[0].name);
-			}else{
-				this.$store.commit(types.LOGOUT);
 			}
 
 		},
@@ -85,9 +82,7 @@
 		methods: {
 			//表单验证
 			doLogin(formName) {
-					this.$store.commit(types.LOGOUT);
 				const that = this;
-				
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						that.$post("/admin/v1/login", {
@@ -103,6 +98,11 @@
 										formData: this.loginData[key]
 									})
 								}
+								this.menuTrees.sort((a, b) => {
+									//排序基于的数据
+									return a.formData.no - b.formData.no;
+								})
+					
 								that.$store.commit(types.LOGINDATA, JSON.stringify(this.menuTrees));
 								that.$message({
 									type: 'success',

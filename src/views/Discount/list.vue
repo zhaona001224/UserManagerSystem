@@ -1,7 +1,7 @@
 <template>
 	<div class="list">
 		<el-card class="box-card">
-			<el-button type="primary" class="common-btn" @click.native="$router.push('/Coupon/Add')">Add</el-button>
+			<el-button type="primary" class="common-btn" @click.native="$router.push('/Discount/Add')">Add</el-button>
 			<el-input class="search-input" prefix-icon="el-icon-search" v-model="keyword" placeholder="请输入搜索内容" maxlength="10">
 			</el-input>
 			<el-button type="primary" class="common-btn" @click="search">Search</el-button>

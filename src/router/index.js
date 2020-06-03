@@ -6,13 +6,17 @@ import Login from '../components/Login'
 import Home from '../components/Home'
 import UserList from '../views/User/list'
 import CouponList from '../views/Coupon/list'
+import CouponAdd from '../views/Coupon/add'
+import CouponDetail from '../views/Coupon/detail'
+import CouponModify from '../views/Coupon/modify'
 import OrderList from '../views/Order/list'
 import UserAdd from '../views/User/add'
 import UserModify from '../views/User/modify'
 import UserDetail from '../views/User/detail'
-import CouponAdd from '../views/Coupon/add'
-import CouponDetail from '../views/Coupon/detail'
-import CouponModify from '../views/Coupon/modify'
+import DiscountList from '../views/Discount/list'
+import DiscountAdd from '../views/Discount/add'
+import DiscountDetail from '../views/Discount/detail'
+import DiscountModify from '../views/Discount/modify'
 import OrderAdd from '../views/Order/add'
 import OrderModify from '../views/Order/modify'
 import OrderDetail from '../views/Order/detail'
@@ -23,7 +27,7 @@ import Config from '../views/config'
 Vue.use(VueRouter);
 
 const routes = [{
-		path: '/login',
+		path: '/',
 		name: 'login',
 		component: resolve => require(['@/components/Login'], resolve)
 	},
@@ -80,11 +84,10 @@ const routes = [{
 		name: 'Photo',
 		component: Home,
 		children: [{
-				path: 'List',
-				name: 'Photo',
-				component: PhotoList
-			}
-		],
+			path: 'List',
+			name: 'Photo',
+			component: PhotoList
+		}],
 		meta: {
 			requireAuth: true //添加该字段，true表示进入这个路由是需要登录的,false不需要登录
 		},
@@ -94,11 +97,10 @@ const routes = [{
 		name: 'Config',
 		component: Home,
 		children: [{
-				path: '/',
-				name: 'Config',
-				component: Config
-			}
-		],
+			path: '/',
+			name: 'Config',
+			component: Config
+		}],
 		meta: {
 			requireAuth: true //添加该字段，true表示进入这个路由是需要登录的,false不需要登录
 		},
@@ -132,7 +134,67 @@ const routes = [{
 		meta: {
 			requireAuth: true //添加该字段，true表示进入这个路由是需要登录的,false不需要登录
 		},
+
 	},
+	{
+		path: '/Coupon',
+		name: 'Coupon',
+		component: Home,
+		children: [{
+				path: 'List',
+				name: '优惠券列表',
+				component: CouponList
+			},
+			{
+				path: 'Add',
+				name: '优惠券新增',
+				component: CouponAdd
+			},
+			{
+				path: 'Modify',
+				name: '修改优惠券',
+				component: CouponModify
+			},
+			{
+				path: 'Detail',
+				name: '查看优惠券',
+				component: CouponDetail
+			},
+		],
+		meta: {
+			requireAuth: true //添加该字段，true表示进入这个路由是需要登录的,false不需要登录
+		}
+	},
+	{
+		path: '/Discount',
+		name: 'Discount',
+		component: Home,
+		children: [{
+				path: 'List',
+				name: '折扣列表',
+				component: DiscountList
+			},
+			{
+				path: 'Add',
+				name: '折扣新增',
+				component: DiscountAdd
+			},
+			{
+				path: 'Modify',
+				name: '修改折扣',
+				component: DiscountModify
+			},
+			{
+				path: 'Detail',
+				name: '查看折扣',
+				component: DiscountDetail
+			},
+		],
+		meta: {
+			requireAuth: true //添加该字段，true表示进入这个路由是需要登录的,false不需要登录
+		}
+	}
+
 ];
 
 if(window.localStorage.getItem('userName')) {
@@ -144,7 +206,6 @@ if(window.localStorage.getItem('configData')) {
 if(window.localStorage.getItem('loginData')) {
 	store.commit(types.LOGINDATA, window.localStorage.getItem('loginData'));
 }
-
 
 const router = new VueRouter({
 	routes

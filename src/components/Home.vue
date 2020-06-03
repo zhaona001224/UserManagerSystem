@@ -54,11 +54,11 @@
 							<i class="el-icon-menu"></i>
 							<span slot="title">Order</span>
 						</el-menu-item>
-						<el-menu-item index="3">
+						<el-menu-item index="/Coupon/list" key="Coupon">
 							<i class="el-icon-menu"></i>
 							<span slot="title">Coupon</span>
 						</el-menu-item>
-						<el-menu-item index="3">
+						<el-menu-item  index="/Discount/list" key="Discount">
 							<i class="el-icon-menu"></i>
 							<span slot="title">Discount</span>
 						</el-menu-item>
