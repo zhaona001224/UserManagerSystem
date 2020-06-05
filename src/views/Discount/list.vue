@@ -15,22 +15,47 @@
 				</el-table-column>-->
 				<el-table-column header-align="left" prop="id" label="id">
 				</el-table-column>
-				<el-table-column header-align="left" prop="level" label="level">
+					<el-table-column header-align="left" prop="name" label="name">
 				</el-table-column>
-				<el-table-column header-align="left" prop="qty" label="qty">
+				<el-table-column header-align="left" prop="online" label="online">
 				</el-table-column>
-				<el-table-column header-align="left" prop="discount" label="discount">
+				<el-table-column header-align="left" prop="starttime" width="160px" label="starttime">
 				</el-table-column>
-				<el-table-column header-align="left" prop="startTime" label="startTime">
+				<el-table-column header-align="left" prop="endtime" width="160px" label="endtime">
 				</el-table-column>
-				<el-table-column header-align="left" prop="endTime" label="endTime">
+				
+					<el-table-column label="list" width="380px" cell-class-name="center" header-align="center">
+					<template slot-scope="scope">
+						<el-table :data="scope.row.list" >
+							<el-table-column cell-style="text-align:center" header-align="center" label="level" width="120px">
+								<template slot-scope="scope1">
+									{{scope1.row.level}}
+								</template>
+							</el-table-column>
+							<el-table-column cell-style="text-align:center" header-align="center" label="qty" width="120px">
+								<template slot-scope="scope1">
+									{{scope1.row.qty}}
+								</template>
+							</el-table-column>
+							<el-table-column cell-style="text-align:center" header-align="center" label="discount" width="120px">
+								<template slot-scope="scope1">
+									{{scope1.row.discount}}
+								</template>
+							</el-table-column>
+							
+							
+						</el-table>
+
+					</template>
 				</el-table-column>
-				<el-table-column label="operation" width="240px" cell-class-name="center" header-align="center">
+				<el-table-column header-align="left" prop="updated" width="160px" label="updateTime">
+				</el-table-column>
+				<el-table-column label="operation" width="180px" cell-class-name="center" header-align="center">
 					<template slot-scope="scope">
 						<!--<el-button type="text" size="small" v-if="scope.row.online" @click="handleStatus(scope.row)">{{scope.row.online?'outLine':'online'}}</el-button>-->
 						<el-button type="text" size="small" @click="handleEdit(scope.row)">Edit</el-button>
 						<el-button type="text" size="small" @click="handleDelete(scope.row)">Delete</el-button>
-						<el-button type="text" class="clip" size="small" :data-clipboard-text="getFromData(scope.row)" @click="copy">Copy</el-button>
+						<el-button type="text" class="clip" size="small"  @click="copy(scope.row.id)">Copy</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -54,7 +79,6 @@
 				pageNum: 1,
 				pageSize: 10,
 				total: 0,
-				formData: [],
 				notSearch: true
 
 			}
@@ -70,42 +94,9 @@
 				}
 				return true;
 			},
-			getFromData(data) {
-				var string = data.id + " " + " " + " " + " " + " " + " " + " "
-				this.formData.map((item, index) => {
-					if(this.dataSource.formData.data[item.name] && this.dataSource.formData.data[item.name].type != "textarea" && this.dataSource.formData.data[item.name].type != "file") {
-
-						var str = data[item.name] ? data[item.name] : ''
-						string = string + str + " " + " " + " " + " " + " " + " " + " "
-					}
-				})
-				this.formData.map((item, index) => {
-					if(this.dataSource.formData.data[item.name] && this.dataSource.formData.data[item.name].type == "file") {
-						var str = data[item.name] ? data[item.name] : ''
-						string = string + str + " " + " " + " " + " " + " " + " " + " "
-					}
-				})
-				string = string + data.updated + " " + " " + " " + " " + " " + " " + " "
-				return string
-
-			},
+			
 			handleEdit(item) {
-				this.$router.push('/template/Add/' + this.$route.params.key + '?id=' + item.id)
-			},
-
-			copy() {
-				var clipboard1 = new this.clipboard('.clip')
-				clipboard1.on('success', e => {
-					console.log('复制成功')
-					// 释放内存
-					clipboard1.destroy()
-				})
-				clipboard1.on('error', e => {
-					// 不支持复制
-					console.log('该浏览器不支持自动复制')
-					// 释放内存
-					clipboard.destroy()
-				})
+				this.$router.push('/Discount/Add?id=' + item.id)
 			},
 			//删除
 			handleStatus(item) {
@@ -115,7 +106,7 @@
 				} else {
 					url = '/admin/v1/content/approve'
 				}
-				this.$post(url + "?type=" + this.$route.params.key + "&id=" + item.id, {}).then(response => {
+				this.$post(url + "?type=Discount&id=" + item.id, {}).then(response => {
 					if(response.retCode == 0) {
 						this.$message({
 							message: '操作成功!',
@@ -133,7 +124,7 @@
 			},
 			//删除
 			handleDelete(item) {
-				this.$delete("/admin/v1/content?type=" + this.$route.params.key + "&id=" + item.id, {}).then(response => {
+				this.$delete("/admin/v1/content?type=Discount&id=" + item.id, {}).then(response => {
 					if(response.retCode == 0) {
 						this.$message({
 							message: '删除成功!',
@@ -149,35 +140,52 @@
 				})
 
 			},
+			copy(id) {
+				var that = this;
+				var data = this.originTable.filter((item, index) => {
+					return item.id == id
+				})
+				data=data[0]
+				data.name= data.name + "(复制)"
+				delete data.id
+				that.$post("/admin/v1/content?type=Discount", data).then(response => {
+					if(response.retCode == 0) {
+						that.$message({
+							type: 'success',
+							message: "Copy success"
+						});
+						that.search();
+					} else {
+						that.$message({
+							type: 'warning',
+							message: response.message
+						});
+					}
 
+				})
+
+			},
 			queryTable() {
-				this.$get('/admin/v1/contents?type=Coupon&offset=' + this.pageNum + "&count=" + this.pageSize, {
+				this.$get('/admin/v1/contents?type=Discount&offset=' + this.pageNum + "&count=" + this.pageSize, {
 
 				}).then(response => {
 
 					if(response.retCode == 0) {
 						this.notSearch = true;
 						this.tableData = response.data || [];
+						this.originTable = JSON.parse(JSON.stringify(this.tableData))
 						this.tableData.sort((a, b) => {
 							//排序基于的数据
 							return b.updated - a.updated;
 						})
+						
 						this.tableData && this.tableData.map((item) => {
-							for(var key in this.dataSource.formData.data) {
-
-								if(this.dataSource.formData.data[key].type == "select" || this.dataSource.formData.data[key].type == "tree") {
-									item[key] = item[key] && item[key].split(',')[1]
-								}
-								if(this.dataSource.formData.data[key].type == "bool") {
-									item[key] = item[key] + ''
-								}
-
-							}
-
+							item.online = item.online + '';
+							item.list = JSON.parse(item.list)
 							item.updated = this.$util.formatTime(item.updated, 'YYYY-MM-DD HH:mm:ss');
 
 						})
-
+							
 						this.total = response.meta.total ? parseInt(response.meta.total) : 0;
 					} else {
 
@@ -197,31 +205,23 @@
 					return
 				}
 				this.notSearch = false;
-				this.$get('/admin/v1/contents/search?type=' + this.$route.params.key + "&q=" + this.keyword + "&status=public", {
+				this.$get('/admin/v1/contents/search?type=Discount&q=' + this.keyword + "&status=public", {
 
 				}).then(response => {
-
 					if(response.retCode == 0) {
 						this.tableData = response.data || [];
 						this.tableData.sort((a, b) => {
 							//排序基于的数据
 							return b.updated - a.updated;
 						})
+				
 						this.tableData && this.tableData.map((item) => {
-							for(var key in this.dataSource.formData.data) {
-
-								if(this.dataSource.formData.data[key].type == "select" || this.dataSource.formData.data[key].type == "tree") {
-
-									item[key] = item[key] && item[key].split(',')[1]
-								}
-								if(this.dataSource.formData.data[key].type == "bool") {
-									item[key] = item[key] + ''
-								}
-
-							}
-							item.updated = this.$util.formatTime(item.updated, 'YYYY-MM-DD HH:mm:ss')
+							item.online = item.online + '';
+								item.list = JSON.parse(item.list)
+							item.updated = this.$util.formatTime(item.updated, 'YYYY-MM-DD HH:mm:ss');
 						})
 						this.total = response.meta.total ? parseInt(response.meta.total) : 0;
+						this.$forceUpdate();
 					} else {
 
 						this.$message({
@@ -259,5 +259,11 @@
 	@import "../../assets/css/list.css";
 	.center {
 		text-align: center;
+	}
+	.el-table .el-table thead.has-gutter tr,.el-table .el-table th{
+		background-color: #999!important;
+	}
+	.e-table .e-table{
+		border:1px solid #EBEEF5;
 	}
 </style>

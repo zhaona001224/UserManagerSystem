@@ -3,7 +3,7 @@
 		<!--面包屑-->
 		<el-card class="box-card">
 			<el-breadcrumb separator="/">
-				<el-breadcrumb-item :to="{ path: '/template/Coupon/List'}">Coupon</el-breadcrumb-item>
+				<el-breadcrumb-item :to="{ path: '/Discount/List'}">Coupon</el-breadcrumb-item>
 				<el-breadcrumb-item>{{$route.query.id?'Edit':'Add'}}</el-breadcrumb-item>
 			</el-breadcrumb>
 		</el-card>
@@ -14,6 +14,17 @@
 					<el-form-item label="name" prop="name">
 						<el-input style="width:400px" placeholder="Please fill in name" maxlength="" v-model="form.name">
 						</el-input>
+					</el-form-item>
+					<el-form-item label="online" prop="online">
+						<el-radio-group v-model="form.online">
+							<el-radio :label="true">{{true}}</el-radio>
+							<el-radio :label="false">{{false}}</el-radio>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="rangeTime" prop="rangeTime">
+
+						<el-date-picker format="yyyy-MM-dd HH" value-format="yyyy-MM-dd HH" v-model="form.rangeTime" type="datetimerange" range-separator="To" start-placeholder="startTime" end-placeholder="endTime">
+						</el-date-picker>
 					</el-form-item>
 					<el-form-item label="discount List" width="700px">
 						<el-table :data="form.discountList" width="700px" :rules="rules">
@@ -31,10 +42,10 @@
 									</el-form-item>
 								</template>
 							</el-table-column>
-							<el-table-column cell-style="text-align:center" header-align="center" label="discount" width="220px">
+							<el-table-column cell-style="text-align:center" header-align="center" label="discount" width="200px">
 								<template slot-scope="scope">
 									<el-form-item :inline-message="true" :rules="tableRules.discount" :prop="'discountList.'+scope.$index+'.discount'">
-										<el-input width="220px" v-model="scope.row.discount"></el-input>
+										<el-input width="200px" v-model="scope.row.discount"></el-input>
 									</el-form-item>
 
 								</template>
@@ -48,15 +59,12 @@
 						</el-table>
 
 					</el-form-item>
-					<el-form-item label="online" prop="online">
-						<el-radio-group  v-model="form.online" >
-							<el-radio label="true">{{true}}</el-radio>
-							<el-radio label="false">{{false}}</el-radio>
-						</el-radio-group>
-					</el-form-item>
-					<el-form-item label="rangeTime" prop="rangeTime">
-						<el-date-picker value-format="yyyy-MM-dd" v-model="form.rangeTime" type="daterange" range-separator="To" start-placeholder="startTime" end-placeholder="endTime">
-						</el-date-picker>
+					
+					<el-form-item label="desc" prop="desc">
+
+						<div ref="editorElem" style="z-index: 1000;">
+							<div v-model="form.description" style="text-align:left;"></div>
+						</div>
 					</el-form-item>
 					<div class="cls"></div>
 					<div class="cls"></div>
@@ -104,7 +112,7 @@
 						qty: '',
 						discount: ''
 					}],
-					online:'false',
+					online: 'false',
 				},
 
 				list: {
@@ -159,6 +167,21 @@
 				});
 
 			},
+			creatEdit() {
+				var that = this;
+				setTimeout(() => {
+					this.editor= new E(this.$refs['editorElem']);
+					// 编辑器的事件，每次改变会获取其html内容
+					this.editor.customConfig.onchange = html => {
+						that.form['desc'] = html;
+						that.$forceUpdate();
+					};
+					this.editor.create(); // 创建富文本实例
+					this.editor.txt.html(that.form['desc'])
+				}, 1000)
+
+			},
+			
 			handleDelete(index) {
 				this.form.discountList.splice(index, 1)
 				this.$forceUpdate();
@@ -168,13 +191,17 @@
 				var form = {};
 				form = JSON.parse(JSON.stringify(this.form)); //this.templateData是父组件传递的对象  
 				var that = this;
+				form.starttime=form.rangeTime[0];
+				form.endtime=form.rangeTime[1];
+				form.list=JSON.stringify(form.discountList)
+				form.entime=form.rangeTime[1]
 				this.$refs.form.validate((valid) => {
 					if(valid) {
 
 						if(this.$route.query.id) {
-							that.$post("/admin/v1/content/update?type=" + Coupon + "&id=" + this.$route.query.id, form).then(response => {
+							that.$post("/admin/v1/content/update?type=Discount&id=" + this.$route.query.id, form).then(response => {
 								if(response.retCode == 0) {
-									that.$util.successAlert("Modify Success！", '/template/list/' + Coupon, 'return list');
+									that.$util.successAlert("Modify Success！", '/Discount/list', 'return list');
 								} else {
 									that.$message({
 										type: 'warning',
@@ -184,9 +211,9 @@
 
 							})
 						} else {
-							that.$post("/admin/v1/content?type=" + Coupon, form).then(response => {
+							that.$post("/admin/v1/content?type=Discount", form).then(response => {
 								if(response.retCode == 0) {
-									that.$util.successAlert("Add Success！", '/template/list/' + Coupon, 'return list');
+									that.$util.successAlert("Add Success！", '/Discount/list', 'return list');
 								} else {
 									that.$message({
 										type: 'warning',
@@ -205,10 +232,14 @@
 		},
 
 		created() {
+				this.creatEdit();
 			if(this.$route.query.id) {
-				this.$get("/admin/v1/content?type=Coupon&id=" + this.$route.query.id, {}).then(response => {
+				this.$get("/admin/v1/content?type=Discount&id=" + this.$route.query.id, {}).then(response => {
+					
 					if(response.retCode == 0) {
 						this.form = response.data;
+						this.form.rangeTime=[response.data.starttime,response.data.endtime];
+						this.form.discountList=JSON.parse(this.form.list)
 						this.$forceUpdate();
 
 					} else {

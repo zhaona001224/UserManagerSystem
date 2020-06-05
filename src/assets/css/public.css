@@ -39,14 +39,14 @@ html, body {
   padding: 0!important;
   margin: 0;
   height: 62px!important;
-  background-color: #27a6b9;
+  background-color: #544c64;
 }
 
 .el-aside {
   width: 200px!important;
   height: 100%!important;
   padding-top: 10px;
-  background-color: #2ab4c9;
+  background-color: #544c64;
   color: #333;
   text-align: left;
 }
@@ -61,14 +61,14 @@ html, body {
 /*头部左侧*/
 .header {
   height: 62px;
-  border-bottom: 1px solid #26a0b3;
-  box-shadow: 1px 1px 1px #27a6b9;
+  border-bottom: 1px solid #544c64;
+  box-shadow: 1px 1px 1px #544c64;
 }
 
 .header-left {
   width: 340px!important;
   color: #fff;
-  background: #27a6b9;
+  background: #544c64;
 }
 
 .header-left .header-left-cont {
@@ -92,7 +92,7 @@ html, body {
 
 /*头部菜单*/
 .header-middle {
-  background: #27a6b9;
+  background: #544c64;
 }
 
 .header-middle .menu-top {
@@ -106,7 +106,7 @@ html, body {
   float: left;
   left: -50%;
   border-bottom: 1px;
-  background: #27a6b9;
+  background: #544c64;
 }
 
 .menu-top .el-menu-demo li span {
@@ -115,7 +115,7 @@ html, body {
 
 
 .menu-top .el-submenu .el-menu-item.is-active, .menu-top .el-menu-item.is-active, .menu-top .el-submenu .el-menu-item.is-active:hover, .menu-top .el-menu-item.is-active:hover {
-  background: #27a6b9!important;
+  background: #544c64!important;
   color: #555!important;
 }
 
@@ -125,15 +125,15 @@ html, body {
 }
 
 .menu-top .el-menu-item:hover {
-  background: #27a6b9!important;
+  background: #544c64!important;
 }
 
 .el-menu.el-menu--horizontal {
-  border-bottom: solid 1px #27a6b9!important;
+  border-bottom: solid 1px #544c64!important;
 }
 
 .el-menu--horizontal>.el-menu-item.is-active {
-  border-bottom: solid 1px #27a6b9!important;
+  border-bottom: solid 1px #544c64!important;
 }
 
 
@@ -155,7 +155,7 @@ html, body {
 
 .header-right {
   width: 200px!important;
-  background: #27a6b9;
+  background: #544c64;
   text-align: right;
   line-height: 60px;
 }
@@ -181,7 +181,7 @@ html, body {
 }
 
 .el-dropdown-menu__item:hover {
-  background: #2ab4c9!important;
+  background: #544c64!important;
   color: #fff!important;
 }
 
@@ -197,7 +197,7 @@ html, body {
 /*侧边栏*/
 .el-aside .el-menu {
   text-align: left;
-  background: #2ab4c9!important;
+  background: #544c64!important;
   border-right: none;
 }
 
@@ -208,7 +208,7 @@ html, body {
 
 .el-aside .el-menu .el-menu-item:hover,
 .el-aside .el-menu .el-submenu__title:hover {
-  background: #27a6b9;
+  background: #544c64;
   color: #fff!important;
 }
 
@@ -218,7 +218,7 @@ html, body {
 }
 
 .el-submenu .el-menu-item.is-active,  .el-menu-item.is-active,  .el-submenu .el-menu-item.is-active:hover,  .el-menu-item.is-active:hover {
-  background-color: #27a6b9!important;
+  background-color: #544c64!important;
   color: #fff!important;
 }
 
@@ -249,24 +249,24 @@ html, body {
 .el-select .el-input.is-focus .el-input__inner,
 .el-select .el-input__inner:hover,
 .el-select .el-input__inner:focus {
-  border-color: #27a6b9!important;
+  border-color: #544c64!important;
 }
 
 .el-select-dropdown__item.selected {
-  color: #27a6b9!important;
+  color: #544c64!important;
 }
 
 
 .el-form-item.is-success .el-input__inner, .el-form-item.is-success .el-input__inner:focus, .el-form-item.is-success .el-textarea__inner, .el-form-item.is-success .el-textarea__inner:focus {
-  border-color: #27a6b9!important;
+  border-color: #544c64!important;
 }
 
 .el-input__inner:focus {
-  border-color: #27a6b9!important;
+  border-color: #544c64!important;
 }
 
 .el-textarea__inner:focus {
-  border-color: #27a6b9!important;
+  border-color: #544c64!important;
 }
 
 
@@ -274,19 +274,19 @@ html, body {
 /*日期*/
 .el-date-table td.current:not(.disabled) span {
   color: #fff!important;
-  background-color: #27a6b9!important;
+  background-color: #544c64!important;
 }
 
 .el-date-table td.today span {
-  color: #27a6b9!important;
+  color: #544c64!important;
 }
 
 .el-date-table tr .available:hover {
-  color: #27a6b9!important;
+  color: #544c64!important;
 }
 
 .el-month-table td .cell:hover, .el-month-table td.current:not(.disabled) .cell {
-  color: #27a6b9!important;
+  color: #544c64!important;
 }
 
 
@@ -331,7 +331,7 @@ html, body {
 }
 
 .el-dialog__headerbtn .el-dialog__close:hover {
-  color: #27a6b9!important;
+  color: #544c64!important;
 }
 
 
@@ -346,19 +346,19 @@ html, body {
 /*按钮*/
 
 .el-button--primary {
-  background-color: #27a6b9!important;
-  border-color: #27a6b9!important;
+  background-color: #544c64!important;
+  border-color: #544c64!important;
 }
 
 .el-button--primary:focus, .el-button--primary:hover {
-  background-color: #2ab4c9!important;
-  border-color: #2ab4c9!important;
+  background-color: #544c64!important;
+  border-color: #544c64!important;
 }
 
 
 /*面包屑*/
 .el-breadcrumb__inner a:hover, .el-breadcrumb__inner.is-link:hover {
-  color: #27a6b9!important;
+  color: #544c64!important;
 }
 
 
@@ -366,32 +366,32 @@ html, body {
 /*单选框复选框*/
 
 .el-radio__input.is-checked .el-radio__inner {
-  border-color: #27a6b9!important;
-  background: #27a6b9!important;
+  border-color: #544c64!important;
+  background: #544c64!important;
 }
 
 .el-radio__input.is-checked+.el-radio__label {
-  color: #27a6b9!important;
+  color: #544c64!important;
 }
 
 
 .el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
-  border-color: #27a6b9!important;
-  background: #27a6b9!important;
+  border-color: #544c64!important;
+  background: #544c64!important;
 }
 
 .el-checkbox__input.is-checked+.el-checkbox__label {
-  color: #27a6b9!important;
+  color: #544c64!important;
 }
 
 .el-checkbox__inner:hover,
 .el-radio__inner:hover {
-  border-color: #27a6b9!important;
+  border-color: #544c64!important;
 }
 
 .el-checkbox__input .is-focus,
 .el-radio__inner .is-focus {
-  border-color: #27a6b9!important;
+  border-color: #544c64!important;
 }
 
 /*返回上一级*/
@@ -411,7 +411,7 @@ html, body {
   color: #ffffff;
   font-size: 16px;
   text-align: center;
-  background-color: #2ab4c9!important;
+  background-color: #544c64!important;
 }
 
 .el-table .descending .sort-caret.descending,
@@ -425,13 +425,13 @@ html, body {
   border-top-color: #fff!important;
 }
 .el-table .descending .sort-caret.descending {
-  border-top-color: #27a6b9!important;
+  border-top-color: #544c64!important;
 }
 .el-table .ascending  .caret-wrapper .sort-caret.ascending {
-  border-bottom-color: #27a6b9!important;
+  border-bottom-color: #544c64!important;
 }
 .el-table .sort-caret.descending{
-  border-top-color: #27a6b9!important;
+  border-top-color: #544c64!important;
 }
  .el-table  .has-gutter  th{
   padding:0;
@@ -478,11 +478,11 @@ html, body {
 }
 
 .el-pager li.active {
-  color: #27a6b9!important;
+  color: #544c64!important;
 }
 
 .el-pager li:hover {
-  color: #27a6b9!important;
+  color: #544c64!important;
 }
 
 .el-pager li.active+li {
@@ -496,9 +496,9 @@ html, body {
 	color: red;
 }
 .button-purple{
-	background-color: #2ab4c9 !important;
+	background-color: #544c64 !important;
 	color: white !important;
-	border-color: #2ab4c9 !important;
+	border-color: #544c64 !important;
 }
 .button-gray{
 	background-color: #d7d7d7 !important;
