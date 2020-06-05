@@ -52,7 +52,7 @@
 							</el-table-column>
 							<el-table-column label="operation" width="120px" cell-class-name="center" header-align="center">
 								<template slot-scope="scope">
-									<el-button type="text" size="small" @click="handleDelete(scope.$index)">Delete</el-button>
+									<el-button type="text" size="small" v-if="form.discountList.length!=1" @click="handleDelete(scope.$index)">Delete</el-button>
 									<el-button type="text" size="small" @click="handleAdd(scope.$index)">Add</el-button>
 								</template>
 							</el-table-column>
