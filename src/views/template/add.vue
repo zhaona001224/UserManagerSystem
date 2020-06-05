@@ -266,7 +266,6 @@
 				}).then(response => {
 
 					if(response.retCode == 0) {
-
 						this.dataSource.formData.data[key].source = response.data || [];
 						
 						if(this.dataSource.formData.data[key].required && this.dataSource.formData.data[key].source.length==0) {
@@ -322,7 +321,7 @@
 				if(this.dataSource.formData.data[key].required) {
 					var text = this.dataSource.formData.data[key].type == "select" ? "select" : "fill in"
 					this.rules[key] = [{
-						message: "Place" + text + key,
+						message: "Place " + text + key,
 						required: true,
 						trigger: 'blur'
 					}]
@@ -383,7 +382,10 @@
 						for(var key in this.dataSource.formData.data) {
 
 							if(this.dataSource.formData.data[key].type == "select") {
-								this.form[key] = this.form[key] && parseInt(this.form[key].split(',')[0])
+								if(this.form[key]){
+									this.form[key] = this.form[key] && parseInt(this.form[key].split(',')[0])
+								}
+								
 
 							}
 							if(this.dataSource.formData.data[key].type == "tree") {
