@@ -16,7 +16,7 @@
 						</el-input>
 						<el-tree :default-expand-all="true" v-if="item.data.type=='tree'" ref="tree" :props="defaultProps" style="width:400px" :data="item.data.source[0].name?item.data.source:[]" :key="item.data.id" :highlight-current="true" node-key="id" :label="item.name" :value="item.id" accordion @node-click="handleNodeClick">
 						</el-tree>
-						<el-select style="width:400px" v-if="item.data.type=='select'" v-model="form[item.name]" :placeholder="'Please select'+item.name">
+						<el-select :clearable="true" @change="refreshData" style="width:400px" v-if="item.data.type=='select'" v-model="form[item.name]" :placeholder="'Please select'+item.name">
 							<el-option v-for="subItem in item.data.source" :key="subItem.id" :label="subItem.name" :value="subItem.id">
 							</el-option>
 						</el-select>
@@ -98,8 +98,12 @@
 			handleAvatarSuccess(res, file) {
 				this.formData.imageUrl = URL.createObjectURL(file.raw);
 			},
-			refreshData() {
+			refreshData(e) {
+				console.log(e)
 				this.$forceUpdate();
+			},
+			changeSelect(){
+				
 			},
 			handlePictureCardPreview(file) {
 				this.dialogImageUrl = file.url;
