@@ -112,7 +112,7 @@
 						qty: '',
 						discount: ''
 					}],
-					online: 'false',
+					online: false,
 				},
 
 				list: {
