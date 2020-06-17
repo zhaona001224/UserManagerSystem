@@ -50,7 +50,7 @@
 							</el-menu-item-group>
 
 						</el-submenu>
-						<el-menu-item index="2">
+						<el-menu-item index="/Order/list">
 							<i class="el-icon-menu"></i>
 							<span slot="title">Order</span>
 						</el-menu-item>
@@ -158,8 +158,7 @@
 		created() {
 			this.menuTrees = JSON.parse(this.store.state.loginData);
 			this.userInfo = JSON.parse(this.store.state.configData)
-
-			this.onRoutes = '/template/List/' + this.$route.params.key
+			this.onRoutes = this.$route.fullPath
 		}
 	}
 </script>

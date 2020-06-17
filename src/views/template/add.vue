@@ -150,7 +150,7 @@
 
 			//获取图片库内容
 			getPicData() {
-				this.$get('/admin/v1/files', {
+				this.$get('/admin/v1/files?count=-1', {
 
 				}).then(response => {
 

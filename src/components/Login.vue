@@ -80,6 +80,13 @@
 		},
 
 		methods: {
+			create() {
+				localStorage.removeItem('token');
+				localStorage.removeItem('loginData');
+				localStorage.removeItem('configData');
+				document.cookie = ''
+				state.token = null;
+			},
 			//表单验证
 			doLogin(formName) {
 				const that = this;
@@ -102,7 +109,7 @@
 									//排序基于的数据
 									return a.formData.no - b.formData.no;
 								})
-					
+
 								that.$store.commit(types.LOGINDATA, JSON.stringify(this.menuTrees));
 								that.$message({
 									type: 'success',

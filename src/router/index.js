@@ -7,19 +7,11 @@ import Home from '../components/Home'
 import UserList from '../views/User/list'
 import CouponList from '../views/Coupon/list'
 import CouponAdd from '../views/Coupon/add'
-import CouponDetail from '../views/Coupon/detail'
-import CouponModify from '../views/Coupon/modify'
 import OrderList from '../views/Order/list'
 import UserAdd from '../views/User/add'
-import UserModify from '../views/User/modify'
-import UserDetail from '../views/User/detail'
 import DiscountList from '../views/Discount/list'
 import DiscountAdd from '../views/Discount/add'
-import DiscountDetail from '../views/Discount/detail'
-import DiscountModify from '../views/Discount/modify'
 import OrderAdd from '../views/Order/add'
-import OrderModify from '../views/Order/modify'
-import OrderDetail from '../views/Order/detail'
 import TemplateList from '../views/template/list'
 import TemplateAdd from '../views/template/add'
 import PhotoList from '../views/photoList'
@@ -62,17 +54,7 @@ const routes = [{
 				path: 'Add',
 				name: '新增用户',
 				component: UserAdd
-			},
-			{
-				path: 'Modify',
-				name: '修改用户',
-				component: UserModify
-			},
-			{
-				path: 'Detail',
-				name: '查看用户',
-				component: UserDetail
-			},
+			}
 		],
 		meta: {
 			requireAuth: true //添加该字段，true表示进入这个路由是需要登录的,false不需要登录
@@ -112,24 +94,14 @@ const routes = [{
 		component: Home,
 		children: [{
 				path: 'List',
-				name: '权限列表',
+				name: '订单列表',
 				component: OrderList
 			},
 			{
 				path: 'Add',
-				name: '权限新增',
+				name: '订单新增',
 				component: OrderAdd
-			},
-			{
-				path: 'Modify',
-				name: '修改权限',
-				component: OrderModify
-			},
-			{
-				path: 'Detail',
-				name: '查看权限',
-				component: OrderDetail
-			},
+			}
 		],
 		meta: {
 			requireAuth: true //添加该字段，true表示进入这个路由是需要登录的,false不需要登录
@@ -149,17 +121,7 @@ const routes = [{
 				path: 'Add',
 				name: '优惠券新增',
 				component: CouponAdd
-			},
-			{
-				path: 'Modify',
-				name: '修改优惠券',
-				component: CouponModify
-			},
-			{
-				path: 'Detail',
-				name: '查看优惠券',
-				component: CouponDetail
-			},
+			}
 		],
 		meta: {
 			requireAuth: true //添加该字段，true表示进入这个路由是需要登录的,false不需要登录
@@ -178,17 +140,7 @@ const routes = [{
 				path: 'Add',
 				name: '折扣新增',
 				component: DiscountAdd
-			},
-			{
-				path: 'Modify',
-				name: '修改折扣',
-				component: DiscountModify
-			},
-			{
-				path: 'Detail',
-				name: '查看折扣',
-				component: DiscountDetail
-			},
+			}
 		],
 		meta: {
 			requireAuth: true //添加该字段，true表示进入这个路由是需要登录的,false不需要登录

@@ -7,30 +7,35 @@
 			<el-button type="primary" class="common-btn" @click="search">Search</el-button>
 		</el-card>
 		<el-card class="box-card">
-			<el-table :data="tableData" width="100%">
-				<!--<el-table-column header-align="left" label="选择" width="80px">
-					<template slot-scope="scope">
-						<el-radio :label="scope.row.yun_id" v-model="selectid">&nbsp;</el-radio>
-					</template>
-				</el-table-column>-->
-				<el-table-column header-align="left" prop="id" label="id">
+			<el-table :data="tableData" width="100%" :row-class-name="getRowStyle">
+				<el-table-column header-align="left" sortable prop="id" label="id">
 				</el-table-column>
-				<el-table-column header-align="left" prop="level" label="level">
+				<el-table-column header-align="left" prop="name" label="name">
 				</el-table-column>
-				<el-table-column header-align="left" prop="qty" label="qty">
+				<el-table-column header-align="left" width="160px" sortable prop="game" label="game">
 				</el-table-column>
-				<el-table-column header-align="left" prop="discount" label="discount">
+				<el-table-column header-align="left" prop="price" label="price">
 				</el-table-column>
-				<el-table-column header-align="left" prop="startTime" label="startTime">
+				<el-table-column header-align="left" width="180px" prop="initial_amount" label="initial_amount">
 				</el-table-column>
-				<el-table-column header-align="left" prop="endTime" label="endTime">
+				<el-table-column header-align="left" prop="type" label="type">
 				</el-table-column>
-				<el-table-column label="operation" width="240px" cell-class-name="center" header-align="center">
+				<el-table-column header-align="left" sortable prop="code" width="160px" label="code">
+				</el-table-column>
+				<el-table-column header-align="left" prop="meta" width="160px" label="meta">
+				</el-table-column>
+				<el-table-column header-align="left" sortable prop="starttime" width="160px" label="starttime">
+				</el-table-column>
+				<el-table-column header-align="left" sortable prop="endtime" width="160px" label="endtime">
+				</el-table-column>
+				<el-table-column header-align="left" prop="updated" width="160px" label="updateTime">
+				</el-table-column>
+				<el-table-column label="operation" width="180px" cell-class-name="center" header-align="center">
 					<template slot-scope="scope">
 						<!--<el-button type="text" size="small" v-if="scope.row.online" @click="handleStatus(scope.row)">{{scope.row.online?'outLine':'online'}}</el-button>-->
 						<el-button type="text" size="small" @click="handleEdit(scope.row)">Edit</el-button>
 						<el-button type="text" size="small" @click="handleDelete(scope.row)">Delete</el-button>
-						<el-button type="text" class="clip" size="small" :data-clipboard-text="getFromData(scope.row)" @click="copy">Copy</el-button>
+						<el-button type="text" class="clip" size="small" @click="copy(scope.row.id)">Copy</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -54,58 +59,20 @@
 				pageNum: 1,
 				pageSize: 10,
 				total: 0,
-				formData: [],
 				notSearch: true
 
 			}
 		},
 		methods: {
-			checkSeleted() {
-				if(!this.selectid) {
-					this.$message({
-						message: '请先选择用户!',
-						type: 'warning'
-					});
-					return false;
-				}
-				return true;
-			},
-			getFromData(data) {
-				var string = data.id + " " + " " + " " + " " + " " + " " + " "
-				this.formData.map((item, index) => {
-					if(this.dataSource.formData.data[item.name] && this.dataSource.formData.data[item.name].type != "textarea" && this.dataSource.formData.data[item.name].type != "file") {
 
-						var str = data[item.name] ? data[item.name] : ''
-						string = string + str + " " + " " + " " + " " + " " + " " + " "
-					}
-				})
-				this.formData.map((item, index) => {
-					if(this.dataSource.formData.data[item.name] && this.dataSource.formData.data[item.name].type == "file") {
-						var str = data[item.name] ? data[item.name] : ''
-						string = string + str + " " + " " + " " + " " + " " + " " + " "
-					}
-				})
-				string = string + data.updated + " " + " " + " " + " " + " " + " " + " "
-				return string
-
-			},
 			handleEdit(item) {
-				this.$router.push('/template/Add/' + this.$route.params.key + '?id=' + item.id)
+				this.$router.push('/Coupon/Add?id=' + item.id)
 			},
-
-			copy() {
-				var clipboard1 = new this.clipboard('.clip')
-				clipboard1.on('success', e => {
-					console.log('复制成功')
-					// 释放内存
-					clipboard1.destroy()
-				})
-				clipboard1.on('error', e => {
-					// 不支持复制
-					console.log('该浏览器不支持自动复制')
-					// 释放内存
-					clipboard.destroy()
-				})
+			getRowStyle({
+				row,
+				rowIndex
+			}) {
+				return row.isLate
 			},
 			//删除
 			handleStatus(item) {
@@ -115,7 +82,7 @@
 				} else {
 					url = '/admin/v1/content/approve'
 				}
-				this.$post(url + "?type=" + this.$route.params.key + "&id=" + item.id, {}).then(response => {
+				this.$post(url + "?type=Coupon&id=" + item.id, {}).then(response => {
 					if(response.retCode == 0) {
 						this.$message({
 							message: '操作成功!',
@@ -133,7 +100,7 @@
 			},
 			//删除
 			handleDelete(item) {
-				this.$delete("/admin/v1/content?type=" + this.$route.params.key + "&id=" + item.id, {}).then(response => {
+				this.$delete("/admin/v1/content?type=Coupon&id=" + item.id, {}).then(response => {
 					if(response.retCode == 0) {
 						this.$message({
 							message: '删除成功!',
@@ -149,7 +116,31 @@
 				})
 
 			},
+			copy(id) {
+				var that = this;
+				var data = this.originTable.filter((item, index) => {
+					return item.id == id
+				})
+				data = data[0]
+				data.name = data.name + "(复制)"
+				delete data.id
+				that.$post("/admin/v1/content?type=Coupon", data).then(response => {
+					if(response.retCode == 0) {
+						that.$message({
+							type: 'success',
+							message: "Copy success"
+						});
+						that.search();
+					} else {
+						that.$message({
+							type: 'warning',
+							message: response.message
+						});
+					}
 
+				})
+
+			},
 			queryTable() {
 				this.$get('/admin/v1/contents?type=Coupon&offset=' + this.pageNum + "&count=" + this.pageSize, {
 
@@ -158,23 +149,20 @@
 					if(response.retCode == 0) {
 						this.notSearch = true;
 						this.tableData = response.data || [];
+						this.originTable = JSON.parse(JSON.stringify(this.tableData))
 						this.tableData.sort((a, b) => {
 							//排序基于的数据
 							return b.updated - a.updated;
 						})
+
 						this.tableData && this.tableData.map((item) => {
-							for(var key in this.dataSource.formData.data) {
-
-								if(this.dataSource.formData.data[key].type == "select" || this.dataSource.formData.data[key].type == "tree") {
-									item[key] = item[key] && item[key].split(',')[1]
-								}
-								if(this.dataSource.formData.data[key].type == "bool") {
-									item[key] = item[key] + ''
-								}
-
-							}
-
 							item.updated = this.$util.formatTime(item.updated, 'YYYY-MM-DD HH:mm:ss');
+							item.game = item.game.split(',')[1];
+							item.type = item.type == 1 ? '百分比' : '金额'
+							var a = item.endtime + ":00:00";
+							if(new Date().getTime() > new Date(a).getTime()) {
+								item.isLate = 'late';
+							}
 
 						})
 
@@ -197,31 +185,27 @@
 					return
 				}
 				this.notSearch = false;
-				this.$get('/admin/v1/contents/search?type=' + this.$route.params.key + "&q=" + this.keyword + "&status=public", {
+				this.$get('/admin/v1/contents/search?type=Coupon&q=' + this.keyword + "&status=public", {
 
 				}).then(response => {
-
 					if(response.retCode == 0) {
 						this.tableData = response.data || [];
 						this.tableData.sort((a, b) => {
 							//排序基于的数据
 							return b.updated - a.updated;
 						})
+
 						this.tableData && this.tableData.map((item) => {
-							for(var key in this.dataSource.formData.data) {
-
-								if(this.dataSource.formData.data[key].type == "select" || this.dataSource.formData.data[key].type == "tree") {
-
-									item[key] = item[key] && item[key].split(',')[1]
-								}
-								if(this.dataSource.formData.data[key].type == "bool") {
-									item[key] = item[key] + ''
-								}
-
+							item.updated = this.$util.formatTime(item.updated, 'YYYY-MM-DD HH:mm:ss');
+							item.game = item.game.split(',')[1];
+							item.type = item.type == 1 ? '百分比' : '金额'
+							var a = item.ednTime + ":00:00"
+							if(new Date().getTime() > new Date(a).getTime()) {
+								item.isLate = 'late';
 							}
-							item.updated = this.$util.formatTime(item.updated, 'YYYY-MM-DD HH:mm:ss')
 						})
 						this.total = response.meta.total ? parseInt(response.meta.total) : 0;
+						this.$forceUpdate();
 					} else {
 
 						this.$message({
@@ -259,5 +243,14 @@
 	@import "../../assets/css/list.css";
 	.center {
 		text-align: center;
+	}
+	
+	.el-table .el-table thead.has-gutter tr,
+	.el-table .el-table th {
+		background-color: #999!important;
+	}
+	
+	.e-table .e-table {
+		border: 1px solid #EBEEF5;
 	}
 </style>

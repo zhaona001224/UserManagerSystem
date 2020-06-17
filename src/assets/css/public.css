@@ -115,7 +115,7 @@ html, body {
 
 
 .menu-top .el-submenu .el-menu-item.is-active, .menu-top .el-menu-item.is-active, .menu-top .el-submenu .el-menu-item.is-active:hover, .menu-top .el-menu-item.is-active:hover {
-  background: #544c64!important;
+  background: #8a818a!important;
   color: #555!important;
 }
 
@@ -133,7 +133,7 @@ html, body {
 }
 
 .el-menu--horizontal>.el-menu-item.is-active {
-  border-bottom: solid 1px #544c64!important;
+  border-bottom: solid 1px #8a818a!important;
 }
 
 
@@ -218,7 +218,7 @@ html, body {
 }
 
 .el-submenu .el-menu-item.is-active,  .el-menu-item.is-active,  .el-submenu .el-menu-item.is-active:hover,  .el-menu-item.is-active:hover {
-  background-color: #544c64!important;
+  background-color: #8a818a!important;
   color: #fff!important;
 }
 
@@ -284,7 +284,9 @@ html, body {
 .el-date-table tr .available:hover {
   color: #544c64!important;
 }
-
+.el-table__row.late{
+		    background-color: #ececec;
+	}
 .el-month-table td .cell:hover, .el-month-table td.current:not(.disabled) .cell {
   color: #544c64!important;
 }

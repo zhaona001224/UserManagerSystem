@@ -1,165 +1,385 @@
 <template>
 	<div class="add">
-    <!--面包屑-->
+		<!--面包屑-->
 		<el-card class="box-card">
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item :to="{ path: '/Role/List' }">角色管理</el-breadcrumb-item>
-        <el-breadcrumb-item>新增角色</el-breadcrumb-item>
-      </el-breadcrumb>
+			<el-breadcrumb separator="/">
+				<el-breadcrumb-item :to="{ path: '/Order/List'}">Order</el-breadcrumb-item>
+				<el-breadcrumb-item>{{$route.query.id?'Edit':'Add'}}</el-breadcrumb-item>
+			</el-breadcrumb>
 		</el-card>
 
 		<el-card class="box-card">
-      <el-row>
-        <el-col :span="6" class="place"></el-col>
-        <el-col :span="12">
-          <el-form ref="addData" :model="addData" :rules="addDataRule" label-width="100px" label-position="right">
+			<div class="align-center" style="width: 100%;">
+				<el-form ref="form" :model="form" :rules="rules" label-width="20%" label-position="right">
+					<el-form-item label="bad" prop="bad">
+						<el-radio-group v-model="form.bad" disabled>
+							<el-radio :label="true">true</el-radio>
+							<el-radio :label="false">false</el-radio>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="status" prop="status">
+						<el-select :clearable="true" :disabled="form.status=='已完成'" @change="refreshData" style="width:400px" v-model="form.status" placeholder="Please select status">
+							<el-option v-for="subItem in statusList" :key="subItem.name" :label="subItem.name" :value="subItem.name">
+							</el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item label="total" prop="total">
+						<el-input disabled style="width:400px"  maxlength="" v-model="form.total">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="currency" prop="currency">
+						<el-input disabled style="width:400px"  maxlength="" v-model="form.currency">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="order_id" prop="order_id">
+						<el-input disabled style="width:400px"  maxlength="" v-model="form.order_id">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="payment_id" prop="payment_id">
+						<el-input disabled style="width:400px"  maxlength="" v-model="form.payment_id">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="vendor" prop="vendor">
+						<el-input disabled style="width:400px"  maxlength="" v-model="form.vendor">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="method" prop="method">
+						<el-input disabled style="width:400px"  maxlength="" v-model="form.method">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="payment_note" prop="payment_note">
+						<el-input disabled style="width:400px"  maxlength="" v-model="form.payment_note">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="payer" prop="payer">
+						<el-input disabled style="width:400px"  maxlength="" v-model="form.payer">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="payer_link" prop="payer_link">
+						<el-input disabled style="width:400px" maxlength="" v-model="form.payer_link">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="paid" prop="paid">
+						<el-input disabled style="width:400px"  maxlength="" v-model="form.paid">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="net" prop="net">
+						<el-input disabled style="width:400px"  maxlength="" v-model="form.net">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="notify_info " prop="notify_info ">
+						<el-input disabled style="width:400px"  maxlength="" v-model="form.notify_info">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="pay_time" prop="pay_time">
+						<el-input disabled style="width:400px" maxlength="" v-model="form.pay_time ">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="delivery_time" prop="delivery_time">
+						<el-input disabled style="width:400px"  maxlength="" v-model="form.delivery_time">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="worker" prop="worker">
+						<el-input disabled style="width:400px"  maxlength="" v-model="form.worker">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="comments" prop="comments">
+						<el-input disabled style="width:400px"  maxlength="" v-model="form.comments">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="note" prop="note">
+						<el-tag :key="tag" v-for="(tag,subIndex) in form.note" closable :disable-transitions="false" @close="handleClose(subIndex)">
+							{{tag}}
+						</el-tag>
 
-            <el-form-item label="角色ID：" prop="roleKey">
-              <el-input placeholder="请输入角色ID，必须由字母、数字、下划线组成，不超过10个字符" maxlength="10" v-model="addData.roleKey"></el-input>
-            </el-form-item>
+						<el-input class="input-new-tag" v-if="inputVisible==1" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm()" @blur="handleInputBlur()">
+						</el-input>
+						<el-button v-else class="button-new-tag" size="small" @click="showInput()">+Note</el-button>
+					</el-form-item>
+					<el-form-item label="is_refund" prop="is_refund">
+						<el-radio-group v-model="form.is_refund" disabled>
+							<el-radio :label="true">true</el-radio>
+							<el-radio :label="false">false</el-radio>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="is_chargeback" prop="is_chargeback">
+						<el-radio-group v-model="form.is_chargeback" disabled>
+							<el-radio :label="true">true</el-radio>
+							<el-radio :label="false">false</el-radio>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="request_time" prop="request_time">
+						<el-input disabled style="width:400px"  maxlength="" v-model="form.request_time">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="refund_time" prop="refund_time">
+						<el-input disabled style="width:400px"  maxlength="" v-model="form.refund_time">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="last_update" prop="last_update">
+						<el-input disabled style="width:400px"  maxlength="" v-model="form.last_update">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="delivery" prop="delivery">
+						<el-input disabled style="width:400px"  maxlength="" v-model="form.delivery">
+						</el-input>
+					</el-form-item>
 
-            <el-form-item label="角色名称：" prop="roleName">
-              <el-input placeholder="请输入角色名称，不超过20个字符" maxlength="20" v-model="addData.roleName"></el-input>
-            </el-form-item>
+					<el-form-item label="coupon" prop="coupon">
+						<el-input disabled style="width:400px"  maxlength="" v-model="form.coupon">
+						</el-input>
+					</el-form-item>
+					<div class="cls"></div>
+					<div class="cls"></div>
+					<div class="return-btn">
+						<el-button @click.native="submit" type="info" class="button-purple">confirm</el-button>
+						<el-button @click.native="$util.goBack" type="info" class="button-gray">cancel</el-button>
+					</div>
 
-            <el-form-item label="选择权限：" prop="aclKeys">
-              <el-tree
-                :data="rolePowerList"
-                @check="doSelectTree"
-                show-checkbox
-                node-key="acl_key"
-                ref="tree"
-                highlight-current
-                :props="defaultProps">
-              </el-tree>
-
-            </el-form-item>
-
-            <el-form-item label="备注：">
-              <el-input placeholder="请输入备注，不超过40个字符" maxlength="40" v-model="addData.remark"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-        <el-col :span="6" class="place"></el-col>
-      </el-row>
-      <div class="return-btn">
-        <el-button type="info" class="button-purple" @click.native="doSubmitData('addData')">确 定</el-button>
-        <el-button type="info" class="button-gray" @click.native="$util.goBack">取 消</el-button>
-      </div>
-
+				</el-form>
+			</div>
 		</el-card>
 	</div>
 </template>
 
 <script>
+	import { ptn } from '@/utils/common/validate'
+	import E from "wangeditor";
+	export default {
+		name: 'Add',
+		data() {
+			var validatePass = (rule, value, callback) => {
+				if(value) {
+					if(value.split('.')[1] && value.split('.')[1].length > 3) {
+						callback(new Error('最多只能输入3位小数'));
+						return
+					}
+					callback();
+				} else {
+					callback(new Error(rule.field + '不能为空'));
 
-export default {
-	name: 'Add',
-  created() {
-    rolePowerList(this);
-  },
-	data(){
-		return {
-      //新增
-      addData: {
-        roleKey: "",
-        roleName: "",
-        aclKeys: [],
-        remark: "",
-      },
-      addDataRule:{
-        roleKey: [
-          { required: true, message: '请输入角色ID，必须由字母、数字、下划线组成', trigger: 'blur' },
-          { min: 1, max: 10, message: '长度在10个字符以内', trigger: 'blur' }
-        ],
-        roleName: [
-          { required: true, message: '请输入角色名称', trigger: 'blur' },
-          { min: 1, max: 20, message: '长度在20个字符以内', trigger: 'blur' }
-        ],
-        aclKeys: [
-          { type: 'array', required: true, message: '请至少选择一个角色权限', trigger: 'blur' },
-        ],
-      },
+				}
+			};
+			return {
 
-      //权限列表
-      rolePowerList: [],
+				form: {
 
-      //tree
-      defaultProps: {
-        children: 'sons',
-        label: 'acl_name'
-      }
+					online: false,
+					type: 1,
+				},
+				statusList: [],
+				list: {
 
-		}
-	},
-	methods:{
-    //选择树
-    doSelectTree() {
-      this.addData.aclKeys = [];
-      //选中的树节点
-      var nodeName = this.$refs.tree.getCheckedNodes();
-      for(var i in nodeName) {
-        this.addData.aclKeys.push(nodeName[i].acl_key);
-      }
-    },
+				},
+				inputValue: '',
+				inputVisible: '',
+				activeKey: '',
+				rules: {
 
-    //提交
-    doSubmitData(formName){
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
+				},
+			}
+		},
+		methods: {
+			creatEdit() {
+				var that = this;
+				setTimeout(() => {
+					this.editor = new E(this.$refs['editorElem']);
+					// 编辑器的事件，每次改变会获取其html内容
+					this.editor.customConfig.onchange = html => {
+						that.form['desc'] = html;
+						that.$forceUpdate();
+					};
+					this.editor.create(); // 创建富文本实例
+					this.editor.txt.html(that.form['desc'])
+				}, 1000)
 
-          addRole(this);
-          this.doResetData(formName);
+			},
+			refreshData(e) {
+				console.log(e)
+				this.$forceUpdate();
+			},
+			showInput(index) {
+				this.inputVisible = 1;
+				this.form.note.splice(index, 0);
+				this.$forceUpdate();
+				this.$nextTick(_ => {
+					//					debugger
+					this.$refs.saveTagInput.$refs.input.focus();
+				});
+			},
+			handleInputBlur(index) {
+				this.inputVisible = 0;
+				this.$forceUpdate();
+			},
+			handleClose(subIndex) {
+				this.form.note.splice(subIndex, 1);
+			},
+			handleInputConfirm(index) {
+				let inputValue = this.inputValue;
+				var d = new Date(),
+					str = '';
+				str += d.getFullYear() + '-'; //获取当前年份 
+				str += d.getMonth() + 1 + '-'; //获取当前月份（0——11） 
+				str += d.getDate() + ' ';
+				str += d.getHours() + ':';
+				str += d.getMinutes() + ':';
+				str += d.getSeconds() + '';
+				if(inputValue) {
+					this.form.note.push(inputValue + ' [' + str + ']');
+				}
+				this.inputVisible = 0;
+				this.inputValue = '';
+				this.$forceUpdate();
+			},
+			getDataSource() {
+				var that = this;
+				that.$get('/admin/v1/contents?type=Orderstatus', {
 
-        } else {
-          this.$message.error("请正确填写表单！");
-        }
-      });
+				}).then(response => {
+					if(response.retCode == 0) {
+						this.statusList = response.data || [];
+
+						this.$forceUpdate();
+					} else {
+
+						that.$message({
+							type: 'warning',
+							message: response.message
+						});
+					}
+
+				})
+			},
+			dateFormat(date, format) {         
+				date = new Date(date);         
+				date.setHours(date.getHours() - 14);         
+				var o = {             
+					'M+': date.getMonth() + 1, //month
+					             'd+': date.getDate(), //day
+					             'H+': date.getHours(), //hour
+					             'm+': date.getMinutes(), //minute
+					             's+': date.getSeconds(), //second
+					             'q+': Math.floor((date.getMonth() + 3) / 3), //quarter
+					             'S': date.getMilliseconds() //millisecond
+					         
+				};
+
+				         
+				if(/(y+)/.test(format))              format = format.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
+
+				         
+				for(var k in o)             
+					if(new RegExp('(' + k + ')').test(format)) {                 
+						format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ('00' + o[k]).substr(('' + o[k]).length));             
+					}         
+				return format;      
+			},
+			//新增方法
+			submit() {
+				var form = {};
+				var that = this;
+				if(this.form.note.length == 0) {
+					this.originFrom.note = "";
+				} else {
+					this.originFrom.note = this.form.note.join(',')
+				}
+				this.originFrom.status = this.form.status;
+				this.$refs.form.validate((valid) => {
+					if(valid) {
+						if(this.$route.query.id) {
+							that.$post("/admin/v1/content/update?type=Order&id=" + this.$route.query.id, this.originFrom).then(response => {
+								if(response.retCode == 0) {
+									that.$util.successAlert("Modify Success！", '/Order/list', 'return list');
+								} else {
+									that.$message({
+										type: 'warning',
+										message: response.message
+									});
+								}
+
+							})
+						} else {
+							that.$post("/admin/v1/content?type=Order", form).then(response => {
+								if(response.retCode == 0) {
+									that.$util.successAlert("Add Success！", '/Order/list', 'return list');
+								} else {
+									that.$message({
+										type: 'warning',
+										message: response.message
+									});
+								}
+
+							})
+						}
+
+					} else {
+						that.$message.error("Please fill in the form correctly！");
+					}
+				})
+			},
 		},
 
-    //重置
-    doResetData(formName) {
-      this.$refs[formName].resetFields();
-    },
-	},
+		created() {
+			this.getDataSource();
+			if(this.$route.query.id) {
+				this.$get("/admin/v1/content?type=Order&id=" + this.$route.query.id, {}).then(response => {
 
-}
+					if(response.retCode == 0) {
+						this.form = response.data;
+						this.originFrom = JSON.parse(JSON.stringify(this.form))
+						this.form.note = this.form.note && this.form.note.split(',');
+						this.form.pay_time = this.form.pay_time ? this.dateFormat(this.form.pay_time, 'yyyy-MM-dd HH:mm:ss') : '';
+						this.form.request_time = this.form.request_time ? this.dateFormat(this.form.request_time, 'yyyy-MM-dd HH:mm:ss') : '';
+						this.form.last_update = this.form.last_update ? this.dateFormat(this.form.last_update, 'yyyy-MM-dd HH:mm:ss') : ''
+						this.form.refund_time = this.form.refund_time ? this.dateFormat(this.form.refund_time, 'yyyy-MM-dd HH:mm:ss') : ''
+					} else {
+						this.$message({
+							message: response.msg,
+							type: 'warning'
+						})
+					}
+				})
+			}
 
+		}
 
-  //初始化角色权限
-  function rolePowerList(vue) {
-    vue.$post("/acl/options").then(response => {
-      vue.rolePowerList = response.data;
-    })
-  }
-
-
-  //角色新增/修改
-  function addRole(vue) {
-    var dataStr = {
-      role_key: vue.addData.roleKey,   //角色Key
-      role_name: vue.addData.roleName,   //角色名称
-      acl_keys: vue.addData.aclKeys,   //权限Key的数组，每个元素对应权限的Key
-      description: vue.addData.remark  //备注
-    };
-
-    vue.$post("/role/edit",{
-      RoleRequest: dataStr,
-
-    }).then(response => {
-      if(response.code == 1) {
-        vue.$util.successAlert("角色新增成功！");
-      }else {
-        vue.$message.error(response.msg);
-      }
-
-    })
-  }
-
+	}
 </script>
 
-
-<style>
-  @import "../../assets/css/add.css";
+<style scoped="">
+	@import "../../assets/css/add.css";
+	.avatar-uploader .el-upload {
+		border: 1px dashed #d9d9d9;
+		border-radius: 6px;
+		cursor: pointer;
+		position: relative;
+		overflow: hidden;
+	}
+	
+	.avatar-uploader .el-upload:hover {
+		border-color: #409EFF;
+	}
+	
+	.avatar-uploader-icon {
+		font-size: 28px;
+		color: #8c939d;
+		width: 128px;
+		height: 128px;
+		line-height: 128px;
+		text-align: center;
+		background-color: #fbfdff;
+		border: 1px dashed #c0ccda;
+		border-radius: 6px;
+	}
+	
+	.avatar {
+		width: 128px;
+		height: 128px;
+		display: block;
+	}
+	
+	/deep/ .w-e-menu,
+	/deep/ .w-e-text-container {
+		z-index: 1000!important;
+	}
 </style>
-

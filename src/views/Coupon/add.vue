@@ -3,7 +3,7 @@
 		<!--面包屑-->
 		<el-card class="box-card">
 			<el-breadcrumb separator="/">
-				<el-breadcrumb-item :to="{ path: '/template/Coupon/List'}">Coupon</el-breadcrumb-item>
+				<el-breadcrumb-item :to="{ path: '/Coupon/List'}">Coupon</el-breadcrumb-item>
 				<el-breadcrumb-item>{{$route.query.id?'Edit':'Add'}}</el-breadcrumb-item>
 			</el-breadcrumb>
 		</el-card>
@@ -11,25 +11,48 @@
 		<el-card class="box-card">
 			<div class="align-center" style="width: 100%;">
 				<el-form ref="form" :model="form" :rules="rules" label-width="20%" label-position="right">
-					<el-form-item label="name" prop="name" >
+					<el-form-item label="name" prop="name">
 						<el-input style="width:400px" placeholder="Please fill in name" maxlength="" v-model="form.name">
 						</el-input>
 					</el-form-item>
-					<el-form-item label="level" prop="level" >
-						<el-input style="width:400px" placeholder="Please fill in level" maxlength="" v-model="form.level">
+
+					<el-form-item label="game" prop="game">
+						<el-select :clearable="true" @change="refreshData" style="width:400px" v-model="form.game" placeholder="Please select game">
+							<el-option v-for="subItem in gameList" :key="subItem.id" :label="subItem.name" :value="subItem.id">
+							</el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item label="price" prop="price">
+						<el-input style="width:400px" placeholder="Please fill in price" maxlength="" oninput="value=value.replace(/[^\d.]/g,'')" v-model="form.price">
 						</el-input>
 					</el-form-item>
-					<el-form-item label="qty" prop="qty" >
-						<el-input style="width:400px" placeholder="Please fill in qty" maxlength="" v-model="form.qty">
+					<el-form-item label="type" prop="type">
+						<el-radio-group v-model="form.type">
+							<el-radio :label="1">百分比</el-radio>
+							<el-radio :label="2">金额</el-radio>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="initial_amount" prop="initial_amount">
+						<el-input style="width:400px" placeholder="Please fill in initial_amount" maxlength="" oninput="value=value.replace(/[^\d.]/g,'')" v-model="form.initial_amount">
 						</el-input>
 					</el-form-item>
-					<el-form-item label="discount" prop="discount" >
-						<el-input style="width:400px" placeholder="Please fill in discount" maxlength="" v-model="form.discount">
-						</el-input>
-					</el-form-item>
-					<el-form-item label="rangeTime" prop="rangeTime" >
-						<el-date-picker value-format="yyyy-MM-dd" v-model="form.rangeTime" type="daterange" range-separator="To" start-placeholder="startTime" end-placeholder="endTime">
+					<el-form-item label="rangeTime" prop="rangeTime">
+						<el-date-picker format="yyyy-MM-dd HH" value-format="yyyy-MM-dd HH" v-model="form.rangeTime" type="datetimerange" range-separator="To" start-placeholder="startTime" end-placeholder="endTime">
 						</el-date-picker>
+					</el-form-item>
+					<el-form-item label="code" prop="code">
+						<el-input style="width:400px" placeholder="Please fill in code" maxlength="" v-model="form.code">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="desc" prop="desc">
+
+						<div ref="editorElem" style="z-index: 1000;">
+							<div v-model="form.desc" style="text-align:left;"></div>
+						</div>
+					</el-form-item>
+					<el-form-item label="meta" prop="meta">
+						<el-input style="width:400px" placeholder="Please fill in meta" maxlength="" v-model="form.meta">
+						</el-input>
 					</el-form-item>
 					<div class="cls"></div>
 					<div class="cls"></div>
@@ -41,6 +64,7 @@
 				</el-form>
 			</div>
 		</el-card>
+		{{form}}
 	</div>
 </template>
 
@@ -50,39 +74,150 @@
 	export default {
 		name: 'Add',
 		data() {
+			var validatePass = (rule, value, callback) => {
+				if(value) {
+					if(value.split('.')[1] && value.split('.')[1].length > 3) {
+						callback(new Error('最多只能输入3位小数'));
+						return
+					}
+					callback();
+				} else {
+					callback(new Error(rule.field + '不能为空'));
+
+				}
+			};
 			return {
+
 				form: {
 
+					online: false,
+					type: 1,
 				},
+				gameList: [],
+				list: {
+
+				},
+
 				activeKey: '',
 				rules: {
-					//										name: [{
-					//											message: "请填写name",
-					//											required: true,
-					//											trigger: 'blur'
-					//										}],
+					name: [{
+						message: "请填写name",
+						required: true,
+						trigger: 'blur'
+					}],
+					game: [{
+						message: "请填写game",
+						required: true,
+						trigger: 'blur'
+					}],
+					price: [{
+						required: true,
+						trigger: 'blur',
+						validator: validatePass,
+					}],
+					initial_amount: [{
+						validator: validatePass,
+						required: true,
+						trigger: 'blur'
+					}],
+					rangeTime: [{
+						message: "请填写rangeTime",
+						required: true,
+						trigger: 'blur'
+					}],
+					code: [{
+						message: "请填写code",
+						required: true,
+						trigger: 'blur'
+					}],
 
 				},
 			}
 		},
 		methods: {
+			creatEdit() {
+				var that = this;
+				setTimeout(() => {
+					this.editor = new E(this.$refs['editorElem']);
+					// 编辑器的事件，每次改变会获取其html内容
+					this.editor.customConfig.onchange = html => {
+						that.form['desc'] = html;
+						that.$forceUpdate();
+					};
+					this.editor.create(); // 创建富文本实例
+					this.editor.txt.html(that.form['desc'])
+				}, 1000)
 
-			refreshData() {
+			},
+			refreshData(e) {
+				console.log(e)
 				this.$forceUpdate();
 			},
+			getDataSource(url, key) {
+				var that = this;
+				that.$get('/admin/v1/contents?type=Game', {
 
+				}).then(response => {
+					if(response.retCode == 0) {
+						this.gameList = response.data || [];
+
+						if(this.gameList.length == 0) {
+							this.$alert('请先创建Game', '提示', {
+								confirmButtonText: '确定',
+								callback: action => {
+									this.$router.push('/template/Add/Game')
+								}
+							});
+						}
+						if(this.$route.query.id) {
+							this.$get("/admin/v1/content?type=Coupon&id=" + this.$route.query.id, {}).then(response => {
+
+								if(response.retCode == 0) {
+									this.form = response.data;
+									this.form.rangeTime = [response.data.starttime, response.data.endtime];
+									this.form.game = parseInt(this.form.game.split(',')[0]);
+									this.form.type = parseInt(this.form.type);
+									this.$forceUpdate();
+
+								} else {
+									this.$message({
+										message: response.msg,
+										type: 'warning'
+									})
+								}
+							})
+						}
+						this.$forceUpdate();
+					} else {
+
+						that.$message({
+							type: 'warning',
+							message: response.message
+						});
+					}
+
+				})
+			},
 			//新增方法
 			submit() {
 				var form = {};
 				form = JSON.parse(JSON.stringify(this.form)); //this.templateData是父组件传递的对象  
 				var that = this;
+				var data = this.gameList.filter((item, index) => {
+
+					return item.id == this.form.game
+				})
+				form.game = this.form.game + "," + data[0].name
+				form.starttime = form.rangeTime[0];
+				form.endtime = form.rangeTime[1];
+				form.entime = form.rangeTime[1]
 				this.$refs.form.validate((valid) => {
 					if(valid) {
 
 						if(this.$route.query.id) {
-							that.$post("/admin/v1/content/update?type=" + Coupon + "&id=" + this.$route.query.id, form).then(response => {
+							that.$post("/admin/v1/content/update?type=Coupon&id=" + this.$route.query.id, form).then(response => {
 								if(response.retCode == 0) {
-									that.$util.successAlert("Modify Success！", '/template/list/' + Coupon, 'return list');
+									that.$util.successAlert("Modify Success！", '/Coupon/list', 'return list');
 								} else {
 									that.$message({
 										type: 'warning',
@@ -92,9 +227,9 @@
 
 							})
 						} else {
-							that.$post("/admin/v1/content?type=" + Coupon, form).then(response => {
+							that.$post("/admin/v1/content?type=Coupon", form).then(response => {
 								if(response.retCode == 0) {
-									that.$util.successAlert("Add Success！", '/template/list/' + Coupon, 'return list');
+									that.$util.successAlert("Add Success！", '/Coupon/list', 'return list');
 								} else {
 									that.$message({
 										type: 'warning',
@@ -113,20 +248,8 @@
 		},
 
 		created() {
-			if(this.$route.query.id) {
-				this.$get("/admin/v1/content?type=Coupon&id=" + this.$route.query.id, {}).then(response => {
-					if(response.retCode == 0) {
-						this.form = response.data;
-						this.$forceUpdate();
-
-					} else {
-						this.$message({
-							message: response.msg,
-							type: 'warning'
-						})
-					}
-				})
-			} 
+			this.creatEdit();
+			this.getDataSource();
 
 		}
 
