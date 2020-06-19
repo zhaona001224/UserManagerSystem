@@ -4,11 +4,11 @@
 			<div class="align-center" style="width: 100%;">
 				<el-form ref="form" :model="form"  label-width="20%" label-position="right">
 					<el-form-item label="admin_email" prop="admin_email">
-						<el-input  style="width:400px" placeholder="admin_email" v-model="form.admin_email">
+						<el-input  style="width:800px" placeholder="admin_email" v-model="form.admin_email">
 						</el-input>
 					</el-form-item>
 					<el-form-item label="bind_addr" prop="bind_addr">
-						<el-input disabled style="width:400px" placeholder="bind_addr" v-model="form.bind_addr">
+						<el-input disabled style="width:800px" placeholder="bind_addr" v-model="form.bind_addr">
 						</el-input>
 					</el-form-item>
 					<el-form-item label="cache_disabled" prop="cache_disabled">
@@ -24,35 +24,35 @@
 						</el-radio-group>
 					</el-form-item>
 					<el-form-item label="domain" prop="domain">
-						<el-input style="width:400px" placeholder="domain" v-model="form.domain">
+						<el-input style="width:800px" placeholder="domain" v-model="form.domain">
 						</el-input>
 					</el-form-item>
 					<el-form-item  label="email_host" prop="email_host">
-						<el-input style="width:400px" placeholder="email_host" v-model="form.email_host">
+						<el-input style="width:800px" placeholder="email_host" v-model="form.email_host">
 						</el-input>
 					</el-form-item>
 					<el-form-item label="email_password" prop="email_password">
-						<el-input style="width:400px" placeholder="email_password" v-model="form.email_password">
+						<el-input style="width:800px" placeholder="email_password" v-model="form.email_password">
 						</el-input>
 					</el-form-item>
 					<el-form-item  label="http_port" prop="http_port">
-						<el-input disabled style="width:400px" placeholder="http_port" v-model="form.http_port">
+						<el-input disabled style="width:800px" placeholder="http_port" v-model="form.http_port">
 						</el-input>
 					</el-form-item>
 					<el-form-item  label="https_port" prop="https_port">
-						<el-input disabled style="width:400px" placeholder="https_port" v-model="form.https_port">
+						<el-input disabled style="width:800px" placeholder="https_port" v-model="form.https_port">
 						</el-input>
 					</el-form-item>
 					<el-form-item  label="log_file" prop="log_file">
-						<el-input disabled style="width:400px" placeholder="log_file" v-model="form.log_file">
+						<el-input disabled style="width:800px" placeholder="log_file" v-model="form.log_file">
 						</el-input>
 					</el-form-item>
 					<el-form-item  label="log_level" prop="log_level">
-						<el-input disabled style="width:400px" placeholder="log_level" v-model="form.log_level">
+						<el-input disabled style="width:800px" placeholder="log_level" v-model="form.log_level">
 						</el-input>
 					</el-form-item>
 					<el-form-item  label="name" prop="name">
-						<el-input disabled style="width:400px" placeholder="name" v-model="form.name">
+						<el-input disabled style="width:800px" placeholder="name" v-model="form.name">
 						</el-input>
 					</el-form-item>
 					<el-form-item  label="zip_disabled" prop="zip_disabled">

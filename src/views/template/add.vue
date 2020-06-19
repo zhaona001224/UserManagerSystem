@@ -12,11 +12,11 @@
 			<div class="align-center" style="width: 100%;">
 				<el-form ref="form" :model="form" :rules="rules" label-width="20%" label-position="right">
 					<el-form-item v-for="(item,index) in formData" :label="item&&item.name+':'" :prop="item&&item.name" :key="index" v-if="item">
-						<el-input style="width:400px" v-if="item.data.type=='input'" :placeholder="'Please fill in '+item.name" maxlength="" v-model="form[item.name]">
+						<el-input style="width:800px" v-if="item.data.type=='input'" :placeholder="'Please fill in '+item.name" maxlength="" v-model="form[item.name]">
 						</el-input>
-						<el-tree :default-expand-all="true" v-if="item.data.type=='tree'" ref="tree" :props="defaultProps" style="width:400px" :data="item.data.source[0].name?item.data.source:[]" :key="item.data.id" :highlight-current="true" node-key="id" :label="item.name" :value="item.id" accordion @node-click="handleNodeClick">
+						<el-tree :default-expand-all="true" v-if="item.data.type=='tree'" ref="tree" :props="defaultProps" style="width:800px" :data="item.data.source[0].name?item.data.source:[]" :key="item.data.id" :highlight-current="true" node-key="id" :label="item.name" :value="item.id" accordion @node-click="handleNodeClick">
 						</el-tree>
-						<el-select :clearable="true" @change="refreshData" style="width:400px" v-if="item.data.type=='select'" v-model="form[item.name]" :placeholder="'Please select'+item.name">
+						<el-select :clearable="true" @change="refreshData" style="width:800px" v-if="item.data.type=='select'" v-model="form[item.name]" :placeholder="'Please select'+item.name">
 							<el-option v-for="subItem in item.data.source" :key="subItem.id" :label="subItem.name" :value="subItem.id">
 							</el-option>
 						</el-select>
@@ -30,7 +30,7 @@
 						</el-radio-group>
 
 						<div v-if="item.data.type=='file'" @click='activeKey=item.name'>
-							<el-select style="display: block;width: 400px;margin:20px 0 " v-if="item.data.type=='file'&&picType[item.name]==1" v-model="form[item.name]" :placeholder="'Please select'+item.name">
+							<el-select style="display: block;width: 800px;margin:20px 0 " v-if="item.data.type=='file'&&picType[item.name]==1" v-model="form[item.name]" :placeholder="'Please select'+item.name">
 								<el-option v-for="subItem in picSource" :key="subItem.id" :label="subItem.name" :value="subItem.id">
 								</el-option>
 							</el-select>

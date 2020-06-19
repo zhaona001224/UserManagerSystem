@@ -1,10 +1,11 @@
 <template>
 	<div class="list">
-		<el-card class="box-card">
-			<el-button type="primary" class="common-btn" @click.native="$router.push('/Discount/Add')">Add</el-button>
-			<el-input class="search-input" prefix-icon="el-icon-search" v-model="keyword" placeholder="请输入搜索内容" maxlength="10">
+		<el-card class="box-card" >
+			<el-button type="primary" class="common-btn" @click.native="$router.push('/Coupon/Add')">Add</el-button>
+			<el-button type="primary" style="float: right;" class="common-btn" @click="search">Search</el-button>
+			<el-input class="search-input" style="width:340px!important;margin-right: 50px;float: right;"prefix-icon="el-icon-search" v-model="keyword" placeholder="请输入搜索内容" maxlength="10">
 			</el-input>
-			<el-button type="primary" class="common-btn" @click="search">Search</el-button>
+		
 		</el-card>
 		<el-card class="box-card">
 			<el-table :data="tableData" width="100%">
@@ -13,7 +14,7 @@
 						<el-radio :label="scope.row.yun_id" v-model="selectid">&nbsp;</el-radio>
 					</template>
 				</el-table-column>-->
-				<el-table-column header-align="left" prop="id" label="id">
+				<el-table-column header-align="left" width="70px" prop="id" label="id">
 				</el-table-column>
 					<el-table-column header-align="left" prop="name" label="name">
 				</el-table-column>

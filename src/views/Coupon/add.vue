@@ -12,18 +12,22 @@
 			<div class="align-center" style="width: 100%;">
 				<el-form ref="form" :model="form" :rules="rules" label-width="20%" label-position="right">
 					<el-form-item label="name" prop="name">
-						<el-input style="width:400px" placeholder="Please fill in name" maxlength="" v-model="form.name">
+						<el-input style="width:800px" placeholder="Please fill in name" maxlength="" v-model="form.name">
 						</el-input>
 					</el-form-item>
 
 					<el-form-item label="game" prop="game">
-						<el-select :clearable="true" @change="refreshData" style="width:400px" v-model="form.game" placeholder="Please select game">
+						<el-select :clearable="true" @change="refreshData" style="width:800px" v-model="form.game" placeholder="Please select game">
 							<el-option v-for="subItem in gameList" :key="subItem.id" :label="subItem.name" :value="subItem.id">
 							</el-option>
 						</el-select>
 					</el-form-item>
+					<el-form-item label="currency" prop="currency">
+						<el-input style="width:800px" disabled placeholder="Please fill in currency" maxlength="" v-model="form.currency">
+						</el-input>
+					</el-form-item>
 					<el-form-item label="price" prop="price">
-						<el-input style="width:400px" placeholder="Please fill in price" maxlength="" oninput="value=value.replace(/[^\d.]/g,'')" v-model="form.price">
+						<el-input style="width:800px" placeholder="Please fill in price" maxlength="" oninput="value=value.replace(/[^\d.]/g,'')" v-model="form.price">
 						</el-input>
 					</el-form-item>
 					<el-form-item label="type" prop="type">
@@ -33,15 +37,15 @@
 						</el-radio-group>
 					</el-form-item>
 					<el-form-item label="initial_amount" prop="initial_amount">
-						<el-input style="width:400px" placeholder="Please fill in initial_amount" maxlength="" oninput="value=value.replace(/[^\d.]/g,'')" v-model="form.initial_amount">
+						<el-input style="width:800px" placeholder="Please fill in initial_amount" maxlength="" oninput="value=value.replace(/[^\d.]/g,'')" v-model="form.initial_amount">
 						</el-input>
 					</el-form-item>
 					<el-form-item label="rangeTime" prop="rangeTime">
-						<el-date-picker format="yyyy-MM-dd HH" value-format="yyyy-MM-dd HH" v-model="form.rangeTime" type="datetimerange" range-separator="To" start-placeholder="startTime" end-placeholder="endTime">
+						<el-date-picker  format="yyyy-MM-dd HH" value-format="yyyy-MM-dd HH" v-model="form.rangeTime" type="datetimerange" range-separator="To" start-placeholder="startTime" end-placeholder="endTime">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item label="code" prop="code">
-						<el-input style="width:400px" placeholder="Please fill in code" maxlength="" v-model="form.code">
+						<el-input style="width:800px" placeholder="Please fill in code" maxlength="" v-model="form.code">
 						</el-input>
 					</el-form-item>
 					<el-form-item label="desc" prop="desc">
@@ -51,8 +55,10 @@
 						</div>
 					</el-form-item>
 					<el-form-item label="meta" prop="meta">
-						<el-input style="width:400px" placeholder="Please fill in meta" maxlength="" v-model="form.meta">
-						</el-input>
+						<div ref="editorElem1" style="z-index: 1000;">
+							<div v-model="form.meta" style="text-align:left;"></div>
+						</div>
+
 					</el-form-item>
 					<div class="cls"></div>
 					<div class="cls"></div>
@@ -76,6 +82,7 @@
 		data() {
 			var validatePass = (rule, value, callback) => {
 				if(value) {
+					value=value+''
 					if(value.split('.')[1] && value.split('.')[1].length > 3) {
 						callback(new Error('最多只能输入3位小数'));
 						return
@@ -146,6 +153,14 @@
 					};
 					this.editor.create(); // 创建富文本实例
 					this.editor.txt.html(that.form['desc'])
+					this.editor1 = new E(this.$refs['editorElem1']);
+					// 编辑器的事件，每次改变会获取其html内容
+					this.editor1.customConfig.onchange = html => {
+						that.form['meta'] = html;
+						that.$forceUpdate();
+					};
+					this.editor1.create(); // 创建富文本实例
+					this.editor1.txt.html(that.form['meta'])
 				}, 1000)
 
 			},
@@ -177,6 +192,7 @@
 									this.form.rangeTime = [response.data.starttime, response.data.endtime];
 									this.form.game = parseInt(this.form.game.split(',')[0]);
 									this.form.type = parseInt(this.form.type);
+									this.form.currency = "$"
 									this.$forceUpdate();
 
 								} else {

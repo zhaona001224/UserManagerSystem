@@ -1,10 +1,11 @@
 <template>
 	<div class="list">
-		<el-card class="box-card">
-			<el-button type="primary" class="common-btn" @click.native="$router.push('/template/Add/'+$route.params.key)">Add</el-button>
-			<el-input class="search-input" prefix-icon="el-icon-search" v-model="keyword" placeholder="请输入搜索内容" maxlength="10">
+		<el-card class="box-card" >
+			<el-button type="primary" class="common-btn" @click.native="$router.push('/Coupon/Add')">Add</el-button>
+			<el-button type="primary" style="float: right;" class="common-btn" @click="search">Search</el-button>
+			<el-input class="search-input" style="width:340px!important;margin-right: 50px;float: right;" prefix-icon="el-icon-search" v-model="keyword" placeholder="请输入搜索内容" maxlength="10">
 			</el-input>
-			<el-button type="primary" class="common-btn" @click="search">Search</el-button>
+
 		</el-card>
 		<el-card class="box-card">
 			<el-table :data="tableData" width="100%">
@@ -189,7 +190,7 @@
 
 					if(response.retCode == 0) {
 						this.notSearch = true;
-			
+
 						this.tableData = response.data || [];
 						this.originTable = JSON.parse(JSON.stringify(this.tableData))
 						this.tableData.sort((a, b) => {
@@ -282,7 +283,7 @@
 		created() {
 			this.imgUrl = this.store.state.imgUrl
 			var menuTrees = JSON.parse(this.store.state.loginData);
-			
+
 			menuTrees.map((item, index) => {
 				if(item.name == this.$route.params.key) {
 					this.dataSource = item

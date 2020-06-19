@@ -1,22 +1,26 @@
 <template>
 	<div class="list">
-		<el-card class="box-card">
-			<el-input class="search-input" prefix-icon="el-icon-search" v-model="keyword" placeholder="请输入搜索内容" maxlength="10">
+		<el-card class="box-card" style="text-align: right;">
+			<el-input @input="selfSearch" class="search-input" style="width:340px!important;margin-right: 50px;" prefix-icon="el-icon-search" v-model="keyword" placeholder="请输入搜索内容" maxlength="10">
 			</el-input>
 			<el-button type="primary" class="common-btn" @click="search">Search</el-button>
+			<el-button type="primary" style="float: right;background-color: #8a818a!important;border-color: #8a818a!important;" class="common-btn" @click="exportTable">Export</el-button>
 
 		</el-card>
 		<el-card>
-			<label>订单状态：</label>
-			<el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-			<el-checkbox-group style="display: inline-block;" v-model="checkedStatus" @change="handlecheckedStatusChange">
-				<el-checkbox v-for="item in statusList" :label="item.name" :key="item.name">{{item.name}}</el-checkbox>
-			</el-checkbox-group>
-			<div style="margin: 15px 0;"></div>
-			<label>时间筛选：</label>
-			<el-date-picker @change="search" v-model="timeRange" type="daterange" :picker-options="pickerOptions" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="right">
-			</el-date-picker>
-			<el-button type="primary" style="float: right;" class="common-btn" @click="exportTable">Export</el-button>
+			<el-row>
+				<el-col :span="12" style="display: flex;"><label style="width:140px;">订单状态：</label>
+					<el-checkbox-group style="display: inline-block;" v-model="checkedStatus" @change="handlecheckedStatusChange">
+						<el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+						<el-checkbox style="margin-bottom:10px" v-for="item in statusList" :label="item.name" :key="item.name">{{item.name}}</el-checkbox>
+					</el-checkbox-group>
+				</el-col>
+				<el-col :span="12" style="text-align: right;"><label>时间筛选：</label>
+					<el-date-picker @change="search" v-model="timeRange" type="daterange" :picker-options="pickerOptions" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="right">
+					</el-date-picker>
+				</el-col>
+			</el-row>
+
 		</el-card>
 		<el-card class="box-card">
 			<el-table :data="tableData" width="100%" :row-class-name="getRowStyle">
@@ -26,13 +30,13 @@
 				</el-table-column>
 				<el-table-column header-align="left" width="160px" sortable prop="pay_time" label="pay_time">
 				</el-table-column>
-				<el-table-column header-align="left" prop="request_time" width="160px" label="request_time">
+				<el-table-column header-align="left" prop="updated" width="160px" label="updated">
 				</el-table-column>
 				<el-table-column header-align="left" width="220px" prop="payer" label="payer">
 				</el-table-column>
-				<el-table-column prop="status" label="status" width="300px">
+				<el-table-column prop="status" label="status" width="200px">
 					<template slot-scope="scope">
-						<el-select :clearable="true" @change="edit(scope.$index,scope.row['id'])" style="width:200px" :disabled="scope.row['status']=='已完成'" v-model="scope.row['status']" placeholder="Please select status">
+						<el-select :clearable="true" @change="edit(scope.$index,scope.row['id'])" style="width:100px" v-model="scope.row['status']" placeholder="Please select status">
 							<el-option v-for="subItem in statusList" :key="subItem.name" :label="subItem.name" :value="subItem.name">
 							</el-option>
 						</el-select>
@@ -44,7 +48,7 @@
 				</el-table-column>
 				<el-table-column prop="note" label="note" width="300px">
 					<template slot-scope="scope">
-						<el-tag :key="tag" v-for="(tag,subIndex) in scope.row['note']" closable :disable-transitions="false" @close="handleClose(scope.$index,subIndex)">
+						<el-tag :key="subIndex" v-for="(tag,subIndex) in scope.row['note']" closable :disable-transitions="false" @close="handleClose(scope.$index,subIndex)">
 							{{tag}}
 						</el-tag>
 
@@ -56,7 +60,6 @@
 				<el-table-column label="operation" width="180px" cell-class-name="center" header-align="center">
 					<template slot-scope="scope">
 						<el-button type="text" size="small" @click="handleEdit(scope.row)">Edit</el-button>
-						<el-button type="text" size="small" @click="handleDelete(scope.row)">Delete</el-button>
 						<el-button type="text" class="clip" :data-clipboard-text="getFromData(scope.$index)" size="small" @click="copy(scope.row.id)">Copy</el-button>
 					</template>
 				</el-table-column>
@@ -131,12 +134,30 @@
 			}) {
 				return row.isLate
 			},
+			selfSearch() {
+				if(!this.keyword && !this.isIndeterminate && this.timeRange.length == 0) {
+					this.pageNum = 1;
+					this.queryTable();
+					return
+				}
+
+				this.tableData = JSON.parse(JSON.stringify(this.tableData1)).filter((item, index) => {
+
+					return JSON.stringify(item).indexOf(this.keyword) > -1
+				})
+				console.log(this.tableData)
+
+				this.originTable = JSON.parse(JSON.stringify(this.originTable1)).filter((item, index) => {
+
+					return JSON.stringify(item).indexOf(this.keyword) > -1
+				})
+				this.$forceUpdate();
+			},
 			handleClose(index, subIndex) {
 				this.tableData[index].note.splice(subIndex, 1);
 				this.edit(index, this.tableData[index].id)
 
-			},
-			//导出表格
+			}, //导出表格
 			exportTable() {
 				var tableLable = this.originTable;
 				let addobj = {}
@@ -215,10 +236,10 @@
 				var str = ""
 				for(var key in data) {
 					data[key] = data[key] + ''
-						// 2.5.1 注意要将本身就有换行或者英文逗号的内容进行变换 否则表格内容会错乱
-						data[key] = data[key].replace(/\n/g, ' ')
-						data[key] = data[key].replace(/,/g, '，') // 英文替换为中文
-						str += `${data[key]+ '\t'}`;
+					// 2.5.1 注意要将本身就有换行或者英文逗号的内容进行变换 否则表格内容会错乱
+					data[key] = data[key].replace(/\n/g, ' ')
+					data[key] = data[key].replace(/,/g, '，') // 英文替换为中文
+					str += `${data[key]+ '\t'}`;
 
 				}
 				return str
@@ -260,8 +281,9 @@
 				str += d.getHours() + ':';
 				str += d.getMinutes() + ':';
 				str += d.getSeconds() + '';
+				var email=JSON.parse(this.store.state.configData).admin_email
 				if(inputValue) {
-					this.tableData[index].note.push(inputValue + ' [' + str + ']');
+					this.tableData[index].note.push(' [' + str + ']'+' [' + email + ']:'+inputValue);
 					this.edit(index, this.tableData[index].id)
 				}
 				this.inputVisible[index] = 0;
@@ -292,24 +314,7 @@
 				})
 
 			},
-			//删除
-			handleDelete(item) {
-				this.$delete("/admin/v1/content?type=Order&id=" + item.id, {}).then(response => {
-					if(response.retCode == 0) {
-						this.$message({
-							message: 'success!',
-							type: 'success'
-						})
-						this.queryTable();
-					} else {
-						this.$message({
-							message: response.msg,
-							type: 'warning'
-						})
-					}
-				})
-
-			},
+			
 			edit(index, id) {
 				var that = this;
 				var data;
@@ -359,7 +364,8 @@
 					if(response.retCode == 0) {
 						this.notSearch = true;
 						this.tableData = response.data || [];
-						this.originTable = JSON.parse(JSON.stringify(this.tableData))
+						this.originTable = JSON.parse(JSON.stringify(this.tableData));
+						this.originTable1 = JSON.parse(JSON.stringify(this.tableData));
 						this.tableData.sort((a, b) => {
 							//排序基于的数据
 							return b.updated - a.updated;
@@ -374,6 +380,7 @@
 
 						})
 
+						this.tableData1 = JSON.parse(JSON.stringify(this.tableData))
 						this.total = response.meta.total ? parseInt(response.meta.total) : 0;
 					} else {
 
@@ -415,12 +422,12 @@
 					return
 				}
 				if(this.isIndeterminate) {
-					var str = "[";
+					var str = "";
 					this.checkedStatus.map((item, index) => {
 						if(index != this.checkedStatus.length - 1) {
-							str = str + '(' + item + ')|';
+							str = str + '(\"' + item + '\")|';
 						} else {
-							str = str + '(' + item + ')]';
+							str = str + '(\"' + item + '\")';
 						}
 
 					})
@@ -440,6 +447,8 @@
 				}).then(response => {
 					if(response.retCode == 0) {
 						this.tableData = response.data || [];
+						this.originTable = JSON.parse(JSON.stringify(this.tableData));
+						this.originTable1 = JSON.parse(JSON.stringify(this.tableData));
 						this.tableData.sort((a, b) => {
 							//排序基于的数据
 							return b.updated - a.updated;
@@ -453,6 +462,8 @@
 
 						})
 						this.total = response.meta.total ? parseInt(response.meta.total) : 0;
+
+						this.tableData1 = JSON.parse(JSON.stringify(this.tableData))
 						this.$forceUpdate();
 					} else {
 
@@ -527,14 +538,13 @@
 	}
 	
 	.input-new-tag {
-		width: 240px;
+		width: 240px!important;
 		margin-left: 10px;
 		vertical-align: bottom;
 	}
 	
-	.el-input,
-	.el-textarea,
-	.el-select {
-		width: 200px!important;
+	.el-table__row .el-input,
+	.el-table__row .el-select {
+		width: 120px!important;
 	}
 </style>

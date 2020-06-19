@@ -4,89 +4,199 @@
 		<el-card class="box-card">
 			<el-breadcrumb separator="/">
 				<el-breadcrumb-item :to="{ path: '/Order/List'}">Order</el-breadcrumb-item>
-				<el-breadcrumb-item>{{$route.query.id?'Edit':'Add'}}</el-breadcrumb-item>
+				<el-breadcrumb-item>{{$route.query.id?'Edit / ':'Add'}}<span v-if="$route.query.id" style="color: #544c64;font-weight: bold;">{{form.order_id}}</span></el-breadcrumb-item>
 			</el-breadcrumb>
 		</el-card>
 
 		<el-card class="box-card">
 			<div class="align-center" style="width: 100%;">
-				<el-form ref="form" :model="form" :rules="rules" label-width="20%" label-position="right">
-					<el-form-item label="bad" prop="bad">
-						<el-radio-group v-model="form.bad" disabled>
-							<el-radio :label="true">true</el-radio>
-							<el-radio :label="false">false</el-radio>
-						</el-radio-group>
-					</el-form-item>
-					<el-form-item label="status" prop="status">
-						<el-select :clearable="true" :disabled="form.status=='已完成'" @change="refreshData" style="width:400px" v-model="form.status" placeholder="Please select status">
-							<el-option v-for="subItem in statusList" :key="subItem.name" :label="subItem.name" :value="subItem.name">
-							</el-option>
-						</el-select>
-					</el-form-item>
-					<el-form-item label="total" prop="total">
-						<el-input disabled style="width:400px"  maxlength="" v-model="form.total">
-						</el-input>
-					</el-form-item>
-					<el-form-item label="currency" prop="currency">
-						<el-input disabled style="width:400px"  maxlength="" v-model="form.currency">
-						</el-input>
-					</el-form-item>
-					<el-form-item label="order_id" prop="order_id">
-						<el-input disabled style="width:400px"  maxlength="" v-model="form.order_id">
-						</el-input>
-					</el-form-item>
-					<el-form-item label="payment_id" prop="payment_id">
-						<el-input disabled style="width:400px"  maxlength="" v-model="form.payment_id">
-						</el-input>
-					</el-form-item>
-					<el-form-item label="vendor" prop="vendor">
-						<el-input disabled style="width:400px"  maxlength="" v-model="form.vendor">
-						</el-input>
-					</el-form-item>
-					<el-form-item label="method" prop="method">
-						<el-input disabled style="width:400px"  maxlength="" v-model="form.method">
-						</el-input>
-					</el-form-item>
-					<el-form-item label="payment_note" prop="payment_note">
-						<el-input disabled style="width:400px"  maxlength="" v-model="form.payment_note">
-						</el-input>
-					</el-form-item>
-					<el-form-item label="payer" prop="payer">
-						<el-input disabled style="width:400px"  maxlength="" v-model="form.payer">
-						</el-input>
-					</el-form-item>
-					<el-form-item label="payer_link" prop="payer_link">
-						<el-input disabled style="width:400px" maxlength="" v-model="form.payer_link">
-						</el-input>
-					</el-form-item>
-					<el-form-item label="paid" prop="paid">
-						<el-input disabled style="width:400px"  maxlength="" v-model="form.paid">
-						</el-input>
-					</el-form-item>
-					<el-form-item label="net" prop="net">
-						<el-input disabled style="width:400px"  maxlength="" v-model="form.net">
-						</el-input>
-					</el-form-item>
-					<el-form-item label="notify_info " prop="notify_info ">
-						<el-input disabled style="width:400px"  maxlength="" v-model="form.notify_info">
-						</el-input>
-					</el-form-item>
-					<el-form-item label="pay_time" prop="pay_time">
-						<el-input disabled style="width:400px" maxlength="" v-model="form.pay_time ">
-						</el-input>
-					</el-form-item>
-					<el-form-item label="delivery_time" prop="delivery_time">
-						<el-input disabled style="width:400px"  maxlength="" v-model="form.delivery_time">
-						</el-input>
-					</el-form-item>
-					<el-form-item label="worker" prop="worker">
-						<el-input disabled style="width:400px"  maxlength="" v-model="form.worker">
-						</el-input>
-					</el-form-item>
-					<el-form-item label="comments" prop="comments">
-						<el-input disabled style="width:400px"  maxlength="" v-model="form.comments">
-						</el-input>
-					</el-form-item>
+				<el-form ref="form" :model="form" :rules="rules" label-width="100px" label-position="right">
+					<el-row>
+						<el-col :span="12">
+							<el-form-item label="bad" prop="bad">
+								<el-radio-group v-model="form.bad" disabled>
+									<el-radio :label="true">true</el-radio>
+									<el-radio :label="false">false</el-radio>
+								</el-radio-group>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="status" prop="status">
+								<el-select :clearable="true" :disabled="form.status=='已完成'" @change="refreshData" style="width:400px" v-model="form.status" placeholder="Please select status">
+									<el-option v-for="subItem in statusList" :key="subItem.name" :label="subItem.name" :value="subItem.name">
+									</el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="12">
+
+						</el-col>
+						<el-col :span="12">
+
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="12">
+							<el-form-item label="total" prop="total">
+								<el-input disabled style="width:400px" maxlength="" v-model="form.total">
+								</el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="currency" prop="currency">
+								<el-input disabled style="width:400px" maxlength="" v-model="form.currency">
+								</el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="12">
+							<el-form-item label="payment_id" prop="payment_id">
+								<el-input disabled style="width:400px" maxlength="" v-model="form.payment_id">
+								</el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="vendor" prop="vendor">
+								<el-input disabled style="width:400px" maxlength="" v-model="form.vendor">
+								</el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="12">
+							<el-form-item label="method" prop="method">
+								<el-input disabled style="width:400px" maxlength="" v-model="form.method">
+								</el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="payment_note" prop="payment_note">
+								<el-input disabled style="width:400px" maxlength="" v-model="form.payment_note">
+								</el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="12">
+							<el-form-item label="payer" prop="payer">
+								<el-input disabled style="width:400px" maxlength="" v-model="form.payer">
+								</el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="payer_link" prop="payer_link">
+								<el-input disabled style="width:400px" maxlength="" v-model="form.payer_link">
+								</el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="12">
+							<el-form-item label="paid" prop="paid">
+								<el-input disabled style="width:400px" maxlength="" v-model="form.paid">
+								</el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="pay_time" prop="pay_time">
+								<el-input disabled style="width:400px" maxlength="" v-model="form.pay_time ">
+								</el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="12">
+							<el-form-item label="delivery_time" prop="delivery_time">
+								<el-input disabled style="width:400px" maxlength="" v-model="form.delivery_time">
+								</el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="worker" prop="worker">
+								<el-input disabled style="width:400px" maxlength="" v-model="form.worker">
+								</el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="12">
+							<el-form-item label="net" prop="net">
+								<el-input disabled style="width:400px" maxlength="" v-model="form.net">
+								</el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="request_time" prop="request_time">
+								<el-input disabled style="width:400px" maxlength="" v-model="form.request_time">
+								</el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="12">
+							<el-form-item label="is_refund" prop="is_refund">
+								<el-radio-group v-model="form.is_refund" disabled>
+									<el-radio :label="true">true</el-radio>
+									<el-radio :label="false">false</el-radio>
+								</el-radio-group>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="is_chargeback" prop="is_chargeback">
+								<el-radio-group v-model="form.is_chargeback" disabled>
+									<el-radio :label="true">true</el-radio>
+									<el-radio :label="false">false</el-radio>
+								</el-radio-group>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="12">
+							<el-form-item label="refund_time" prop="refund_time">
+								<el-input disabled style="width:400px" maxlength="" v-model="form.refund_time">
+								</el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="last_update" prop="last_update">
+								<el-input disabled style="width:400px" maxlength="" v-model="form.last_update">
+								</el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="12">
+							<el-form-item label="delivery" prop="delivery">
+								<el-input disabled style="width:400px" maxlength="" v-model="form.delivery">
+								</el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="coupon" prop="coupon">
+								<el-input disabled style="width:400px" maxlength="" v-model="form.coupon">
+								</el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-form-item label="notify_info " prop="notify_info ">
+							<pre style="height: 300px;overflow-y: auto;">{{form.notify_info&&JSON.parse(form.notify_info)}}</pre>
+						</el-form-item>
+					</el-row>
+					<el-row>
+						<el-form-item label="order_detail " prop="order_detail ">
+							<pre style="height: 300px;overflow-y: auto;">{{form.order_detail&&JSON.parse(form.order_detail)}}</pre>
+						</el-form-item>
+					</el-row>
+					<el-row>
+						<el-form-item label="comments" prop="comments">
+							<el-input disabled style="width:600px" maxlength="" v-model="form.comments">
+							</el-input>
+						</el-form-item>
+					</el-row>
 					<el-form-item label="note" prop="note">
 						<el-tag :key="tag" v-for="(tag,subIndex) in form.note" closable :disable-transitions="false" @close="handleClose(subIndex)">
 							{{tag}}
@@ -96,39 +206,7 @@
 						</el-input>
 						<el-button v-else class="button-new-tag" size="small" @click="showInput()">+Note</el-button>
 					</el-form-item>
-					<el-form-item label="is_refund" prop="is_refund">
-						<el-radio-group v-model="form.is_refund" disabled>
-							<el-radio :label="true">true</el-radio>
-							<el-radio :label="false">false</el-radio>
-						</el-radio-group>
-					</el-form-item>
-					<el-form-item label="is_chargeback" prop="is_chargeback">
-						<el-radio-group v-model="form.is_chargeback" disabled>
-							<el-radio :label="true">true</el-radio>
-							<el-radio :label="false">false</el-radio>
-						</el-radio-group>
-					</el-form-item>
-					<el-form-item label="request_time" prop="request_time">
-						<el-input disabled style="width:400px"  maxlength="" v-model="form.request_time">
-						</el-input>
-					</el-form-item>
-					<el-form-item label="refund_time" prop="refund_time">
-						<el-input disabled style="width:400px"  maxlength="" v-model="form.refund_time">
-						</el-input>
-					</el-form-item>
-					<el-form-item label="last_update" prop="last_update">
-						<el-input disabled style="width:400px"  maxlength="" v-model="form.last_update">
-						</el-input>
-					</el-form-item>
-					<el-form-item label="delivery" prop="delivery">
-						<el-input disabled style="width:400px"  maxlength="" v-model="form.delivery">
-						</el-input>
-					</el-form-item>
-
-					<el-form-item label="coupon" prop="coupon">
-						<el-input disabled style="width:400px"  maxlength="" v-model="form.coupon">
-						</el-input>
-					</el-form-item>
+					</el-row>
 					<div class="cls"></div>
 					<div class="cls"></div>
 					<div class="return-btn">
@@ -224,8 +302,9 @@
 				str += d.getHours() + ':';
 				str += d.getMinutes() + ':';
 				str += d.getSeconds() + '';
+				var email = JSON.parse(this.store.state.configData).admin_email
 				if(inputValue) {
-					this.form.note.push(inputValue + ' [' + str + ']');
+					this.form.note.push(' [' + str + ']' + ' [' + email + ']:' + inputValue);
 				}
 				this.inputVisible = 0;
 				this.inputValue = '';
@@ -378,6 +457,21 @@
 		display: block;
 	}
 	
+	.el-tag {
+		position: relative;
+		max-width: 600px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		display: block;
+		margin-bottom: 20px;
+		padding-right: 20px;
+	}
+	.el-tag .el-tag__close{
+		position: absolute;
+		right: 10px;
+		top: 4px!important;
+	}
 	/deep/ .w-e-menu,
 	/deep/ .w-e-text-container {
 		z-index: 1000!important;

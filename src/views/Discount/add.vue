@@ -12,7 +12,7 @@
 			<div class="align-center" style="width: 100%;">
 				<el-form ref="form" :model="form" :rules="rules" label-width="20%" label-position="right">
 					<el-form-item label="name" prop="name">
-						<el-input style="width:400px" placeholder="Please fill in name" maxlength="" v-model="form.name">
+						<el-input style="width:800px" placeholder="Please fill in name" maxlength="" v-model="form.name">
 						</el-input>
 					</el-form-item>
 					<el-form-item label="online" prop="online">
@@ -38,7 +38,7 @@
 							<el-table-column cell-style="text-align:center" header-align="center" label="qty" width="120px">
 								<template slot-scope="scope">
 									<el-form-item :inline-message="true" :rules="tableRules.qty" :prop="'discountList.'+scope.$index+'.qty'">
-										<el-input width="120px" v-model.number="scope.row.qty"></el-input>
+										{{scope.row.qty}}
 									</el-form-item>
 								</template>
 							</el-table-column>
@@ -155,7 +155,7 @@
 				this.$refs.form.validate((valid) => {
 					if(valid) {
 						this.form.discountList.splice(index + 1, 0, {
-							level: '',
+							level: index+1,
 							qty: '',
 							discount: ''
 						})
