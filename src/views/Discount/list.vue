@@ -1,7 +1,7 @@
 <template>
 	<div class="list">
 		<el-card class="box-card" >
-			<el-button type="primary" class="common-btn" @click.native="$router.push('/Coupon/Add')">Add</el-button>
+			<el-button type="primary" class="common-btn" @click.native="$router.push('/Discount/Add')">Add</el-button>
 			<el-button type="primary" style="float: right;" class="common-btn" @click="search">Search</el-button>
 			<el-input class="search-input" style="width:340px!important;margin-right: 50px;float: right;"prefix-icon="el-icon-search" v-model="keyword" placeholder="请输入搜索内容" maxlength="10">
 			</el-input>
@@ -16,13 +16,19 @@
 				</el-table-column>-->
 				<el-table-column header-align="left" width="70px" prop="id" label="id">
 				</el-table-column>
-					<el-table-column header-align="left" prop="name" label="name">
+					<el-table-column width="140px" header-align="left" prop="name" label="name">
 				</el-table-column>
 				<el-table-column header-align="left" prop="online" label="online">
 				</el-table-column>
 				<el-table-column header-align="left" prop="starttime" width="160px" label="starttime">
+				<template slot-scope="scope">
+				{{scope.row.starttime}}时
+				</template>
 				</el-table-column>
 				<el-table-column header-align="left" prop="endtime" width="160px" label="endtime">
+				<template slot-scope="scope">
+				{{scope.row.endtime}}时
+				</template>
 				</el-table-column>
 				
 					<el-table-column label="list" width="380px" cell-class-name="center" header-align="center">

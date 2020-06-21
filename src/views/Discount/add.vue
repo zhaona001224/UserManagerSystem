@@ -28,17 +28,10 @@
 					</el-form-item>
 					<el-form-item label="discount List" width="700px">
 						<el-table :data="form.discountList" width="700px" :rules="rules">
-							<el-table-column cell-style="text-align:center" header-align="center" label="level" width="120px">
-								<template slot-scope="scope">
-									<el-form-item :inline-message="true" :prop="'discountList.'+scope.$index+'.level'" :rules="tableRules.level">
-										<el-input width="120px" v-model="scope.row.level"></el-input>
-									</el-form-item>
-								</template>
-							</el-table-column>
 							<el-table-column cell-style="text-align:center" header-align="center" label="qty" width="120px">
 								<template slot-scope="scope">
 									<el-form-item :inline-message="true" :rules="tableRules.qty" :prop="'discountList.'+scope.$index+'.qty'">
-										{{scope.row.qty}}
+											<el-input width="200px" v-model="scope.row.qty"></el-input>
 									</el-form-item>
 								</template>
 							</el-table-column>
@@ -91,12 +84,11 @@
 				} else {
 
 					var index = rule.field.split('.')[1] * 1;
-
-					if(this.form.discountList[index - 1] && this.form.discountList[index - 1].qty > value) {
+					if(this.form.discountList[index - 1] && this.form.discountList[index - 1].qty*1 > value*1) {
 						callback(new Error('qty不能小于前一条数据的qty'));
 						return
 					}
-					if(this.form.discountList[index + 1] && (this.form.discountList[index + 1].qty < value)) {
+					if(this.form.discountList[index + 1] && (this.form.discountList[index + 1].qty*1 < value*1)) {
 
 						callback(new Error('qty不能大于后一条数据的qty'));
 						return
@@ -108,7 +100,7 @@
 
 				form: {
 					discountList: [{
-						level: '',
+						level: 1,
 						qty: '',
 						discount: ''
 					}],
@@ -155,7 +147,6 @@
 				this.$refs.form.validate((valid) => {
 					if(valid) {
 						this.form.discountList.splice(index + 1, 0, {
-							level: index+1,
 							qty: '',
 							discount: ''
 						})
@@ -193,6 +184,9 @@
 				var that = this;
 				form.starttime=form.rangeTime[0];
 				form.endtime=form.rangeTime[1];
+				form.discountList.map((item,index)=>{
+					item.order=index+1
+				})
 				form.list=JSON.stringify(form.discountList)
 				form.entime=form.rangeTime[1]
 				this.$refs.form.validate((valid) => {
@@ -239,7 +233,11 @@
 					if(response.retCode == 0) {
 						this.form = response.data;
 						this.form.rangeTime=[response.data.starttime,response.data.endtime];
-						this.form.discountList=JSON.parse(this.form.list)
+						this.form.discountList=this.form.list?JSON.parse(this.form.list):[{
+							level: 1,
+							qty: '',
+							discount: ''
+						}]
 						this.$forceUpdate();
 
 					} else {

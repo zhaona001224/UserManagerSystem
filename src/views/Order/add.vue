@@ -22,7 +22,7 @@
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="status" prop="status">
-								<el-select :clearable="true" :disabled="form.status=='已完成'" @change="refreshData" style="width:400px" v-model="form.status" placeholder="Please select status">
+								<el-select :clearable="true"  @change="refreshData" style="width:300px;border: 1px solid greenyellow;" v-model="form.status" placeholder="Please select status">
 									<el-option v-for="subItem in statusList" :key="subItem.name" :label="subItem.name" :value="subItem.name">
 									</el-option>
 								</el-select>
@@ -40,13 +40,13 @@
 					<el-row>
 						<el-col :span="12">
 							<el-form-item label="total" prop="total">
-								<el-input disabled style="width:400px" maxlength="" v-model="form.total">
+								<el-input disabled style="width:300px" maxlength="" v-model="form.total">
 								</el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="currency" prop="currency">
-								<el-input disabled style="width:400px" maxlength="" v-model="form.currency">
+								<el-input disabled style="width:300px" maxlength="" v-model="form.currency">
 								</el-input>
 							</el-form-item>
 						</el-col>
@@ -54,13 +54,13 @@
 					<el-row>
 						<el-col :span="12">
 							<el-form-item label="payment_id" prop="payment_id">
-								<el-input disabled style="width:400px" maxlength="" v-model="form.payment_id">
+								<el-input disabled style="width:300px" maxlength="" v-model="form.payment_id">
 								</el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="vendor" prop="vendor">
-								<el-input disabled style="width:400px" maxlength="" v-model="form.vendor">
+								<el-input disabled style="width:300px" maxlength="" v-model="form.vendor">
 								</el-input>
 							</el-form-item>
 						</el-col>
@@ -68,13 +68,13 @@
 					<el-row>
 						<el-col :span="12">
 							<el-form-item label="method" prop="method">
-								<el-input disabled style="width:400px" maxlength="" v-model="form.method">
+								<el-input disabled style="width:300px" maxlength="" v-model="form.method">
 								</el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="payment_note" prop="payment_note">
-								<el-input disabled style="width:400px" maxlength="" v-model="form.payment_note">
+								<el-input disabled style="width:300px" maxlength="" v-model="form.payment_note">
 								</el-input>
 							</el-form-item>
 						</el-col>
@@ -82,13 +82,13 @@
 					<el-row>
 						<el-col :span="12">
 							<el-form-item label="payer" prop="payer">
-								<el-input disabled style="width:400px" maxlength="" v-model="form.payer">
+								<el-input disabled style="width:300px" maxlength="" v-model="form.payer">
 								</el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="payer_link" prop="payer_link">
-								<el-input disabled style="width:400px" maxlength="" v-model="form.payer_link">
+								<el-input disabled style="width:300px" maxlength="" v-model="form.payer_link">
 								</el-input>
 							</el-form-item>
 						</el-col>
@@ -96,13 +96,13 @@
 					<el-row>
 						<el-col :span="12">
 							<el-form-item label="paid" prop="paid">
-								<el-input disabled style="width:400px" maxlength="" v-model="form.paid">
+								<el-input disabled style="width:300px" maxlength="" v-model="form.paid">
 								</el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="pay_time" prop="pay_time">
-								<el-input disabled style="width:400px" maxlength="" v-model="form.pay_time ">
+								<el-input disabled style="width:300px" maxlength="" v-model="form.pay_time ">
 								</el-input>
 							</el-form-item>
 						</el-col>
@@ -110,13 +110,13 @@
 					<el-row>
 						<el-col :span="12">
 							<el-form-item label="delivery_time" prop="delivery_time">
-								<el-input disabled style="width:400px" maxlength="" v-model="form.delivery_time">
+								<el-input disabled style="width:300px" maxlength="" v-model="form.delivery_time">
 								</el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="worker" prop="worker">
-								<el-input disabled style="width:400px" maxlength="" v-model="form.worker">
+								<el-input disabled style="width:300px" maxlength="" v-model="form.worker">
 								</el-input>
 							</el-form-item>
 						</el-col>
@@ -124,13 +124,13 @@
 					<el-row>
 						<el-col :span="12">
 							<el-form-item label="net" prop="net">
-								<el-input disabled style="width:400px" maxlength="" v-model="form.net">
+								<el-input disabled style="width:300px" maxlength="" v-model="form.net">
 								</el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="request_time" prop="request_time">
-								<el-input disabled style="width:400px" maxlength="" v-model="form.request_time">
+								<el-input disabled style="width:300px" maxlength="" v-model="form.request_time">
 								</el-input>
 							</el-form-item>
 						</el-col>
@@ -156,13 +156,13 @@
 					<el-row>
 						<el-col :span="12">
 							<el-form-item label="refund_time" prop="refund_time">
-								<el-input disabled style="width:400px" maxlength="" v-model="form.refund_time">
+								<el-input disabled style="width:300px" maxlength="" v-model="form.refund_time">
 								</el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="last_update" prop="last_update">
-								<el-input disabled style="width:400px" maxlength="" v-model="form.last_update">
+								<el-input disabled style="width:300px" maxlength="" v-model="form.last_update">
 								</el-input>
 							</el-form-item>
 						</el-col>
@@ -170,13 +170,13 @@
 					<el-row>
 						<el-col :span="12">
 							<el-form-item label="delivery" prop="delivery">
-								<el-input disabled style="width:400px" maxlength="" v-model="form.delivery">
+								<el-input disabled style="width:300px" maxlength="" v-model="form.delivery">
 								</el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="coupon" prop="coupon">
-								<el-input disabled style="width:400px" maxlength="" v-model="form.coupon">
+								<el-input disabled style="width:300px" maxlength="" v-model="form.coupon">
 								</el-input>
 							</el-form-item>
 						</el-col>
@@ -193,7 +193,7 @@
 					</el-row>
 					<el-row>
 						<el-form-item label="comments" prop="comments">
-							<el-input disabled style="width:600px" maxlength="" v-model="form.comments">
+							<el-input type="textarea" disabled style="width:600px" maxlength="" v-model="form.comments">
 							</el-input>
 						</el-form-item>
 					</el-row>

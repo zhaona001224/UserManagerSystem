@@ -11,7 +11,7 @@
 			<el-table :data="tableData" width="100%" :row-class-name="getRowStyle">
 				<el-table-column header-align="left" width="70px" sortable prop="id" label="id">
 				</el-table-column>
-				<el-table-column header-align="left" prop="name" label="name">
+				<el-table-column header-align="left" width="140px" prop="name" label="name">
 				</el-table-column>
 				<el-table-column header-align="left" width="160px" sortable prop="game" label="game">
 				</el-table-column>
@@ -26,8 +26,14 @@
 				<el-table-column header-align="left" prop="meta" width="160px" label="meta">
 				</el-table-column>
 				<el-table-column header-align="left" sortable prop="starttime" width="160px" label="starttime">
+					<template slot-scope="scope">
+				{{scope.row.starttime}}时
+				</template>
 				</el-table-column>
 				<el-table-column header-align="left" sortable prop="endtime" width="160px" label="endtime">
+					<template slot-scope="scope">
+				{{scope.row.endtime}}时
+				</template>
 				</el-table-column>
 				<el-table-column header-align="left" prop="updated" width="160px" label="updateTime">
 				</el-table-column>
