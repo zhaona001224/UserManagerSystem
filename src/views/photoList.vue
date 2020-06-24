@@ -2,7 +2,7 @@
 
 	<div class="list">
 		<el-card class="box-card" style="margin-bottom: 20px;">
-			<el-input class="search-input" prefix-icon="el-icon-search" v-model="keyword" placeholder="请输入搜索内容" maxlength="10">
+			<el-input class="search-input" prefix-icon="el-icon-search" v-model="keyword" placeholder="请输入搜索内容" >
 			</el-input>
 			<el-button type="primary" class="common-btn" @click="search">Search</el-button>
 		</el-card>

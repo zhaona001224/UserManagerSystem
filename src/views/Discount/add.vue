@@ -12,7 +12,7 @@
 			<div class="align-center" style="width: 100%;">
 				<el-form ref="form" :model="form" :rules="rules" label-width="20%" label-position="right">
 					<el-form-item label="name" prop="name">
-						<el-input style="width:800px" placeholder="Please fill in name" maxlength="" v-model="form.name">
+						<el-input style="width:800px" placeholder="请填写 name" maxlength="" v-model="form.name">
 						</el-input>
 					</el-form-item>
 					<el-form-item label="online" prop="online">
@@ -31,7 +31,7 @@
 							<el-table-column cell-style="text-align:center" header-align="center" label="qty" width="120px">
 								<template slot-scope="scope">
 									<el-form-item :inline-message="true" :rules="tableRules.qty" :prop="'discountList.'+scope.$index+'.qty'">
-											<el-input width="200px" v-model="scope.row.qty"></el-input>
+										<el-input width="200px" v-model="scope.row.qty"></el-input>
 									</el-form-item>
 								</template>
 							</el-table-column>
@@ -52,7 +52,7 @@
 						</el-table>
 
 					</el-form-item>
-					
+
 					<el-form-item label="desc" prop="desc">
 
 						<div ref="editorElem" style="z-index: 1000;">
@@ -84,11 +84,11 @@
 				} else {
 
 					var index = rule.field.split('.')[1] * 1;
-					if(this.form.discountList[index - 1] && this.form.discountList[index - 1].qty*1 > value*1) {
+					if(this.form.discountList[index - 1] && this.form.discountList[index - 1].qty * 1 > value * 1) {
 						callback(new Error('qty不能小于前一条数据的qty'));
 						return
 					}
-					if(this.form.discountList[index + 1] && (this.form.discountList[index + 1].qty*1 < value*1)) {
+					if(this.form.discountList[index + 1] && (this.form.discountList[index + 1].qty * 1 < value * 1)) {
 
 						callback(new Error('qty不能大于后一条数据的qty'));
 						return
@@ -161,7 +161,7 @@
 			creatEdit() {
 				var that = this;
 				setTimeout(() => {
-					this.editor= new E(this.$refs['editorElem']);
+					this.editor = new E(this.$refs['editorElem']);
 					// 编辑器的事件，每次改变会获取其html内容
 					this.editor.customConfig.onchange = html => {
 						that.form['desc'] = html;
@@ -172,7 +172,7 @@
 				}, 1000)
 
 			},
-			
+
 			handleDelete(index) {
 				this.form.discountList.splice(index, 1)
 				this.$forceUpdate();
@@ -182,13 +182,13 @@
 				var form = {};
 				form = JSON.parse(JSON.stringify(this.form)); //this.templateData是父组件传递的对象  
 				var that = this;
-				form.starttime=form.rangeTime[0];
-				form.endtime=form.rangeTime[1];
-				form.discountList.map((item,index)=>{
-					item.order=index+1
+				form.starttime = form.rangeTime[0];
+				form.endtime = form.rangeTime[1];
+				form.discountList.map((item, index) => {
+					item.order = index + 1
 				})
-				form.list=JSON.stringify(form.discountList)
-				form.entime=form.rangeTime[1]
+				form.list = JSON.stringify(form.discountList)
+				form.entime = form.rangeTime[1]
 				this.$refs.form.validate((valid) => {
 					if(valid) {
 
@@ -219,21 +219,21 @@
 						}
 
 					} else {
-						that.$message.error("Please fill in the form correctly！");
+						that.$message.error("请填写 the form correctly！");
 					}
 				})
 			},
 		},
 
 		created() {
-				this.creatEdit();
+			this.creatEdit();
 			if(this.$route.query.id) {
 				this.$get("/admin/v1/content?type=Discount&id=" + this.$route.query.id, {}).then(response => {
-					
+
 					if(response.retCode == 0) {
 						this.form = response.data;
-						this.form.rangeTime=[response.data.starttime,response.data.endtime];
-						this.form.discountList=this.form.list?JSON.parse(this.form.list):[{
+						this.form.rangeTime = [response.data.starttime, response.data.endtime];
+						this.form.discountList = this.form.list ? JSON.parse(this.form.list) : [{
 							level: 1,
 							qty: '',
 							discount: ''

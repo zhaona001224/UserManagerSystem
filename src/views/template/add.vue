@@ -11,12 +11,18 @@
 		<el-card class="box-card">
 			<div class="align-center" style="width: 100%;">
 				<el-form ref="form" :model="form" :rules="rules" label-width="20%" label-position="right">
-					<el-form-item v-for="(item,index) in formData" :label="item&&item.name+':'" :prop="item&&item.name" :key="index" v-if="item">
-						<el-input style="width:800px" v-if="item.data.type=='input'" :placeholder="'Please fill in '+item.name" maxlength="" v-model="form[item.name]">
+
+					<el-form-item v-for="(item,index) in formData" :label="item&&item.name+''" :prop="item&&item.name" :key="index" v-if="item">
+
+						<el-input style="width:800px" v-if="item.data.type=='input'" :placeholder="'请填写 '+item.name" maxlength="" v-model="form[item.name]">
 						</el-input>
 						<el-tree :default-expand-all="true" v-if="item.data.type=='tree'" ref="tree" :props="defaultProps" style="width:800px" :data="item.data.source[0].name?item.data.source:[]" :key="item.data.id" :highlight-current="true" node-key="id" :label="item.name" :value="item.id" accordion @node-click="handleNodeClick">
 						</el-tree>
-						<el-select :clearable="true" @change="refreshData" style="width:800px" v-if="item.data.type=='select'" v-model="form[item.name]" :placeholder="'Please select'+item.name">
+						<el-select :clearable="true" @change="refreshData" style="width:800px" multiple v-if="item.data.type=='multiselect'" v-model="form[item.name]" :placeholder="'请选择'+item.name">
+							<el-option v-for="subItem in item.data.source" :key="subItem.id" :label="subItem.name" :value="subItem.id">
+							</el-option>
+						</el-select>
+						<el-select :clearable="true" @change="refreshData" style="width:800px" v-if="item.data.type=='select'" v-model="form[item.name]" :placeholder="'请选择'+item.name">
 							<el-option v-for="subItem in item.data.source" :key="subItem.id" :label="subItem.name" :value="subItem.id">
 							</el-option>
 						</el-select>
@@ -29,8 +35,9 @@
 							<el-radio value="2" label="2">Upload</el-radio>
 						</el-radio-group>
 
-						<div v-if="item.data.type=='file'" @click='activeKey=item.name'>
-							<el-select style="display: block;width: 800px;margin:20px 0 " v-if="item.data.type=='file'&&picType[item.name]==1" v-model="form[item.name]" :placeholder="'Please select'+item.name">
+						<div style="display: inline-block" v-if="item.data.type=='file'" @click='activeKey=item.name'>
+
+							<el-select style="display: inline-block;width: 800px;margin:20px 0 " v-if="item.data.type=='file'&&picType[item.name]==1" v-model="form[item.name]" :placeholder="'请选择'+item.name">
 								<el-option v-for="subItem in picSource" :key="subItem.id" :label="subItem.name" :value="subItem.id">
 								</el-option>
 							</el-select>
@@ -45,10 +52,13 @@
 						<div v-if="item.data.type=='textarea'" :ref="'editorElem'+item.name" style="z-index: 1000;">
 							<div v-model="form[item.name]" style="text-align:left;"></div>
 						</div>
+						<el-popover v-if="dataSource.formData.data[item.name].helpText" placement="top-start" title="" trigger="hover" :content="dataSource.formData.data[item.name].helpText">
+							<i style="color: #666;margin-left:10px;" slot="reference" class="iconfont icon-tishi1"></i>
+						</el-popover>
 					</el-form-item>
 					<div class="cls"></div>
 					<div class="cls"></div>
-					{{form}}
+
 					<div class="return-btn">
 						<el-button @click.native="submit" type="info" class="button-purple">confirm</el-button>
 						<el-button @click.native="$util.goBack" type="info" class="button-gray">cancel</el-button>
@@ -57,6 +67,7 @@
 				</el-form>
 			</div>
 		</el-card>
+		{{form}}
 		<div v-html="editorContent"></div>
 	</div>
 </template>
@@ -102,8 +113,8 @@
 				console.log(e)
 				this.$forceUpdate();
 			},
-			changeSelect(){
-				
+			changeSelect() {
+
 			},
 			handlePictureCardPreview(file) {
 				this.dialogImageUrl = file.url;
@@ -187,6 +198,19 @@
 
 							form[key] = this.form[key] + "," + data[0].name
 						}
+						
+						if(this.dataSource.formData.data[key].type == "multiselect") {
+							var source = this.dataSource.formData.data[key].source;
+							var array=[];
+							this.form[key].map((formItem) => {
+								var data = source.filter((item, index) => {
+									return item.id == formItem
+								})
+								array.push(formItem + "," + data[0].name)
+							})
+							form[key] = JSON.stringify(array)
+
+						}
 					}
 
 				}
@@ -220,7 +244,7 @@
 						}
 
 					} else {
-						that.$message.error("Please fill in the form correctly！");
+						that.$message.error("请填写 the form correctly！");
 					}
 				})
 			},
@@ -271,12 +295,12 @@
 
 					if(response.retCode == 0) {
 						this.dataSource.formData.data[key].source = response.data || [];
-						
-						if(this.dataSource.formData.data[key].required && this.dataSource.formData.data[key].source.length==0) {
-							this.$alert('请先创建'+key,'提示' , {
+
+						if(this.dataSource.formData.data[key].required && this.dataSource.formData.data[key].source.length == 0) {
+							this.$alert('请先创建' + key, '提示', {
 								confirmButtonText: '确定',
 								callback: action => {
-									this.$router.push('/template/Add/'+key.charAt(0).toUpperCase() + key.slice(1))
+									this.$router.push('/template/Add/' + key.charAt(0).toUpperCase() + key.slice(1))
 								}
 							});
 						}
@@ -323,7 +347,7 @@
 
 			for(var key in this.dataSource.formData.data) {
 				if(this.dataSource.formData.data[key].required) {
-					var text = this.dataSource.formData.data[key].type == "select" ? "select" : "fill in"
+					var text = this.dataSource.formData.data[key].type == "select" || this.dataSource.formData.data[key].type == "multiselect" ? "select" : "fill in"
 					this.rules[key] = [{
 						message: "Place " + text + key,
 						required: true,
@@ -350,7 +374,7 @@
 						this.form[key] = false
 					}
 				}
-				if(this.dataSource.formData.data[key].type == "select") {
+				if(this.dataSource.formData.data[key].type == "select" || this.dataSource.formData.data[key].type == "multiselect") {
 					if(this.dataSource.formData.data[key].source.length > 0 && this.dataSource.formData.data[key].source[0].indexOf('/') > -1) {
 						that.getDataSource(this.dataSource.formData.data[key].source[0], key);
 
@@ -386,10 +410,19 @@
 						for(var key in this.dataSource.formData.data) {
 
 							if(this.dataSource.formData.data[key].type == "select") {
-								if(this.form[key]){
+								if(this.form[key]) {
 									this.form[key] = this.form[key] && parseInt(this.form[key].split(',')[0])
 								}
-								
+
+							}
+							if(this.dataSource.formData.data[key].type == "multiselect") {
+								if(this.form[key]) {
+									var data=[];
+									 this.form[key] && JSON.parse(this.form[key]).map((item,index)=>{
+									 	data.push(item&&item.split(',')[0]*1)
+									 })
+									  this.form[key]=data
+								}
 
 							}
 							if(this.dataSource.formData.data[key].type == "tree") {
@@ -450,15 +483,21 @@
 		border-radius: 6px;
 	}
 	
+	/deep/ .el-select>.el-input {
+		display: inline-block;
+	}
+	
 	.avatar {
 		width: 128px;
 		height: 128px;
 		display: block;
 	}
-	/deep/ .w-e-text-container{
+	
+	/deep/ .w-e-text-container {
 		z-index: 1999!important;
 	}
-	/deep/ .w-e-menu{
+	
+	/deep/ .w-e-menu {
 		z-index: 2000!important;
 	}
 </style>

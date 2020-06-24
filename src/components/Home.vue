@@ -9,9 +9,9 @@
 				<el-row type="flex" class="row-bg header" justify="space-between">
 					<el-col class="header-left">
 						<div class="header-left-cont">
-							<img src="../assets/image/home/logo.png" height="60">
+						<!--	<img src="../assets/image/home/logo.png" height="60">-->
 							<div class="header-left-cont-text">
-								<h2>管理平台</h2>
+								<h2>EShop后台管理系统</h2>
 								<p></p>
 							</div>
 						</div>
@@ -38,10 +38,10 @@
 			<el-container>
 				<!--侧边栏-->
 				<el-aside>
-					<el-menu :router=true :default-active="onRoutes" class="el-menu-vertical-demo">
+					<el-menu ref="menu" :router=true :default-active="onRoutes" class="el-menu-vertical-demo">
 						<el-submenu index="1">
 							<template slot="title">
-								<i class="el-icon-menu"></i>
+								<i style="color: #fff;margin-right:10px" class="iconfont icon-stack"></i>
 								<span>Product</span>
 							</template>
 							<el-menu-item-group>
@@ -51,20 +51,20 @@
 
 						</el-submenu>
 						<el-menu-item index="/Order/list">
-							<i class="el-icon-menu"></i>
+							<i style="color: #fff;margin-right:10px" class="iconfont icon-dingdan"></i>
 							<span slot="title">Order</span>
 						</el-menu-item>
 						<el-menu-item index="/Coupon/list" key="Coupon">
-							<i class="el-icon-menu"></i>
+							<i style="color: #fff;margin-right:10px" class="iconfont icon-youhuiquan"></i>
 							<span slot="title">Coupon</span>
 						</el-menu-item>
 						<el-menu-item  index="/Discount/list" key="Discount">
-							<i class="el-icon-menu"></i>
+							<i style="color: #fff;margin-right:10px" class="iconfont icon-zhekou"></i>
 							<span slot="title">Discount</span>
 						</el-menu-item>
 						<el-submenu index="4">
 							<template slot="title">
-								<i class="el-icon-menu"></i>
+								<i style="color: #fff;margin-right:10px" class="iconfont icon-xitong"></i>
 								<span slot="title">Systems</span>
 							</template>
 							<el-menu-item-group>
@@ -124,8 +124,7 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					that.$post("/admin/v1/logout", {
-
+					that.$post("/admin/v1/user/logout", {
 					}).then(response => {
 						if(response.retCode == 0) {
 							this.$store.commit(types.LOGOUT);
@@ -157,8 +156,16 @@
 
 		created() {
 			this.menuTrees = JSON.parse(this.store.state.loginData);
-			this.userInfo = JSON.parse(this.store.state.configData)
-			this.onRoutes = this.$route.fullPath
+			this.userInfo = JSON.parse(this.store.state.configData);
+			var router=this.$route.fullPath.replace("Add",'List')
+			this.onRoutes = router;	
+			
+		},
+		mounted(){
+//			if(this.$route.fullPath.indexOf('template')){
+//				this.$refs.menu.open(1)
+//			}
+//				
 		}
 	}
 </script>

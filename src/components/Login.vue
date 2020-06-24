@@ -61,8 +61,8 @@
 
 				//登录
 				login: {
-					userName: "lq@163.com",
-					userPwd: "qweasdzxc" //"1234@晨"
+					userName: "",//lq@163.com
+					userPwd: "" //qweasdzxc
 				},
 
 				//登录信息验证

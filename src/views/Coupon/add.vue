@@ -12,22 +12,22 @@
 			<div class="align-center" style="width: 100%;">
 				<el-form ref="form" :model="form" :rules="rules" label-width="20%" label-position="right">
 					<el-form-item label="name" prop="name">
-						<el-input style="width:800px" placeholder="Please fill in name" maxlength="" v-model="form.name">
+						<el-input style="width:800px" placeholder="请填写 name" maxlength="" v-model="form.name">
 						</el-input>
 					</el-form-item>
 
 					<el-form-item label="game" prop="game">
-						<el-select :clearable="true" @change="refreshData" style="width:800px" v-model="form.game" placeholder="Please select game">
+						<el-select :clearable="true" @change="refreshData" style="width:800px" v-model="form.game" placeholder="请选择 game">
 							<el-option v-for="subItem in gameList" :key="subItem.id" :label="subItem.name" :value="subItem.id">
 							</el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="currency" prop="currency">
-						<el-input style="width:800px" disabled placeholder="Please fill in currency" maxlength="" v-model="form.currency">
+						<el-input style="width:800px" disabled placeholder="请填写 currency" maxlength="" v-model="form.currency">
 						</el-input>
 					</el-form-item>
 					<el-form-item label="price" prop="price">
-						<el-input style="width:800px" placeholder="Please fill in price" maxlength="" oninput="value=value.replace(/[^\d.]/g,'')" v-model="form.price">
+						<el-input style="width:800px" placeholder="请填写 price" maxlength="" oninput="value=value.replace(/[^\d.]/g,'')" v-model="form.price">
 						</el-input>
 					</el-form-item>
 					<el-form-item label="type" prop="type">
@@ -37,7 +37,7 @@
 						</el-radio-group>
 					</el-form-item>
 					<el-form-item label="initial_amount" prop="initial_amount">
-						<el-input style="width:800px" placeholder="Please fill in initial_amount" maxlength="" oninput="value=value.replace(/[^\d.]/g,'')" v-model="form.initial_amount">
+						<el-input style="width:800px" placeholder="请填写 initial_amount" maxlength="" oninput="value=value.replace(/[^\d.]/g,'')" v-model="form.initial_amount">
 						</el-input>
 					</el-form-item>
 					<el-form-item label="rangeTime" prop="rangeTime">
@@ -45,7 +45,7 @@
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item label="code" prop="code">
-						<el-input style="width:800px" placeholder="Please fill in code" maxlength="" v-model="form.code">
+						<el-input style="width:800px" placeholder="请填写 code" maxlength="" v-model="form.code">
 						</el-input>
 					</el-form-item>
 					<el-form-item label="desc" prop="desc">
@@ -257,7 +257,7 @@
 						}
 
 					} else {
-						that.$message.error("Please fill in the form correctly！");
+						that.$message.error("请填写 the form correctly！");
 					}
 				})
 			},

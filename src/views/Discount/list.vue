@@ -3,7 +3,7 @@
 		<el-card class="box-card" >
 			<el-button type="primary" class="common-btn" @click.native="$router.push('/Discount/Add')">Add</el-button>
 			<el-button type="primary" style="float: right;" class="common-btn" @click="search">Search</el-button>
-			<el-input class="search-input" style="width:340px!important;margin-right: 50px;float: right;"prefix-icon="el-icon-search" v-model="keyword" placeholder="请输入搜索内容" maxlength="10">
+			<el-input class="search-input" style="width:340px!important;margin-right: 50px;float: right;"prefix-icon="el-icon-search" v-model="keyword" placeholder="请输入搜索内容" >
 			</el-input>
 		
 		</el-card>

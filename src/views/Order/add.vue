@@ -22,7 +22,7 @@
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="status" prop="status">
-								<el-select :clearable="true"  @change="refreshData" style="width:300px;border: 1px solid greenyellow;" v-model="form.status" placeholder="Please select status">
+								<el-select :clearable="true"  @change="refreshData" style="width:300px;border: 1px solid greenyellow;" v-model="form.status" placeholder="请选择 status">
 									<el-option v-for="subItem in statusList" :key="subItem.name" :label="subItem.name" :value="subItem.name">
 									</el-option>
 								</el-select>
@@ -392,7 +392,7 @@
 						}
 
 					} else {
-						that.$message.error("Please fill in the form correctly！");
+						that.$message.error("请填写 the form correctly！");
 					}
 				})
 			},

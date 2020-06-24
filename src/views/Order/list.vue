@@ -1,7 +1,7 @@
 <template>
 	<div class="list">
 		<el-card class="box-card" style="text-align: right;">
-			<el-input @input="selfSearch" class="search-input" style="width:340px!important;margin-right: 50px;" prefix-icon="el-icon-search" v-model="keyword" placeholder="请输入搜索内容" maxlength="10">
+			<el-input @input="selfSearch" class="search-input" style="width:340px!important;margin-right: 50px;" prefix-icon="el-icon-search" v-model="keyword" placeholder="请输入搜索内容" >
 			</el-input>
 			<el-button type="primary" class="common-btn" @click="search">Search</el-button>
 			<el-button type="primary" style="float: right;background-color: #8a818a!important;border-color: #8a818a!important;" class="common-btn" @click="exportTable">Export</el-button>
@@ -36,7 +36,7 @@
 				</el-table-column>
 				<el-table-column prop="status" label="status" width="200px">
 					<template slot-scope="scope">
-						<el-select :clearable="true" @change="edit(scope.$index,scope.row['id'])" style="width:100px" v-model="scope.row['status']" placeholder="Please select status">
+						<el-select :clearable="true" @change="edit(scope.$index,scope.row['id'])" style="width:100px" v-model="scope.row['status']" placeholder="请选择 status">
 							<el-option v-for="subItem in statusList" :key="subItem.name" :label="subItem.name" :value="subItem.name">
 							</el-option>
 						</el-select>

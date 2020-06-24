@@ -3,7 +3,7 @@
 		<el-card class="box-card" >
 			<el-button type="primary" class="common-btn" @click.native="$router.push('/template/Add/' + $route.params.key)">Add</el-button>
 			<el-button type="primary" style="float: right;" class="common-btn" @click="search">Search</el-button>
-			<el-input class="search-input" style="width:340px!important;margin-right: 50px;float: right;" prefix-icon="el-icon-search" v-model="keyword" placeholder="请输入搜索内容" maxlength="10">
+			<el-input class="search-input" style="width:340px!important;margin-right: 50px;float: right;" prefix-icon="el-icon-search" v-model="keyword" placeholder="请输入搜索内容" >
 			</el-input>
 
 		</el-card>
@@ -203,6 +203,21 @@
 								if(this.dataSource.formData.data[key].type == "select" || this.dataSource.formData.data[key].type == "tree") {
 									item[key] = item[key] && item[key].split(',')[1]
 								}
+								if(this.dataSource.formData.data[key].type == "multiselect") {
+
+									var str=""
+									item[key] && JSON.parse(item[key]).map((subItem,index)=>{
+										if(index==JSON.parse(item[key]).length-1){
+											var subStr=subItem&& subItem.split(',')[1]
+										}else{
+											var subStr=subItem&& subItem.split(',')[1]+','
+										}
+										
+										
+										str=str+subStr
+									})
+									item[key] = str
+								}
 								if(this.dataSource.formData.data[key].type == "bool") {
 									item[key] = item[key] + ''
 								}
@@ -244,7 +259,21 @@
 						})
 						this.tableData && this.tableData.map((item) => {
 							for(var key in this.dataSource.formData.data) {
+								if(this.dataSource.formData.data[key].type == "multiselect") {
 
+									var str=""
+									item[key] && JSON.parse(item[key]).map((subItem,index)=>{
+										if(index==JSON.parse(item[key]).length-1){
+											var subStr=subItem&& subItem.split(',')[1]
+										}else{
+											var subStr=subItem&& subItem.split(',')[1]+','
+										}
+										
+										
+										str=str+subStr
+									})
+									item[key] = str
+								}
 								if(this.dataSource.formData.data[key].type == "select" || this.dataSource.formData.data[key].type == "tree") {
 
 									item[key] = item[key] && item[key].split(',')[1]
