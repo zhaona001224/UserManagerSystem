@@ -9,7 +9,8 @@ export default new Vuex.Store({
     token: null,  //登录token
     userName: "",
     screenHeight: window.screen.height,
-    imgUrl:'http://193.22.152.235:8080/admin/v1/file?id='
+    imgUrl:'http://193.22.152.235:8080/admin/v1/file?id=',
+    baseUrl:'http://193.22.152.235:8080'
   },
   mutations: {
 

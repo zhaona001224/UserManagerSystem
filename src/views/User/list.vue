@@ -7,7 +7,6 @@
 			</el-input>
 
 		</el-card>
-
 		<el-table :data="tableData" width="100%">
 
 			<el-table-column header-align="left" prop="id" label="id">
@@ -19,7 +18,6 @@
 
 			<el-table-column label="operation" width="240px" cell-class-name="center" header-align="center">
 				<template slot-scope="scope">
-					<el-button type="text" size="small" @click="handleStatus(scope.row)">Status</el-button>
 					<el-button type="text" size="small" @click="handleEdit(scope.row)">Edit</el-button>
 					<el-button type="text" size="small" @click="handleDelete(scope.row)">Delete</el-button>
 				</template>
@@ -46,10 +44,9 @@
 
 					if(response.retCode == 0) {
 						this.tableData = response.data || [];
-
 						this.tableData && this.tableData.map((item) => {
-							debugger
-							item.admin = item.Perm.admin
+							
+							item.admin = item.Perm.admin+""
 						})
 						this.$forceUpdate();
 
@@ -65,17 +62,20 @@
 
 			},
 			handleEdit(item) {
-				this.$router.push('/User/Add/' + this.$route.params.key + '?id=' + item.id)
+				localStorage.setItem("userData",JSON.stringify(item))
+				this.$router.push('/User/Modify')
 			},
 			//删除
 			handleDelete(item) {
-				this.$delete("/admin/v1/content?type=" + this.$route.params.key + "&id=" + item.id, {}).then(response => {
+				this.$delete("/admin/v1/user/remove", {
+					email:item.email
+				}).then(response => {
 					if(response.retCode == 0) {
 						this.$message({
 							message: '删除成功!',
 							type: 'success'
 						})
-						this.queryTable();
+						window.location.reload();
 					} else {
 						this.$message({
 							message: response.msg,

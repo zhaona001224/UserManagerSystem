@@ -9,6 +9,7 @@ import CouponList from '../views/Coupon/list'
 import CouponAdd from '../views/Coupon/add'
 import OrderList from '../views/Order/list'
 import UserAdd from '../views/User/add'
+import UserModify from '../views/User/modify'
 import DiscountList from '../views/Discount/list'
 import DiscountAdd from '../views/Discount/add'
 import OrderAdd from '../views/Order/add'
@@ -54,6 +55,11 @@ const routes = [{
 				path: 'Add',
 				name: '新增用户',
 				component: UserAdd
+			},
+			{
+				path: 'Modify',
+				name: '新增用户',
+				component: UserModify
 			}
 		],
 		meta: {

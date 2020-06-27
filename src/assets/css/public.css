@@ -154,14 +154,14 @@ html, body {
 }
 
 .header-right {
-  width: 200px!important;
+  width: 400px!important;
   background: #544c64;
   text-align: right;
   line-height: 60px;
 }
 
 .header-right .header-right-cont {
-  width: 200px;
+  width: 400px;
   padding-right: 20px;
   box-sizing: border-box;
 }
@@ -180,10 +180,10 @@ html, body {
   font-weight: 300!important;
 }
 
-.el-dropdown-menu__item:hover {
+/* .el-dropdown-menu__item:hover {
   background: #544c64!important;
   color: #fff!important;
-}
+} */
 
 .el-dropdown-menu span {
   top: 50px!important;

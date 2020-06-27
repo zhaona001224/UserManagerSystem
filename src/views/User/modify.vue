@@ -4,7 +4,7 @@
 		<el-card class="box-card">
 			<el-breadcrumb separator="/">
 				<el-breadcrumb-item :to="{ path: '/User/List' }">用户管理</el-breadcrumb-item>
-				<el-breadcrumb-item>新增用户</el-breadcrumb-item>
+				<el-breadcrumb-item>修改用户</el-breadcrumb-item>
 			</el-breadcrumb>
 		</el-card>
 
@@ -12,11 +12,15 @@
 			<div class="align-center" style="width: 100%;">
 				<el-form ref="form" :model="form" :rules="rules" label-width="35%" label-position="right">
 					<el-form-item label="email：" prop="email">
-						<el-input placeholder="请填写 email" v-model="form.email">
+						<el-input disabled placeholder="请填写email" v-model="form.email">
 						</el-input>
 					</el-form-item>
-					<el-form-item label="password：" prop="password">
-						<el-input placeholder="请填写 password" type="password" v-model="form.password">
+					<el-form-item label="old password：" prop="password">
+						<el-input  type="password" placeholder="请填写 old password" v-model="form.password">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="new password：" prop="new_password">
+						<el-input type="password"  placeholder="请填写 new password" v-model="form.new_password">
 						</el-input>
 					</el-form-item>
 					<div class="cls"></div>
@@ -57,6 +61,12 @@
 							required: true,
 							trigger: 'blur'
 						}
+					],
+						new_password: [{
+							message: "请填写new password",
+							required: true,
+							trigger: 'blur'
+						}
 					]
 
 				},
@@ -70,9 +80,9 @@
 				var that = this;
 				this.$refs.form.validate((valid) => {
 					if(valid) {
-						that.$post("/admin/v1/user/register", this.form).then(response => {
+							that.$post("/admin/v1/user/update", this.form).then(response => {
 								if(response.retCode == 0) {
-									that.$util.successAlert("Add Success！", '/User/list', 'return list');
+									that.$util.successAlert("Modify Success！", '/User/list', 'return list');
 								} else {
 									that.$message({
 										type: 'warning',
@@ -88,7 +98,7 @@
 			}
 		},
 		created() {
-			
+			this.form.email=JSON.parse(localStorage.getItem('userData')).email;
 
 		}
 

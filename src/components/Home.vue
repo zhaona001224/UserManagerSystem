@@ -19,6 +19,7 @@
 
 					<el-col class="header-right">
 						<div class="header-right-cont">
+						
 							<el-dropdown trigger="hover">
 								<span class="el-dropdown-link userinfo-inner">
               <span>{{ userInfo.admin_email }}</span>
@@ -30,6 +31,15 @@
 									</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
+							
+						<el-dropdown>
+ <el-button type="primary" style="background-color: rgb(138, 129, 138) !important;border-color: rgb(138, 129, 138) !important" v-popover:popover5>备份</el-button>
+  <el-dropdown-menu slot="dropdown">
+    <el-dropdown-item v-for="subItem in backUpList"><a style="color:#544c64;text-decoration: none;" @click="visible2=false"   download="filename" :key="subItem" :href="store.state.baseUrl+'/admin/v1/backup?source='+subItem">{{subItem}}</a></el-dropdown-item>
+  </el-dropdown-menu>
+</el-dropdown>
+
+						
 						</div>
 					</el-col>
 				</el-row>
@@ -108,7 +118,10 @@
 				menuTrees: [
 
 				],
-
+				backUpType:"",
+				 visible2: false,
+				backUpList:['system','uploads','search'],
+				
 				//用户信息(初始化获取到)
 				userName: localStorage.getItem("userName"),
 			}
@@ -151,6 +164,28 @@
 					});
 				})
 			},
+			backUp(e){
+				var that=this;
+				that.$post("/admin/v1/backup?source="+e, {
+					}).then(response => {
+						if(response.retCode == 0) {
+								that.$message({
+								type: 'success',
+								message: "备份成功"
+							});
+
+						} else {
+
+							that.$message({
+								type: 'warning',
+								message: response.message
+							});
+						}
+
+					}).catch(() => {
+					
+					});
+			}
 
 		},
 
@@ -169,3 +204,11 @@
 		}
 	}
 </script>
+<style>
+.select-back{
+	width:160px
+}
+.select-back .el-input{
+width:160px
+}
+</style>

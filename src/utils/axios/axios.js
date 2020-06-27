@@ -45,18 +45,8 @@ axios.interceptors.response.use(response => {
   if(i==0){
     loading.close();
   }
-
 	if(response.data && typeof response.data == "object"){
-		if (response.data.code == 4003) {
-			errorMessaage("抱歉，您没有权限查看该页面。");
-			return Promise.reject(response);
-		}else if(response.data.code == -1001) {
-			errorMessaage("TOKEN失效,请重新登录。");
-			return Promise.reject(response);
-		}else if(response.data.code == 4001) {
-			errorMessaage("请求参数不正确。",true);
-			return Promise.reject(response);
-		}else if(response.data.code === 0) {
+		if(response.data.retCode === -1) {
 			errorMessaage(response.data.msg||response.data.message,true);
 			return Promise.reject(response);
 		}
@@ -121,7 +111,7 @@ export default {
 	axiosDelete(url,params){
 		return new Promise(function(resolve, reject){
 			
-			axios.delete("/api"+url,params).then((response)=>{
+			axios.delete("/api"+url,{data:params}).then((response)=>{
 				resolve(response);
 			})
 		})
