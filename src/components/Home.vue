@@ -10,9 +10,8 @@
 					<el-col class="header-left">
 						<div class="header-left-cont">
 						<!--	<img src="../assets/image/home/logo.png" height="60">-->
-							<div class="header-left-cont-text">
-								<h2>EShop后台管理系统</h2>
-								<p></p>
+							<div class="header-left-cont-text" style="padding-left: 0;">
+								<h2 style="line-height: 40px;font-size: 20px;">EShop后台管理系统</h2>
 							</div>
 						</div>
 					</el-col>
@@ -22,7 +21,7 @@
 						
 							<el-dropdown trigger="hover">
 								<span class="el-dropdown-link userinfo-inner">
-              <span>{{ userInfo.admin_email }}</span>
+              <span>{{ userInfo.email }}</span>
 								<i class="el-icon-caret-bottom"></i>
 								</span>
 								<el-dropdown-menu slot="dropdown">
@@ -35,7 +34,7 @@
 						<el-dropdown>
  <el-button type="primary" style="background-color: rgb(138, 129, 138) !important;border-color: rgb(138, 129, 138) !important" v-popover:popover5>备份</el-button>
   <el-dropdown-menu slot="dropdown">
-    <el-dropdown-item v-for="subItem in backUpList"><a style="color:#544c64;text-decoration: none;" @click="visible2=false"   download="filename" :key="subItem" :href="store.state.baseUrl+'/admin/v1/backup?source='+subItem">{{subItem}}</a></el-dropdown-item>
+    <el-dropdown-item v-for="subItem in backUpList" :key="subItem"><a style="color:#544c64;text-decoration: none;" @click="visible2=false"   download="filename" :key="subItem" :href="store.state.baseUrl+'/admin/v1/backup?source='+subItem">{{subItem}}</a></el-dropdown-item>
   </el-dropdown-menu>
 </el-dropdown>
 

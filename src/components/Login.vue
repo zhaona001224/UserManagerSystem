@@ -30,7 +30,7 @@
 	export default {
 		created() {
 			this.doKeyCode();
-			this.menuTrees = JSON.parse(this.store.state.loginData);
+			this.menuTrees = this.store.state.loginData&&JSON.parse(this.store.state.loginData);
 			if(document.cookie.indexOf('lqcms_token') > -1) {
 				this.$router.push('/template/List/' + this.menuTrees[0].name);
 			}
@@ -118,7 +118,7 @@
 								that.$get("/admin/v1/config", {
 
 								}).then(response1 => {
-
+									response1.data[0].data.email=that.login.userName;
 									if(response1.retCode == 0) {
 										that.$store.commit(types.CONFIGDATA, JSON.stringify(response1.data[0].data))
 										that.$router.push('/template/List/' + this.menuTrees[0].name);
