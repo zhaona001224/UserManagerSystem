@@ -13,8 +13,9 @@
 				<el-form ref="form" :model="form" :rules="rules" label-width="100px" label-position="right">
 					<el-row>
 						<el-col :span="12">
+							{{form}}
 							<el-form-item label="bad" prop="bad">
-								<el-radio-group v-model="form.bad" disabled>
+								<el-radio-group v-model="form.bad" >
 									<el-radio :label="true">true</el-radio>
 									<el-radio :label="false">false</el-radio>
 								</el-radio-group>
@@ -27,14 +28,6 @@
 									</el-option>
 								</el-select>
 							</el-form-item>
-						</el-col>
-					</el-row>
-					<el-row>
-						<el-col :span="12">
-
-						</el-col>
-						<el-col :span="12">
-
 						</el-col>
 					</el-row>
 					<el-row>
@@ -109,20 +102,6 @@
 					</el-row>
 					<el-row>
 						<el-col :span="12">
-							<el-form-item label="delivery_time" prop="delivery_time">
-								<el-input disabled style="width:300px" maxlength="" v-model="form.delivery_time">
-								</el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="worker" prop="worker">
-								<el-input disabled style="width:300px" maxlength="" v-model="form.worker">
-								</el-input>
-							</el-form-item>
-						</el-col>
-					</el-row>
-					<el-row>
-						<el-col :span="12">
 							<el-form-item label="net" prop="net">
 								<el-input disabled style="width:300px" maxlength="" v-model="form.net">
 								</el-input>
@@ -155,22 +134,8 @@
 					</el-row>
 					<el-row>
 						<el-col :span="12">
-							<el-form-item label="refund_time" prop="refund_time">
-								<el-input disabled style="width:300px" maxlength="" v-model="form.refund_time">
-								</el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
 							<el-form-item label="last_update" prop="last_update">
 								<el-input disabled style="width:300px" maxlength="" v-model="form.last_update">
-								</el-input>
-							</el-form-item>
-						</el-col>
-					</el-row>
-					<el-row>
-						<el-col :span="12">
-							<el-form-item label="delivery" prop="delivery">
-								<el-input disabled style="width:300px" maxlength="" v-model="form.delivery">
 								</el-input>
 							</el-form-item>
 						</el-col>
@@ -363,6 +328,7 @@
 					this.originFrom.note = this.form.note.join(',')
 				}
 				this.originFrom.status = this.form.status;
+				this.originFrom.bad = this.form.bad;
 				this.$refs.form.validate((valid) => {
 					if(valid) {
 						if(this.$route.query.id) {
@@ -396,6 +362,19 @@
 					}
 				})
 			},
+			getTransationData(id){
+this.$get("/payment/paypal/info/" + id, {}).then(response => {
+
+					if(response.retCode == 0) {
+						
+					} else {
+						this.$message({
+							message: response.msg,
+							type: 'warning'
+						})
+					}
+				})
+			},
 		},
 
 		created() {
@@ -411,6 +390,7 @@
 						this.form.request_time = this.form.request_time ? this.dateFormat(this.form.request_time, 'yyyy-MM-dd HH:mm:ss') : '';
 						this.form.last_update = this.form.last_update ? this.dateFormat(this.form.last_update, 'yyyy-MM-dd HH:mm:ss') : ''
 						this.form.refund_time = this.form.refund_time ? this.dateFormat(this.form.refund_time, 'yyyy-MM-dd HH:mm:ss') : ''
+						this.getTransationData(response.data.order_id)
 					} else {
 						this.$message({
 							message: response.msg,

@@ -28,12 +28,32 @@
 				</el-table-column>
 				<el-table-column header-align="left" width="320px" prop="order_id" label="order_id">
 				</el-table-column>
+
+<el-table-column prop="payer" label="payer" width="400px">
+					<template slot-scope="scope">
+										<el-popover  v-if="scope.row['payer']"
+  placement="right"
+  width="400"
+  trigger="hover">
+  <div class="tool-tip">note</div>
+	<el-tag :key="subIndex" v-for="(tag,subIndex) in scope.row['note']" closable :disable-transitions="false" @close="handleClose(scope.$index,subIndex)">
+							{{tag}}
+						</el-tag>
+
+						<el-input class="input-new-tag" v-if="inputVisible[scope.$index]==1" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm(scope.$index)" @blur="handleInputBlur(scope.$index)">
+						</el-input>
+						<el-button v-else class="button-new-tag" size="small" @click="showInput(scope.$index)">+Note</el-button>
+						  <div class="tool-tip" v-if="scope.row['comment']">comment</div>
+						  <div  v-if="scope.row['comment']">{{scope.row['comment']}}</div>
+  <el-button slot="reference">{{scope.row['payer']}}</el-button>
+</el-popover>
+					</template>
+				</el-table-column>
 				<el-table-column header-align="left" width="160px" sortable prop="pay_time" label="pay_time">
 				</el-table-column>
-				<el-table-column header-align="left" prop="updated" width="160px" label="updated">
+				<el-table-column header-align="left" prop="description" width="160px" label="description">
 				</el-table-column>
-				<el-table-column header-align="left" width="220px" prop="payer" label="payer">
-				</el-table-column>
+
 				<el-table-column prop="status" label="status" width="200px">
 					<template slot-scope="scope">
 						<el-select :clearable="true" @change="edit(scope.$index,scope.row['id'])" style="width:100px" v-model="scope.row['status']" placeholder="请选择 status">
@@ -46,7 +66,7 @@
 				</el-table-column>
 				<el-table-column header-align="left" prop="currency" width="120px" label="currency">
 				</el-table-column>
-				<el-table-column prop="note" label="note" width="300px">
+				<!-- <el-table-column prop="note" label="note" width="300px">
 					<template slot-scope="scope">
 						<el-tag :key="subIndex" v-for="(tag,subIndex) in scope.row['note']" closable :disable-transitions="false" @close="handleClose(scope.$index,subIndex)">
 							{{tag}}
@@ -56,7 +76,7 @@
 						</el-input>
 						<el-button v-else class="button-new-tag" size="small" @click="showInput(scope.$index)">+Note</el-button>
 					</template>
-				</el-table-column>
+				</el-table-column> -->
 				<el-table-column label="operation" width="180px" cell-class-name="center" header-align="center">
 					<template slot-scope="scope">
 						<el-button type="text" size="small" @click="handleEdit(scope.row)">Edit</el-button>
@@ -132,7 +152,16 @@
 				row,
 				rowIndex
 			}) {
-				return row.isLate
+				if(row.bad){
+					return('bad')
+				}else if(row.note&&row.note.length>0){
+	return('note')
+				}else if(row.comments&&row.comments.length>0){
+						return('comments')
+				}else{
+					return('')
+				}
+			
 			},
 			selfSearch() {
 				if(!this.keyword && !this.isIndeterminate && this.timeRange.length == 0) {
@@ -517,15 +546,23 @@
 	.el-tabs__content {
 		display: none;
 	}
-	
+	.el-table__row.note{
+		background: #f73131;
+		color: #fff;
+	}
+		.el-table__row.bad{
+		background: #c00;;
+		color: #fff;
+	}
+		.el-table__row.comment{
+		background: blue;
+		color: #fff;
+	}
 	.el-tag {
 		height: auto;
 		white-space: initial;
 	}
-	
-	.el-tag+.el-tag {
-		margin-left: 10px;
-	}
+
 	
 	.button-new-tag {
 		margin-top: 10px;
@@ -546,5 +583,13 @@
 	.el-table__row .el-input,
 	.el-table__row .el-select {
 		width: 120px!important;
+	}
+	.el-table--enable-row-hover .el-table__body tr:hover>td {
+		color: #666;
+	}
+	.tool-tip{
+		font-size: 16px;
+    margin-bottom: 9px;
+    font-weight: 700;
 	}
 </style>

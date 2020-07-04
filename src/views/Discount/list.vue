@@ -18,7 +18,7 @@
 				</el-table-column>
 					<el-table-column width="140px" header-align="left" prop="name" label="name">
 				</el-table-column>
-				<el-table-column header-align="left" prop="online" label="online">
+				<el-table-column header-align="left" prop="online" label="online" width="100px">
 				</el-table-column>
 				<el-table-column header-align="left" prop="starttime" width="160px" label="starttime">
 				<template slot-scope="scope">
@@ -31,20 +31,20 @@
 				</template>
 				</el-table-column>
 				
-					<el-table-column label="list" width="380px" cell-class-name="center" header-align="center">
-					<template slot-scope="scope">
-						<el-table :data="scope.row.list" >
-							<el-table-column cell-style="text-align:center" header-align="center" label="level" width="120px">
+					<el-table-column label="list" width="500px" cell-class-name="center" header-align="center">
+					<template slot-scope="scope" >
+						<el-table :data="scope.row.list"  >
+							<el-table-column cell-style="text-align:center" header-align="center" label="level" width="80px">
 								<template slot-scope="scope1">
 									{{scope1.row.level}}
 								</template>
 							</el-table-column>
-							<el-table-column cell-style="text-align:center" header-align="center" label="qty" width="120px">
+							<el-table-column cell-style="text-align:center" header-align="center" label="qty" width="200px">
 								<template slot-scope="scope1">
 									{{scope1.row.qty}}
 								</template>
 							</el-table-column>
-							<el-table-column cell-style="text-align:center" header-align="center" label="discount" width="120px">
+							<el-table-column cell-style="text-align:center" header-align="center" label="discount" width="200px">
 								<template slot-scope="scope1">
 									{{scope1.row.discount}}
 								</template>
@@ -273,4 +273,5 @@
 	.e-table .e-table{
 		border:1px solid #EBEEF5;
 	}
+
 </style>
