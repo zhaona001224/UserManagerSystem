@@ -185,7 +185,7 @@
 				form.starttime = form.rangeTime[0];
 				form.endtime = form.rangeTime[1];
 				form.discountList.map((item, index) => {
-					item.order = index + 1
+					item.level = index + 1
 				})
 				form.list = JSON.stringify(form.discountList)
 				form.entime = form.rangeTime[1]
