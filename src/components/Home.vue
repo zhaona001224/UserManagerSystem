@@ -40,7 +40,6 @@
 									</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
-
 						</div>
 					</el-col>
 				</el-row>
