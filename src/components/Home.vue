@@ -6,10 +6,11 @@
 
 			<!--头部-->
 			<el-header>
+
 				<el-row type="flex" class="row-bg header" justify="space-between">
 					<el-col class="header-left">
 						<div class="header-left-cont">
-						<!--	<img src="../assets/image/home/logo.png" height="60">-->
+							<!--	<img src="../assets/image/home/logo.png" height="60">-->
 							<div class="header-left-cont-text" style="padding-left: 0;">
 								<h2 style="line-height: 40px;font-size: 20px;">EShop后台管理系统</h2>
 							</div>
@@ -18,7 +19,7 @@
 
 					<el-col class="header-right">
 						<div class="header-right-cont">
-						
+
 							<el-dropdown trigger="hover">
 								<span class="el-dropdown-link userinfo-inner">
               <span>{{ userInfo.email }}</span>
@@ -30,24 +31,28 @@
 									</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
-							
-						<el-dropdown>
- <el-button type="primary" style="background-color: rgb(138, 129, 138) !important;border-color: rgb(138, 129, 138) !important" v-popover:popover5>备份</el-button>
-  <el-dropdown-menu slot="dropdown">
-    <el-dropdown-item v-for="subItem in backUpList" :key="subItem"><a style="color:#544c64;text-decoration: none;" @click="visible2=false"   download="filename" :key="subItem" :href="store.state.baseUrl+'/admin/v1/backup?source='+subItem">{{subItem}}</a></el-dropdown-item>
-  </el-dropdown-menu>
-</el-dropdown>
 
-						
+							<el-dropdown>
+								<el-button type="primary" style="background-color: rgb(138, 129, 138) !important;border-color: rgb(138, 129, 138) !important" v-popover:popover5>备份</el-button>
+								<el-dropdown-menu slot="dropdown">
+									<el-dropdown-item v-for="subItem in backUpList" :key="subItem">
+										<a style="color:#544c64;text-decoration: none;" @click="visible2=false" download="filename" :key="subItem" :href="store.state.baseUrl+'/admin/v1/backup?source='+subItem">{{subItem}}</a>
+									</el-dropdown-item>
+								</el-dropdown-menu>
+							</el-dropdown>
+
 						</div>
 					</el-col>
 				</el-row>
 			</el-header>
 
 			<el-container>
+
 				<!--侧边栏-->
-				<el-aside>
-					<el-menu ref="menu" :router=true :default-active="onRoutes" class="el-menu-vertical-demo">
+				<el-aside style="width:auto!important">
+					<div @click="isCollapse=!isCollapse" style="color: #fff;padding-left: 20px;">{{isCollapse?'展开':'收起'}}<i style="position: relative;
+    margin-left: 30px" :class="isCollapse?'el-submenu__icon-arrow el-icon-arrow-up':'el-submenu__icon-arrow el-icon-arrow-down'"></i></div>
+					<el-menu ref="menu"  :collapse="isCollapse" :router=true :default-active="onRoutes" class="el-menu-vertical-demo">
 						<el-submenu index="1">
 							<template slot="title">
 								<i style="color: #fff;margin-right:10px" class="iconfont icon-stack"></i>
@@ -67,7 +72,7 @@
 							<i style="color: #fff;margin-right:10px" class="iconfont icon-youhuiquan"></i>
 							<span slot="title">Coupon</span>
 						</el-menu-item>
-						<el-menu-item  index="/Discount/list" key="Discount">
+						<el-menu-item index="/Discount/list" key="Discount">
 							<i style="color: #fff;margin-right:10px" class="iconfont icon-zhekou"></i>
 							<span slot="title">Discount</span>
 						</el-menu-item>
@@ -117,17 +122,17 @@
 				menuTrees: [
 
 				],
-				backUpType:"",
-				 visible2: false,
-				backUpList:['system','uploads','search'],
-				
+				backUpType: "",
+				visible2: false,
+				isCollapse: true,
+				backUpList: ['system', 'uploads', 'search'],
+
 				//用户信息(初始化获取到)
 				userName: localStorage.getItem("userName"),
 			}
 		},
 
 		methods: {
-
 			//退出登录
 			doLoginOut() {
 				var that = this;
@@ -136,8 +141,7 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					that.$post("/admin/v1/user/logout", {
-					}).then(response => {
+					that.$post("/admin/v1/user/logout", {}).then(response => {
 						if(response.retCode == 0) {
 							this.$store.commit(types.LOGOUT);
 							this.$router.replace({
@@ -163,27 +167,26 @@
 					});
 				})
 			},
-			backUp(e){
-				var that=this;
-				that.$post("/admin/v1/backup?source="+e, {
-					}).then(response => {
-						if(response.retCode == 0) {
-								that.$message({
-								type: 'success',
-								message: "备份成功"
-							});
+			backUp(e) {
+				var that = this;
+				that.$post("/admin/v1/backup?source=" + e, {}).then(response => {
+					if(response.retCode == 0) {
+						that.$message({
+							type: 'success',
+							message: "备份成功"
+						});
 
-						} else {
+					} else {
 
-							that.$message({
-								type: 'warning',
-								message: response.message
-							});
-						}
+						that.$message({
+							type: 'warning',
+							message: response.message
+						});
+					}
 
-					}).catch(() => {
-					
-					});
+				}).catch(() => {
+
+				});
 			}
 
 		},
@@ -191,23 +194,24 @@
 		created() {
 			this.menuTrees = JSON.parse(this.store.state.loginData);
 			this.userInfo = JSON.parse(this.store.state.configData);
-			var router=this.$route.fullPath.replace("Add",'List')
-			this.onRoutes = router;	
-			
+			var router = this.$route.fullPath.replace("Add", 'List')
+			this.onRoutes = router;
+
 		},
-		mounted(){
-//			if(this.$route.fullPath.indexOf('template')){
-//				this.$refs.menu.open(1)
-//			}
-//				
+		mounted() {
+			//			if(this.$route.fullPath.indexOf('template')){
+			//				this.$refs.menu.open(1)
+			//			}
+			//				
 		}
 	}
 </script>
 <style>
-.select-back{
-	width:160px
-}
-.select-back .el-input{
-width:160px
-}
+	.select-back {
+		width: 160px
+	}
+	
+	.select-back .el-input {
+		width: 160px
+	}
 </style>

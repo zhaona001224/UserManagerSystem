@@ -1,9 +1,9 @@
 <template>
 	<div class="list">
-		<el-card class="box-card" >
+		<el-card class="box-card">
 			<el-button type="primary" class="common-btn" @click.native="$router.push('/template/Add/' + $route.params.key)">Add</el-button>
 			<el-button type="primary" style="float: right;" class="common-btn" @click="search">Search</el-button>
-			<el-input class="search-input" style="width:340px!important;margin-right: 50px;float: right;" prefix-icon="el-icon-search" v-model="keyword" placeholder="请输入搜索内容" >
+			<el-input @input="selfSearch" class="search-input" style="width:340px!important;margin-right: 50px;float: right;" prefix-icon="el-icon-search" v-model="keyword" placeholder="请输入搜索内容">
 			</el-input>
 
 		</el-card>
@@ -14,16 +14,22 @@
 						<el-radio :label="scope.row.yun_id" v-model="selectid">&nbsp;</el-radio>
 					</template>
 				</el-table-column>-->
-				<el-table-column header-align="left" prop="id" label="id" width="90px">
+				<el-table-column header-align="left" prop="id" label="id" width="60px">
 				</el-table-column>
-
-				<el-table-column :sortable="item&&item.name=='name'" v-for="(item,index) in formData" :key="item&&item.id" v-if="item&&item.data.type!='textarea'&&item.data.type!='file'" header-align="left" :prop="item&&item.name" :label="item&&item.name" width="140px">
+				<el-table-column v-for="(item,index) in formData" :key="item.id" v-if="item&&item.name=='price'" :prop="item&&item.name" :label="item&&item.name" width="120px">
+					<template slot-scope="scope">
+						<el-input @keyup.enter.native="handleInputConfirm(scope.$index)" style="width:110px" @blur="handleInputConfirm(scope.$index)" v-model="scope.row.price" :placeholder="'请输入'+item.name"></el-input>
+					</template>
+				</el-table-column>
+				<el-table-column :sortable="item&&item.name=='name'" v-for="(item,index) in formData" :key="item&&item.id" v-if="item&&item.data.type!='textarea'&&item.data.type!='file'&&item.name!='price'" header-align="left" :prop="item&&item.name" :label="item&&item.name" :width="(item.name=='type'||item.name=='miniNumber'||item.name=='hotItem'||item.name=='online')?'110px':'140px'">
 				</el-table-column>
 
 				<el-table-column v-for="(item,index) in formData" :key="item.id" v-if="item&&item.data.type=='file'" cell-style="text-align:center" header-align="center" :prop="item&&item.name" :label="item&&item.name" width="120px">
+
 					<template slot-scope="scope">
 						<img v-if="scope.row[item&&item.name]" style="width: 80px;height: 80px;" :src="imgUrl+scope.row[item&&item.name]" />
 					</template>
+
 				</el-table-column>
 
 				<el-table-column prop="updated" sortable label="updateTime" width="160px" cell-class-name="center" header-align="center">
@@ -95,7 +101,45 @@
 			handleEdit(item) {
 				this.$router.push('/template/Add/' + this.$route.params.key + '?id=' + item.id)
 			},
+			selfSearch() {
+				if(!this.keyword) {
+					this.pageNum = 1;
+					this.queryTable();
+					return
+				}
+				this.notSearch = false;
+				this.tableData = JSON.parse(JSON.stringify(this.tableData1)).filter((item, index) => {
 
+					return JSON.stringify(item).indexOf(this.keyword) > -1
+				})
+				console.log(this.tableData)
+
+				this.originTable = JSON.parse(JSON.stringify(this.originTable1)).filter((item, index) => {
+
+					return JSON.stringify(item).indexOf(this.keyword) > -1
+				})
+				this.$forceUpdate();
+			},
+			handleInputConfirm(index) {
+				
+				var data=this.originTable[index];
+				data.price=tableData[index].price
+				that.$post("/admin/v1/content?type=" + this.$route.params.key+"&id=" + data.id, data).then(response => {
+					if(response.retCode == 0) {
+						that.$message({
+							type: 'success',
+							message: "Modify success"
+						});
+						that.search();
+					} else {
+						that.$message({
+							type: 'warning',
+							message: response.message
+						});
+					}
+
+				})
+			},
 			copy(id) {
 				var that = this;
 				//				var clipboard1 = new this.clipboard('.clip')
@@ -205,16 +249,15 @@
 								}
 								if(this.dataSource.formData.data[key].type == "multiselect") {
 
-									var str=""
-									item[key] && JSON.parse(item[key]).map((subItem,index)=>{
-										if(index==JSON.parse(item[key]).length-1){
-											var subStr=subItem&& subItem.split(',')[1]
-										}else{
-											var subStr=subItem&& subItem.split(',')[1]+','
+									var str = ""
+									item[key] && JSON.parse(item[key]).map((subItem, index) => {
+										if(index == JSON.parse(item[key]).length - 1) {
+											var subStr = subItem && subItem.split(',')[1]
+										} else {
+											var subStr = subItem && subItem.split(',')[1] + ','
 										}
-										
-										
-										str=str+subStr
+
+										str = str + subStr
 									})
 									item[key] = str
 								}
@@ -227,7 +270,7 @@
 							item.updated = this.$util.formatTime(item.updated, 'YYYY-MM-DD HH:mm:ss');
 
 						})
-
+						this.tableData1 = JSON.parse(JSON.stringify(this.tableData))
 						this.total = response.meta.total ? parseInt(response.meta.total) : 0;
 					} else {
 
@@ -261,16 +304,15 @@
 							for(var key in this.dataSource.formData.data) {
 								if(this.dataSource.formData.data[key].type == "multiselect") {
 
-									var str=""
-									item[key] && JSON.parse(item[key]).map((subItem,index)=>{
-										if(index==JSON.parse(item[key]).length-1){
-											var subStr=subItem&& subItem.split(',')[1]
-										}else{
-											var subStr=subItem&& subItem.split(',')[1]+','
+									var str = ""
+									item[key] && JSON.parse(item[key]).map((subItem, index) => {
+										if(index == JSON.parse(item[key]).length - 1) {
+											var subStr = subItem && subItem.split(',')[1]
+										} else {
+											var subStr = subItem && subItem.split(',')[1] + ','
 										}
-										
-										
-										str=str+subStr
+
+										str = str + subStr
 									})
 									item[key] = str
 								}
@@ -285,6 +327,7 @@
 							}
 							item.updated = this.$util.formatTime(item.updated, 'YYYY-MM-DD HH:mm:ss')
 						})
+						this.tableData1 = JSON.parse(JSON.stringify(this.tableData))
 						this.total = response.meta.total ? parseInt(response.meta.total) : 0;
 					} else {
 

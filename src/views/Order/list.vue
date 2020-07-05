@@ -140,6 +140,7 @@
 					this.queryTable();
 					return
 				}
+				this.notSearch = false;
 
 				this.tableData = JSON.parse(JSON.stringify(this.tableData1)).filter((item, index) => {
 

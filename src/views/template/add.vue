@@ -185,12 +185,13 @@
 				for(var key in form) {
 					if(key != 'id' && this.dataSource.formData.data[key] && this.form[key]) {
 						if(this.dataSource.formData.data[key].type == "select" || this.dataSource.formData.data[key].type == "tree") {
-							if(this.form[key].toString().indexOf(',') > -1) return
+							
 							if(key == "belongto") {
 								var source = this.treeData
 							} else {
 								var source = this.dataSource.formData.data[key].source
 							}
+							if(this.form[key].toString().indexOf(',') > -1) return
 							var data = source.filter((item, index) => {
 
 								return item.id == this.form[key]
@@ -249,6 +250,7 @@
 				})
 			},
 			getTreeList(data, fn) {
+		
 				data && data.map((item, index) => {
 					if(!item.id) return
 					item.children = this.treeData.filter((subItem, index) => {
@@ -267,7 +269,7 @@
 					if(response.retCode == 0) {
 						this.treeData = response.data || [];
 						var Node1 = this.treeData && this.treeData.filter((item, index) => {
-							return item.belongto == ""
+							return !item.belongto
 						})
 						Node1.unshift({
 							name: 'none',
