@@ -15,7 +15,7 @@
 						<el-col :span="12">
 							{{form}}
 							<el-form-item label="bad" prop="bad">
-								<el-radio-group v-model="form.bad" >
+								<el-radio-group v-model="form.bad">
 									<el-radio :label="true">true</el-radio>
 									<el-radio :label="false">false</el-radio>
 								</el-radio-group>
@@ -23,7 +23,7 @@
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="status" prop="status">
-								<el-select :clearable="true"  @change="refreshData" style="width:300px;border: 1px solid greenyellow;" v-model="form.status" placeholder="请选择 status">
+								<el-select :clearable="true" @change="refreshData" style="width:300px;border: 1px solid greenyellow;" v-model="form.status" placeholder="请选择 status">
 									<el-option v-for="subItem in statusList" :key="subItem.name" :label="subItem.name" :value="subItem.name">
 									</el-option>
 								</el-select>
@@ -171,6 +171,27 @@
 						</el-input>
 						<el-button v-else class="button-new-tag" size="small" @click="showInput()">+Note</el-button>
 					</el-form-item>
+					<el-row v-loading="loading">
+						<el-col :span="12">
+							<el-form-item label="payer_info" prop="payer_info">
+								<div style="background: #efefef"><label>account_id：</label>{{transactionData&&transactionData.data.payer_info.account_id}}</div>
+								<div :style="transactionData&&transactionData.data.payer_info.address_status=='Y'?'background:green;color:#fff':'background:red;color:#fff'"><label>address_status：</label>{{transactionData&&transactionData.data.payer_info.address_status}}</div>
+								<div style="background: #efefef"><label>country_code：</label>{{transactionData&&transactionData.data.payer_info.country_code}}</div>
+								<div style="background: #efefef"><label>email_address：</label>{{transactionData&&transactionData.data.payer_info.email_address}}</div>
+								<div :style="transactionData&&transactionData.data.payer_info.address_status=='Y'?'background:green;color:#fff':'background:red;color:#fff'"><label>payer_status：</label>{{transactionData&&transactionData.data.payer_info.payer_status}}</div>
+								<div style="background: #efefef"><label>payer_name：</label><pre style="height: 300px;overflow-y: auto;">{{transactionData&&transactionData.data.payer_info.payer_name}}</pre></div>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="shipping_info" prop="shipping_info">
+								<div style="background: #efefef"><label>name：</label>{{transactionData&&transactionData.data.shipping_info.account_id}}</div>
+								<div style="background: #efefef"><label>method：</label>{{transactionData&&transactionData.data.shipping_info.method}}</div>
+								<div style="background: #efefef"><label>secondary_shipping_address：</label>{{transactionData&&transactionData.data.shipping_info.secondary_shipping_address}}</div>
+								<div style="background: #efefef"><label>address：</label><pre style="height: 300px;overflow-y: auto;">{{transactionData&&transactionData.data.shipping_info.address}}</pre></div>
+
+							</el-form-item>
+						</el-col>
+					</el-row>
 					</el-row>
 					<div class="cls"></div>
 					<div class="cls"></div>
@@ -220,6 +241,8 @@
 				rules: {
 
 				},
+				transactionData: {},
+				loading:false
 			}
 		},
 		methods: {
@@ -362,11 +385,141 @@
 					}
 				})
 			},
-			getTransationData(id){
-this.$get("/payment/paypal/info/" + id, {}).then(response => {
+			getTransationData(id) {
+				this.loloading = false
+				this.transactionData = {
+					"data": {
+						"transaction_info": {
+							"paypal_account_id": "JPA5DFQT4BVJ6",
+							"transaction_id": "09E627942B9101600",
+							"paypal_reference_id": "",
+							"paypal_reference_id_type": "",
+							"transaction_event_code": "T0006",
+							"transaction_initiation_date": "2020-07-02T01:09:41+0000",
+							"transaction_updated_date": "2020-07-02T01:09:41+0000",
+							"transaction_amount": {
+								"currency_code": "USD",
+								"value": "11.11"
+							},
+							"fee_amount": {
+								"currency_code": "USD",
+								"value": "-0.72"
+							},
+							"insurance_amount": null,
+							"shipping_amount": null,
+							"shipping_discount_amount": null,
+							"shipping_tax_amount": null,
+							"other_amount": null,
+							"tip_amount": null,
+							"transaction_status": "S",
+							"transaction_subject": "note",
+							"payment_tracking_id": "",
+							"bank_reference_id": "",
+							"transaction_note": "",
+							"ending_balance": null,
+							"available_balance": null,
+							"invoice_id": "4f8c5abd1896c14f152f36c8bd70a25c",
+							"custom_field": "",
+							"protection_eligibility": "01",
+							"credit_term": "",
+							"credit_transactional_fee": null,
+							"credit_promotional_fee": null,
+							"annual_percentage_rate": "",
+							"payment_method_type": ""
+						},
+						"payer_info": {
+							"account_id": "JPA5DFQT4BVJ6",
+							"email_address": "e_raeb@yahoo.com",
+							"address_status": "Y",
+							"payer_status": "N",
+							"payer_name": {
+								"given_name": "mm",
+								"surname": "kk"
+							},
+							"country_code": "CR"
+						},
+						"shipping_info": {
+							"name": "mm, kk",
+							"method": "",
+							"address": {
+								"line1": "Free Trade Zone",
+								"city": "San Jose",
+								"country_code": "CR",
+								"postal_code": "11801"
+							},
+							"secondary_shipping_address": null
+						},
+						"cart_info": {
+							"item_details": [{
+								"item_code": "",
+								"item_name": "hat111",
+								"item_description": "Brown hat. for human",
+								"item_options": "",
+								"item_quantity": "2",
+								"item_unit_price": {
+									"currency_code": "USD",
+									"value": "0.50"
+								},
+								"item_amount": {
+									"currency_code": "USD",
+									"value": "1.00"
+								},
+								"discount_amount": null,
+								"adjustment_amount": null,
+								"gift_wrap_amount": null,
+								"tax_percentage": "",
+								"tax_amounts": null,
+								"basic_shipping_amount": null,
+								"extra_shipping_amount": null,
+								"handling_amount": null,
+								"insurance_amount": null,
+								"total_item_amount": {
+									"currency_code": "USD",
+									"value": "1.00"
+								},
+								"invoice_number": "4f8c5abd1896c14f152f36c8bd70a25c",
+								"checkout_options": null
+							}, {
+								"item_code": "",
+								"item_name": "handbag222",
+								"item_description": "Black handbag. for spagati",
+								"item_options": "",
+								"item_quantity": "1",
+								"item_unit_price": {
+									"currency_code": "USD",
+									"value": "10.11"
+								},
+								"item_amount": {
+									"currency_code": "USD",
+									"value": "10.11"
+								},
+								"discount_amount": null,
+								"adjustment_amount": null,
+								"gift_wrap_amount": null,
+								"tax_percentage": "",
+								"tax_amounts": null,
+								"basic_shipping_amount": null,
+								"extra_shipping_amount": null,
+								"handling_amount": null,
+								"insurance_amount": null,
+								"total_item_amount": {
+									"currency_code": "USD",
+									"value": "10.11"
+								},
+								"invoice_number": "4f8c5abd1896c14f152f36c8bd70a25c",
+								"checkout_options": null
+							}],
+							"tax_inclusive": null,
+							"paypal_invoice_id": ""
+						}
+					},
+					"msg": "ok",
+					"retCode": 0
+				}
+				this.$get("/payment/paypal/info/" + id, {}).then(response => {
 
 					if(response.retCode == 0) {
-						
+
 					} else {
 						this.$message({
 							message: response.msg,
@@ -390,7 +543,7 @@ this.$get("/payment/paypal/info/" + id, {}).then(response => {
 						this.form.request_time = this.form.request_time ? this.dateFormat(this.form.request_time, 'yyyy-MM-dd HH:mm:ss') : '';
 						this.form.last_update = this.form.last_update ? this.dateFormat(this.form.last_update, 'yyyy-MM-dd HH:mm:ss') : ''
 						this.form.refund_time = this.form.refund_time ? this.dateFormat(this.form.refund_time, 'yyyy-MM-dd HH:mm:ss') : ''
-						this.getTransationData(response.data.order_id)
+						this.getTransationData(JSON.parse(response.data.notify_info).transaction_id)
 					} else {
 						this.$message({
 							message: response.msg,
@@ -447,11 +600,13 @@ this.$get("/payment/paypal/info/" + id, {}).then(response => {
 		margin-bottom: 20px;
 		padding-right: 20px;
 	}
-	.el-tag .el-tag__close{
+	
+	.el-tag .el-tag__close {
 		position: absolute;
 		right: 10px;
 		top: 4px!important;
 	}
+	
 	/deep/ .w-e-menu,
 	/deep/ .w-e-text-container {
 		z-index: 1000!important;

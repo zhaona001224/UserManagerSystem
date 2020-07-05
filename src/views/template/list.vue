@@ -18,7 +18,7 @@
 				</el-table-column>
 				<el-table-column v-for="(item,index) in formData" :key="item.id" v-if="item&&item.name=='price'" :prop="item&&item.name" :label="item&&item.name" width="120px">
 					<template slot-scope="scope">
-						<el-input @keyup.enter.native="handleInputConfirm(scope.$index)" style="width:110px" @blur="handleInputConfirm(scope.$index)" v-model="scope.row.price" :placeholder="'请输入'+item.name"></el-input>
+						<el-input @keyup.enter.native="handleInputConfirm(scope.$index)" style="width:110px" @blur="handleInputClear(scope.$index)" v-model="scope.row.price" :placeholder="'请输入'+item.name"></el-input>
 					</template>
 				</el-table-column>
 				<el-table-column :sortable="item&&item.name=='name'" v-for="(item,index) in formData" :key="item&&item.id" v-if="item&&item.data.type!='textarea'&&item.data.type!='file'&&item.name!='price'" header-align="left" :prop="item&&item.name" :label="item&&item.name" :width="(item.name=='type'||item.name=='miniNumber'||item.name=='hotItem'||item.name=='online')?'110px':'140px'">
@@ -120,10 +120,14 @@
 				})
 				this.$forceUpdate();
 			},
+			handleInputClear(index){
+				this.tableData[index].price=this.originTable[index].price;
+				this.$forceUpdate();
+			},
 			handleInputConfirm(index) {
-				
+				var that=this;
 				var data=this.originTable[index];
-				data.price=tableData[index].price
+				data.price=this.tableData[index].price
 				that.$post("/admin/v1/content?type=" + this.$route.params.key+"&id=" + data.id, data).then(response => {
 					if(response.retCode == 0) {
 						that.$message({
@@ -236,7 +240,8 @@
 						this.notSearch = true;
 
 						this.tableData = response.data || [];
-						this.originTable = JSON.parse(JSON.stringify(this.tableData))
+						this.originTable = JSON.parse(JSON.stringify(this.tableData));
+						this.originTable1 = JSON.parse(JSON.stringify(this.tableData));
 						this.tableData.sort((a, b) => {
 							//排序基于的数据
 							return b.updated - a.updated;

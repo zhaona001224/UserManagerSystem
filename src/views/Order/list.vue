@@ -45,7 +45,7 @@
 						<el-button v-else class="button-new-tag" size="small" @click="showInput(scope.$index)">+Note</el-button>
 						  <div class="tool-tip" v-if="scope.row['comment']">comment</div>
 						  <div  v-if="scope.row['comment']">{{scope.row['comment']}}</div>
-  <el-button slot="reference">{{scope.row['payer']}}</el-button>
+  <div slot="reference">{{scope.row['payer']}}</div>
 </el-popover>
 					</template>
 				</el-table-column>

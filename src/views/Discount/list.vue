@@ -3,7 +3,7 @@
 		<el-card class="box-card" >
 			<el-button type="primary" class="common-btn" @click.native="$router.push('/Discount/Add')">Add</el-button>
 			<el-button type="primary" style="float: right;" class="common-btn" @click="search">Search</el-button>
-			<el-input class="search-input" style="width:340px!important;margin-right: 50px;float: right;"prefix-icon="el-icon-search" v-model="keyword" placeholder="请输入搜索内容" >
+			<el-input @input="selfSearch" class="search-input" style="width:340px!important;margin-right: 50px;float: right;"prefix-icon="el-icon-search" v-model="keyword" placeholder="请输入搜索内容" >
 			</el-input>
 		
 		</el-card>
@@ -147,6 +147,25 @@
 				})
 
 			},
+			selfSearch() {
+				if(!this.keyword) {
+					this.pageNum = 1;
+					this.queryTable();
+					return
+				}
+				this.notSearch = false;
+				this.tableData = JSON.parse(JSON.stringify(this.tableData1)).filter((item, index) => {
+
+					return JSON.stringify(item).indexOf(this.keyword) > -1
+				})
+				console.log(this.tableData)
+
+				this.originTable = JSON.parse(JSON.stringify(this.originTable1)).filter((item, index) => {
+
+					return JSON.stringify(item).indexOf(this.keyword) > -1
+				})
+				this.$forceUpdate();
+			},
 			copy(id) {
 				var that = this;
 				var data = this.originTable.filter((item, index) => {
@@ -180,7 +199,8 @@
 					if(response.retCode == 0) {
 						this.notSearch = true;
 						this.tableData = response.data || [];
-						this.originTable = JSON.parse(JSON.stringify(this.tableData))
+						this.originTable = JSON.parse(JSON.stringify(this.tableData));
+						this.originTable1 = JSON.parse(JSON.stringify(this.tableData));
 						this.tableData.sort((a, b) => {
 							//排序基于的数据
 							return b.updated - a.updated;
@@ -192,7 +212,7 @@
 							item.updated = this.$util.formatTime(item.updated, 'YYYY-MM-DD HH:mm:ss');
 
 						})
-							
+						this.tableData1 = JSON.parse(JSON.stringify(this.tableData))
 						this.total = response.meta.total ? parseInt(response.meta.total) : 0;
 					} else {
 
@@ -227,6 +247,7 @@
 								item.list = JSON.parse(item.list)
 							item.updated = this.$util.formatTime(item.updated, 'YYYY-MM-DD HH:mm:ss');
 						})
+						this.tableData1 = JSON.parse(JSON.stringify(this.tableData))
 						this.total = response.meta.total ? parseInt(response.meta.total) : 0;
 						this.$forceUpdate();
 					} else {
