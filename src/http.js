@@ -8,8 +8,7 @@ import store from './store/store'
 import * as types from './store/types'
 
 const service = axios.create({
-  baseURL: store.state.isUrl,  // api的base_url
-  timeout: 20000  // 请求超时时间
+  baseURL: store.state.isUrl
 });
 
 export default service

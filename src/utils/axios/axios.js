@@ -17,21 +17,23 @@ import * as types from '@/store/types'
  * @return {object} 请求成功或失败时返回的配置对象或者promise error对象
  **/
 let loading;
-let i=0;
+let i = 0;
 axios.interceptors.request.use(config => {
-  i++;
+	if(config.url.indexOf('/api/payment/paypal/info/' == -1)) {
+		i++;
 
-  loading = Vue.prototype.$loading({
-    lock: true,
-    text: '',
-    spinner: 'el-icon-loading',
-    background: 'rgba(0, 0, 0,0)'
-  });
+		loading = Vue.prototype.$loading({
+			lock: true,
+			text: '',
+			spinner: 'el-icon-loading',
+			background: 'rgba(0, 0, 0,0)'
+		});
 
+	}
 
-  return config;
+	return config;
 }, error => {
-  return Promise.reject(error);
+	return Promise.reject(error);
 })
 
 /**
@@ -41,23 +43,23 @@ axios.interceptors.request.use(config => {
  **/
 
 axios.interceptors.response.use(response => {
-  i--
-  if(i==0){
-    loading.close();
-  }
-	if(response.data && typeof response.data == "object"){
+	i--
+	if(i <=0) {
+		loading.close();
+	}
+	if(response.data && typeof response.data == "object") {
 		if(response.data.retCode === -1) {
-			errorMessaage(response.data.msg||response.data.message,true);
+			errorMessaage(response.data.msg || response.data.message, true);
 			return Promise.reject(response);
 		}
 	}
 	return response.data;
-}, error => {  //响应错误处理
+}, error => { //响应错误处理
 	if(error.response) {
-		if (error.response.status === 504 || error.response.status === 404) {
+		if(error.response.status === 504 || error.response.status === 404) {
 			errorMessaage("请查看网络是否链接。");
-		} else if (error.response.status === 403) {
-		    errorMessaage("抱歉，您没有权限查看该页面。");
+		} else if(error.response.status === 403) {
+			errorMessaage("抱歉，您没有权限查看该页面。");
 		} else {
 			errorMessaage("未知错误。");
 		}
@@ -67,51 +69,55 @@ axios.interceptors.response.use(response => {
 
 //弹出框配置
 const errorOptionsPushPage = {
-	type:"error",
-	confirmButtonText:"返回登录页面",
-	callback:backLogin,
-	showClose:false,
-	center:true
+	type: "error",
+	confirmButtonText: "返回登录页面",
+	callback: backLogin,
+	showClose: false,
+	center: true
 }
 const errorOptionsNoPushPage = {
-	type:"error",
-	confirmButtonText:"确定",
-	showClose:true,
-	center:true
+	type: "error",
+	confirmButtonText: "确定",
+	showClose: true,
+	center: true
 }
 //返回首页方法
-function backLogin(){
-	router.replace({name: 'login'});
+function backLogin() {
+	router.replace({
+		name: 'login'
+	});
 }
 //弹出错误信息弹框
-function errorMessaage(msg,noPushPageFlag){
-	if(noPushPageFlag){
+function errorMessaage(msg, noPushPageFlag) {
+	if(noPushPageFlag) {
 		ElementUI.MessageBox.alert(msg, errorOptionsNoPushPage);
-	}else{
+	} else {
 		ElementUI.MessageBox.alert(msg, errorOptionsPushPage);
 	}
 }
 
 export default {
-	axiosGet(url,params){
-		return new Promise(function(resolve, reject){
-			axios.get("/api"+url,params).then((response)=>{
+	axiosGet(url, params) {
+		return new Promise(function(resolve, reject) {
+			axios.get("/api" + url, params).then((response) => {
 				resolve(response);
 			})
 		})
 	},
-	axiosPost(url,params){
-		return new Promise(function(resolve, reject){
-			
-			axios.post("/api"+url,params).then((response)=>{
+	axiosPost(url, params) {
+		return new Promise(function(resolve, reject) {
+
+			axios.post("/api" + url, params).then((response) => {
 				resolve(response);
 			})
 		})
 	},
-	axiosDelete(url,params){
-		return new Promise(function(resolve, reject){
-			
-			axios.delete("/api"+url,{data:params}).then((response)=>{
+	axiosDelete(url, params) {
+		return new Promise(function(resolve, reject) {
+
+			axios.delete("/api" + url, {
+				data: params
+			}).then((response) => {
 				resolve(response);
 			})
 		})

@@ -31,8 +31,8 @@
 					</el-row>
 					<el-row>
 						<el-col :span="12">
-							<el-form-item label="total" prop="total">
-								<el-input disabled style="width:300px" maxlength="" v-model="form.total">
+							<el-form-item label="transcation_id" prop="transcation_id">
+								<el-input style="width:300px" maxlength="" v-model="form.transcation_id">
 								</el-input>
 							</el-form-item>
 						</el-col>
@@ -146,6 +146,12 @@
 						</el-col>
 					</el-row>
 					<el-row>
+						<el-form-item label="total" prop="total">
+							<el-input disabled style="width:300px" maxlength="" v-model="form.total">
+							</el-input>
+						</el-form-item>
+					</el-row>
+					<el-row>
 						<el-form-item label="notify_info " prop="notify_info ">
 							<pre style="height: 300px;overflow-y: auto;">{{form.notify_info&&JSON.parse(form.notify_info)}}</pre>
 						</el-form-item>
@@ -173,20 +179,20 @@
 					<el-row v-loading="loading" v-if="transaction_id">
 						<el-col :span="12">
 							<el-form-item label="payer_info" prop="payer_info">
-								<div style="background: #efefef"><label>account_id：</label>{{transactionData&&transactionData.data.payer_info.account_id}}</div>
-								<div :style="transactionData&&transactionData.data.payer_info.address_status=='Y'?'background:green;color:#fff':'background:red;color:#fff'"><label>address_status：</label>{{transactionData&&transactionData.data.payer_info.address_status}}</div>
-								<div style="background: #efefef"><label>country_code：</label>{{transactionData&&transactionData.data.payer_info.country_code}}</div>
-								<div style="background: #efefef"><label>email_address：</label>{{transactionData&&transactionData.data.payer_info.email_address}}</div>
-								<div :style="transactionData&&transactionData.data.payer_info.address_status=='Y'?'background:green;color:#fff':'background:red;color:#fff'"><label>payer_status：</label>{{transactionData&&transactionData.data.payer_info.payer_status}}</div>
-								<div style="background: #efefef"><label>payer_name：</label><pre style="height: 300px;overflow-y: auto;">{{transactionData&&transactionData.data.payer_info.payer_name}}</pre></div>
+								<div style="background: #efefef"><label>account_id：</label>{{payer_info&&payer_info.account_id}}</div>
+								<div :style="payer_info&&payer_info.address_status=='Y'?'background:green;color:#fff':'background:red;color:#fff'"><label>address_status：</label>{{payer_info&&payer_info.address_status}}</div>
+								<div style="background: #efefef"><label>country_code：</label>{{payer_info&&payer_info.country_code}}</div>
+								<div style="background: #efefef"><label>email_address：</label>{{payer_info&&payer_info.email_address}}</div>
+								<div :style="payer_info&&payer_info.address_status=='Y'?'background:green;color:#fff':'background:red;color:#fff'"><label>payer_status：</label>{{payer_info&&payer_info.payer_status}}</div>
+								<div style="background: #efefef"><label>payer_name：</label><pre style="height: 300px;overflow-y: auto;">{{payer_info&&payer_info.payer_name}}</pre></div>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="shipping_info" prop="shipping_info">
-								<div style="background: #efefef"><label>name：</label>{{transactionData&&transactionData.data.shipping_info.account_id}}</div>
-								<div style="background: #efefef"><label>method：</label>{{transactionData&&transactionData.data.shipping_info.method}}</div>
-								<div style="background: #efefef"><label>secondary_shipping_address：</label>{{transactionData&&transactionData.data.shipping_info.secondary_shipping_address}}</div>
-								<div style="background: #efefef"><label>address：</label><pre style="height: 300px;overflow-y: auto;">{{transactionData&&transactionData.data.shipping_info.address}}</pre></div>
+								<div style="background: #efefef"><label>name：</label>{{shipping_info&&shipping_info.account_id}}</div>
+								<div style="background: #efefef"><label>method：</label>{{shipping_info&&shipping_info.method}}</div>
+								<div style="background: #efefef"><label>secondary_shipping_address：</label>{{shipping_info&&shipping_info.secondary_shipping_address}}</div>
+								<div style="background: #efefef"><label>address：</label><pre style="height: 300px;overflow-y: auto;">{{shipping_info&&shipping_info.address}}</pre></div>
 
 							</el-form-item>
 						</el-col>
@@ -234,22 +240,23 @@
 				list: {
 
 				},
-				transaction_id:'',
+				transaction_id: '',
 				inputValue: '',
 				inputVisible: '',
 				activeKey: '',
-				rules: {
+rules: {
 
-				},
-				transactionData: {},
-				loading: false
-			}
-		},
-		methods: {
-			creatEdit() {
-				var that = this;
-				setTimeout(() => {
-					this.editor = new E(this.$refs['editorElem']);
+	},
+	shipping_info: '',
+	payer_info: '',
+	loading: false
+}
+},
+methods: {
+		creatEdit() {
+			var that = this;
+			setTimeout(() => {
+						this.editor = new E(this.$refs['editorElem']);
 					// 编辑器的事件，每次改变会获取其html内容
 					this.editor.customConfig.onchange = html => {
 						that.form['desc'] = html;
@@ -345,11 +352,12 @@
 			submit() {
 				var form = {};
 				var that = this;
-				if(this.form.note.length == 0) {
+				if(this.form.note && this.form.note.length == 0) {
 					this.originFrom.note = "";
 				} else {
-					this.originFrom.note = this.form.note.join(',')
+					this.originFrom.note = this.form.note && this.form.note.join(',')
 				}
+				this.originFrom.transcation_id = this.form.transcation_id;
 				this.originFrom.status = this.form.status;
 				this.originFrom.bad = this.form.bad;
 				this.$refs.form.validate((valid) => {
@@ -385,141 +393,13 @@
 					}
 				})
 			},
-			getTransationData(id) {
-				this.loloading = false
-				this.transactionData = {
-					"data": {
-						"transaction_info": {
-							"paypal_account_id": "JPA5DFQT4BVJ6",
-							"transaction_id": "09E627942B9101600",
-							"paypal_reference_id": "",
-							"paypal_reference_id_type": "",
-							"transaction_event_code": "T0006",
-							"transaction_initiation_date": "2020-07-02T01:09:41+0000",
-							"transaction_updated_date": "2020-07-02T01:09:41+0000",
-							"transaction_amount": {
-								"currency_code": "USD",
-								"value": "11.11"
-							},
-							"fee_amount": {
-								"currency_code": "USD",
-								"value": "-0.72"
-							},
-							"insurance_amount": null,
-							"shipping_amount": null,
-							"shipping_discount_amount": null,
-							"shipping_tax_amount": null,
-							"other_amount": null,
-							"tip_amount": null,
-							"transaction_status": "S",
-							"transaction_subject": "note",
-							"payment_tracking_id": "",
-							"bank_reference_id": "",
-							"transaction_note": "",
-							"ending_balance": null,
-							"available_balance": null,
-							"invoice_id": "4f8c5abd1896c14f152f36c8bd70a25c",
-							"custom_field": "",
-							"protection_eligibility": "01",
-							"credit_term": "",
-							"credit_transactional_fee": null,
-							"credit_promotional_fee": null,
-							"annual_percentage_rate": "",
-							"payment_method_type": ""
-						},
-						"payer_info": {
-							"account_id": "JPA5DFQT4BVJ6",
-							"email_address": "e_raeb@yahoo.com",
-							"address_status": "Y",
-							"payer_status": "N",
-							"payer_name": {
-								"given_name": "mm",
-								"surname": "kk"
-							},
-							"country_code": "CR"
-						},
-						"shipping_info": {
-							"name": "mm, kk",
-							"method": "",
-							"address": {
-								"line1": "Free Trade Zone",
-								"city": "San Jose",
-								"country_code": "CR",
-								"postal_code": "11801"
-							},
-							"secondary_shipping_address": null
-						},
-						"cart_info": {
-							"item_details": [{
-								"item_code": "",
-								"item_name": "hat111",
-								"item_description": "Brown hat. for human",
-								"item_options": "",
-								"item_quantity": "2",
-								"item_unit_price": {
-									"currency_code": "USD",
-									"value": "0.50"
-								},
-								"item_amount": {
-									"currency_code": "USD",
-									"value": "1.00"
-								},
-								"discount_amount": null,
-								"adjustment_amount": null,
-								"gift_wrap_amount": null,
-								"tax_percentage": "",
-								"tax_amounts": null,
-								"basic_shipping_amount": null,
-								"extra_shipping_amount": null,
-								"handling_amount": null,
-								"insurance_amount": null,
-								"total_item_amount": {
-									"currency_code": "USD",
-									"value": "1.00"
-								},
-								"invoice_number": "4f8c5abd1896c14f152f36c8bd70a25c",
-								"checkout_options": null
-							}, {
-								"item_code": "",
-								"item_name": "handbag222",
-								"item_description": "Black handbag. for spagati",
-								"item_options": "",
-								"item_quantity": "1",
-								"item_unit_price": {
-									"currency_code": "USD",
-									"value": "10.11"
-								},
-								"item_amount": {
-									"currency_code": "USD",
-									"value": "10.11"
-								},
-								"discount_amount": null,
-								"adjustment_amount": null,
-								"gift_wrap_amount": null,
-								"tax_percentage": "",
-								"tax_amounts": null,
-								"basic_shipping_amount": null,
-								"extra_shipping_amount": null,
-								"handling_amount": null,
-								"insurance_amount": null,
-								"total_item_amount": {
-									"currency_code": "USD",
-									"value": "10.11"
-								},
-								"invoice_number": "4f8c5abd1896c14f152f36c8bd70a25c",
-								"checkout_options": null
-							}],
-							"tax_inclusive": null,
-							"paypal_invoice_id": ""
-						}
-					},
-					"msg": "ok",
-					"retCode": 0
-				}
+			getTransactionData(id) {
+
 				this.$get("/payment/paypal/info/" + id, {}).then(response => {
-
+					this.loloading = false
 					if(response.retCode == 0) {
-
+						this.shipping_info= response.data.shipping_info;
+				this.payer_info= response.data.payer_info;
 					} else {
 						this.$message({
 							message: response.msg,
@@ -543,9 +423,10 @@
 						this.form.request_time = this.form.request_time ? this.dateFormat(this.form.request_time, 'yyyy-MM-dd HH:mm:ss') : '';
 						this.form.last_update = this.form.last_update ? this.dateFormat(this.form.last_update, 'yyyy-MM-dd HH:mm:ss') : ''
 						this.form.refund_time = this.form.refund_time ? this.dateFormat(this.form.refund_time, 'yyyy-MM-dd HH:mm:ss') : ''
-						if(JSON.parse(response.data.notify_info).transaction_id) {
-							this.transaction_id=JSON.parse(response.data.notify_info).transaction_id
-							this.getTransactionData(JSON.parse(response.data.notify_info).transaction_id)
+						this.form.transaction_id = '68330057502714443'
+						if(this.form.transaction_id) {
+							this.transaction_id = this.form.transaction_id
+							this.getTransactionData(this.form.transaction_id)
 						}
 
 					} else {
