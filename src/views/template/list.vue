@@ -358,7 +358,7 @@
 
 		},
 		created() {
-			this.imgUrl = this.store.state.imgUrl
+			this.imgUrl = this.store.state.imgUrl;
 			var menuTrees = JSON.parse(this.store.state.loginData);
 
 			menuTrees.map((item, index) => {

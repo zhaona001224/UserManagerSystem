@@ -339,7 +339,7 @@
 		mounted() {
 
 			let that = this;
-			this.imgUrl = this.store.state.imgUrl
+			this.imgUrl = this.store.state.imgUrl;
 			var menuTrees = JSON.parse(this.store.state.loginData);
 			menuTrees.map((item, index) => {
 				if(item.name == this.$route.params.key) {

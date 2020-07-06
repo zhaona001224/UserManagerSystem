@@ -1,16 +1,15 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import * as types from './types'
-
+import config from '../../config/index'
 Vue.use(Vuex);
-
+console.log(config)
 export default new Vuex.Store({
   state: {
     token: null,  //登录token
     userName: "",
     screenHeight: window.screen.height,
-    imgUrl:'http://193.22.152.235:8080/admin/v1/file?id=',
-    baseUrl:'http://193.22.152.235:8080'
+    imgUrl:config.imgUrl
   },
   mutations: {
 

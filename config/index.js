@@ -3,8 +3,8 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
-
 module.exports = {
+	imgUrl:'http://193.22.152.235:8080/admin/v1/file?id=',
   dev: {
 
     // Paths
