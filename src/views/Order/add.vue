@@ -13,7 +13,6 @@
 				<el-form ref="form" :model="form" :rules="rules" label-width="100px" label-position="right">
 					<el-row>
 						<el-col :span="12">
-							{{form}}
 							<el-form-item label="bad" prop="bad">
 								<el-radio-group v-model="form.bad">
 									<el-radio :label="true">true</el-radio>
@@ -171,7 +170,7 @@
 						</el-input>
 						<el-button v-else class="button-new-tag" size="small" @click="showInput()">+Note</el-button>
 					</el-form-item>
-					<el-row v-loading="loading">
+					<el-row v-loading="loading" v-if="transaction_id">
 						<el-col :span="12">
 							<el-form-item label="payer_info" prop="payer_info">
 								<div style="background: #efefef"><label>account_id：</label>{{transactionData&&transactionData.data.payer_info.account_id}}</div>
@@ -235,6 +234,7 @@
 				list: {
 
 				},
+				transaction_id:'',
 				inputValue: '',
 				inputVisible: '',
 				activeKey: '',
@@ -242,7 +242,7 @@
 
 				},
 				transactionData: {},
-				loading:false
+				loading: false
 			}
 		},
 		methods: {
@@ -543,7 +543,11 @@
 						this.form.request_time = this.form.request_time ? this.dateFormat(this.form.request_time, 'yyyy-MM-dd HH:mm:ss') : '';
 						this.form.last_update = this.form.last_update ? this.dateFormat(this.form.last_update, 'yyyy-MM-dd HH:mm:ss') : ''
 						this.form.refund_time = this.form.refund_time ? this.dateFormat(this.form.refund_time, 'yyyy-MM-dd HH:mm:ss') : ''
-						this.getTransationData(JSON.parse(response.data.notify_info).transaction_id)
+						if(JSON.parse(response.data.notify_info).transaction_id) {
+							this.transaction_id=JSON.parse(response.data.notify_info).transaction_id
+							this.getTransactionData(JSON.parse(response.data.notify_info).transaction_id)
+						}
+
 					} else {
 						this.$message({
 							message: response.msg,
