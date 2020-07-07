@@ -32,7 +32,7 @@
 					<el-row>
 						<el-col :span="12">
 							<el-form-item label="transcation_id" prop="transcation_id">
-								<el-input style="width:300px" maxlength="" v-model="form.transcation_id">
+								<el-input style="width:300px" disabled maxlength="" v-model="form.transcation_id">
 								</el-input>
 							</el-form-item>
 						</el-col>
@@ -423,10 +423,10 @@ methods: {
 						this.form.request_time = this.form.request_time ? this.dateFormat(this.form.request_time, 'yyyy-MM-dd HH:mm:ss') : '';
 						this.form.last_update = this.form.last_update ? this.dateFormat(this.form.last_update, 'yyyy-MM-dd HH:mm:ss') : ''
 						this.form.refund_time = this.form.refund_time ? this.dateFormat(this.form.refund_time, 'yyyy-MM-dd HH:mm:ss') : ''
-						this.form.transaction_id = '68330057502714443'
-						if(this.form.transaction_id) {
-							this.transaction_id = this.form.transaction_id
-							this.getTransactionData(this.form.transaction_id)
+						if(this.form.id) {
+							this.transaction_id = this.form.id;
+							this.form.transaction_id=this.form.id;
+							this.getTransactionData(this.form.id)
 						}
 
 					} else {
