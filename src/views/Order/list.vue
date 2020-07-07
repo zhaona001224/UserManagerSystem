@@ -555,7 +555,7 @@
 		color: #fff;
 	}
 	
-	.el-table__row.comment .el-table_1_column_3    {
+	.el-table__row.comments .el-table_1_column_3    {
 		background: blue;
 		color: #fff;
 	}

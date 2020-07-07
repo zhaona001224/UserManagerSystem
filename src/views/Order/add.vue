@@ -85,7 +85,7 @@
 							</el-form-item>
 						</el-col>
 					</el-row>
-					<el-row v-loading="loading" v-if="transaction_id">
+					<el-row v-loading="loading" v-if="payer_info">
 						<el-col :span="12" style="height: 500px;overflow-y: auto;">
 							<el-form-item label="payer_info" prop="payer_info">
 								<div style="background: #efefef"><label>account_id：</label>{{payer_info&&payer_info.account_id}}</div>
