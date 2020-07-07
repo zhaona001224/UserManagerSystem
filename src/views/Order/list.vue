@@ -548,17 +548,17 @@
 		display: none;
 	}
 	
-.el-table__row.note .el-table_1_column_3  {
+.el-table__row.note td:nth-child(3)  {
 		background: #f73131;
 		color: #fff;
 	}
 	
-	.el-table__row.bad .el-table_1_column_3  {
+	.el-table__row.bad td:nth-child(3)  {
 		background: #c00;
 		color: #fff;
 	}
 	
-	.el-table__row.comments .el-table_1_column_3    {
+	.el-table__row.comments td:nth-child(3)   {
 		background: blue;
 		color: #fff;
 	}
