@@ -85,6 +85,27 @@
 							</el-form-item>
 						</el-col>
 					</el-row>
+					<el-row v-loading="loading" v-if="transaction_id">
+						<el-col :span="12" style="height: 500px;overflow-y: auto;">
+							<el-form-item label="payer_info" prop="payer_info">
+								<div style="background: #efefef"><label>account_id：</label>{{payer_info&&payer_info.account_id}}</div>
+								<div :style="payer_info&&payer_info.address_status=='Y'?'background:green;color:#fff':'background:red;color:#fff'"><label>address_status：</label>{{payer_info&&payer_info.address_status}}</div>
+								<div style="background: #efefef"><label>country_code：</label>{{payer_info&&payer_info.country_code}}</div>
+								<div style="background: #efefef"><label>email_address：</label>{{payer_info&&payer_info.email_address}}</div>
+								<div :style="payer_info&&payer_info.address_status=='Y'?'background:green;color:#fff':'background:red;color:#fff'"><label>payer_status：</label>{{payer_info&&payer_info.payer_status}}</div>
+								<div style="background: #efefef"><label>payer_name：</label><pre style="max-height: 300px;overflow-y: auto;">{{payer_info&&payer_info.payer_name}}</pre></div>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12" style="height: 500px;overflow-y: auto;">
+							<el-form-item label="shipping_info" prop="shipping_info">
+								<div style="background: #efefef"><label>name：</label>{{shipping_info&&shipping_info.account_id}}</div>
+								<div style="background: #efefef"><label>method：</label>{{shipping_info&&shipping_info.method}}</div>
+								<div style="background: #efefef"><label>secondary_shipping_address：</label>{{shipping_info&&shipping_info.secondary_shipping_address}}</div>
+								<div style="background: #efefef"><label>address：</label><pre style="max-height: 300px;overflow-y: auto;">{{shipping_info&&shipping_info.address}}</pre></div>
+
+							</el-form-item>
+						</el-col>
+					</el-row>
 					<el-row>
 						<el-col :span="12">
 							<el-form-item label="paid" prop="paid">
@@ -176,27 +197,7 @@
 						</el-input>
 						<el-button v-else class="button-new-tag" size="small" @click="showInput()">+Note</el-button>
 					</el-form-item>
-					<el-row v-loading="loading" v-if="transaction_id">
-						<el-col :span="12">
-							<el-form-item label="payer_info" prop="payer_info">
-								<div style="background: #efefef"><label>account_id：</label>{{payer_info&&payer_info.account_id}}</div>
-								<div :style="payer_info&&payer_info.address_status=='Y'?'background:green;color:#fff':'background:red;color:#fff'"><label>address_status：</label>{{payer_info&&payer_info.address_status}}</div>
-								<div style="background: #efefef"><label>country_code：</label>{{payer_info&&payer_info.country_code}}</div>
-								<div style="background: #efefef"><label>email_address：</label>{{payer_info&&payer_info.email_address}}</div>
-								<div :style="payer_info&&payer_info.address_status=='Y'?'background:green;color:#fff':'background:red;color:#fff'"><label>payer_status：</label>{{payer_info&&payer_info.payer_status}}</div>
-								<div style="background: #efefef"><label>payer_name：</label><pre style="height: 300px;overflow-y: auto;">{{payer_info&&payer_info.payer_name}}</pre></div>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="shipping_info" prop="shipping_info">
-								<div style="background: #efefef"><label>name：</label>{{shipping_info&&shipping_info.account_id}}</div>
-								<div style="background: #efefef"><label>method：</label>{{shipping_info&&shipping_info.method}}</div>
-								<div style="background: #efefef"><label>secondary_shipping_address：</label>{{shipping_info&&shipping_info.secondary_shipping_address}}</div>
-								<div style="background: #efefef"><label>address：</label><pre style="height: 300px;overflow-y: auto;">{{shipping_info&&shipping_info.address}}</pre></div>
-
-							</el-form-item>
-						</el-col>
-					</el-row>
+					
 					</el-row>
 					<div class="cls"></div>
 					<div class="cls"></div>
@@ -244,19 +245,19 @@
 				inputValue: '',
 				inputVisible: '',
 				activeKey: '',
-rules: {
+				rules: {
 
-	},
-	shipping_info: '',
-	payer_info: '',
-	loading: false
-}
-},
-methods: {
-		creatEdit() {
-			var that = this;
-			setTimeout(() => {
-						this.editor = new E(this.$refs['editorElem']);
+				},
+				shipping_info: '',
+				payer_info: '',
+				loading: false
+			}
+		},
+		methods: {
+			creatEdit() {
+				var that = this;
+				setTimeout(() => {
+					this.editor = new E(this.$refs['editorElem']);
 					// 编辑器的事件，每次改变会获取其html内容
 					this.editor.customConfig.onchange = html => {
 						that.form['desc'] = html;
@@ -398,8 +399,8 @@ methods: {
 				this.$get("/payment/paypal/info/" + id, {}).then(response => {
 					this.loloading = false
 					if(response.retCode == 0) {
-						this.shipping_info= response.data.shipping_info;
-				this.payer_info= response.data.payer_info;
+						this.shipping_info = response.data.shipping_info;
+						this.payer_info = response.data.payer_info;
 					} else {
 						this.$message({
 							message: response.msg,
@@ -425,7 +426,7 @@ methods: {
 						this.form.refund_time = this.form.refund_time ? this.dateFormat(this.form.refund_time, 'yyyy-MM-dd HH:mm:ss') : ''
 						if(this.form.id) {
 							this.transaction_id = this.form.id;
-							this.form.transaction_id=this.form.id;
+							this.form.transaction_id = this.form.id;
 							this.getTransactionData(this.form.id)
 						}
 

@@ -1,7 +1,7 @@
 <template>
 	<div class="list">
 		<el-card class="box-card" style="text-align: right;">
-			<el-input @input="selfSearch" class="search-input" style="width:340px!important;margin-right: 50px;" prefix-icon="el-icon-search" v-model="keyword" placeholder="请输入搜索内容" >
+			<el-input @input="selfSearch" class="search-input" style="width:340px!important;margin-right: 50px;" prefix-icon="el-icon-search" v-model="keyword" placeholder="请输入搜索内容">
 			</el-input>
 			<el-button type="primary" class="common-btn" @click="search">Search</el-button>
 			<el-button type="primary" style="float: right;background-color: #8a818a!important;border-color: #8a818a!important;" class="common-btn" @click="exportTable">Export</el-button>
@@ -29,24 +29,21 @@
 				<el-table-column header-align="left" width="320px" prop="order_id" label="order_id">
 				</el-table-column>
 
-<el-table-column prop="payer" label="payer" width="400px">
+				<el-table-column prop="payer" label="payer" width="200px">
 					<template slot-scope="scope">
-										<el-popover  v-if="scope.row['payer']"
-  placement="right"
-  width="400"
-  trigger="hover">
-  <div class="tool-tip">note</div>
-	<el-tag :key="subIndex" v-for="(tag,subIndex) in scope.row['note']" closable :disable-transitions="false" @close="handleClose(scope.$index,subIndex)">
-							{{tag}}
-						</el-tag>
+						<el-popover v-if="scope.row['payer']" placement="right" width="400" trigger="hover">
+							<div class="tool-tip">note</div>
+							<el-tag :key="subIndex" v-for="(tag,subIndex) in scope.row['note']" closable :disable-transitions="false" @close="handleClose(scope.$index,subIndex)">
+								{{tag}}
+							</el-tag>
 
-						<el-input class="input-new-tag" v-if="inputVisible[scope.$index]==1" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm(scope.$index)" @blur="handleInputBlur(scope.$index)">
-						</el-input>
-						<el-button v-else class="button-new-tag" size="small" @click="showInput(scope.$index)">+Note</el-button>
-						  <div class="tool-tip" v-if="scope.row['comment']">comment</div>
-						  <div  v-if="scope.row['comment']">{{scope.row['comment']}}</div>
-  <div slot="reference">{{scope.row['payer']}}</div>
-</el-popover>
+							<el-input class="input-new-tag" v-if="inputVisible[scope.$index]==1" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm(scope.$index)" @blur="handleInputBlur(scope.$index)">
+							</el-input>
+							<el-button v-else class="button-new-tag" size="small" @click="showInput(scope.$index)">+Note</el-button>
+							<div class="tool-tip" v-if="scope.row['comment']">comment</div>
+							<div v-if="scope.row['comment']">{{scope.row['comment']}}</div>
+							<div slot="reference" class="color">{{scope.row['payer']}}</div>
+						</el-popover>
 					</template>
 				</el-table-column>
 				<el-table-column header-align="left" width="160px" sortable prop="pay_time" label="pay_time">
@@ -152,16 +149,16 @@
 				row,
 				rowIndex
 			}) {
-				if(row.bad){
+				if(row.bad) {
 					return('bad')
-				}else if(row.note&&row.note.length>0){
-	return('note')
-				}else if(row.comments&&row.comments.length>0){
-						return('comments')
-				}else{
+				} else if(row.note && row.note.length > 0) {
+					return('note')
+				} else if(row.comments && row.comments.length > 0) {
+					return('comments')
+				} else {
 					return('')
 				}
-			
+
 			},
 			selfSearch() {
 				if(!this.keyword && !this.isIndeterminate && this.timeRange.length == 0) {
@@ -311,9 +308,9 @@
 				str += d.getHours() + ':';
 				str += d.getMinutes() + ':';
 				str += d.getSeconds() + '';
-				var email=JSON.parse(this.store.state.configData).admin_email
+				var email = JSON.parse(this.store.state.configData).admin_email
 				if(inputValue) {
-					this.tableData[index].note.push(' [' + str + ']'+' [' + email + ']:'+inputValue);
+					this.tableData[index].note.push(' [' + str + ']' + ' [' + email + ']:' + inputValue);
 					this.edit(index, this.tableData[index].id)
 				}
 				this.inputVisible[index] = 0;
@@ -344,7 +341,7 @@
 				})
 
 			},
-			
+
 			edit(index, id) {
 				var that = this;
 				var data;
@@ -547,23 +544,26 @@
 	.el-tabs__content {
 		display: none;
 	}
-	.el-table__row.note{
+	
+.el-table__row.note .el-table_1_column_3  {
 		background: #f73131;
 		color: #fff;
 	}
-		.el-table__row.bad{
-		background: #c00;;
+	
+	.el-table__row.bad .el-table_1_column_3  {
+		background: #c00;
 		color: #fff;
 	}
-		.el-table__row.comment{
+	
+	.el-table__row.comment .el-table_1_column_3    {
 		background: blue;
 		color: #fff;
 	}
+	
 	.el-tag {
 		height: auto;
 		white-space: initial;
 	}
-
 	
 	.button-new-tag {
 		margin-top: 10px;
@@ -585,12 +585,14 @@
 	.el-table__row .el-select {
 		width: 120px!important;
 	}
+	
 	.el-table--enable-row-hover .el-table__body tr:hover>td {
 		color: #666;
 	}
-	.tool-tip{
+	
+	.tool-tip {
 		font-size: 16px;
-    margin-bottom: 9px;
-    font-weight: 700;
+		margin-bottom: 9px;
+		font-weight: 700;
 	}
 </style>
