@@ -26,7 +26,7 @@
 			<el-table :data="tableData" width="100%" :row-class-name="getRowStyle">
 				<el-table-column header-align="left" sortable prop="id" label="id">
 				</el-table-column>
-				<el-table-column header-align="left" width="320px" prop="order_id" label="order_id">
+				<el-table-column header-align="left" width="280px" prop="order_id" label="order_id">
 				</el-table-column>
 
 				<el-table-column prop="payer" label="payer" width="200px">
@@ -40,15 +40,18 @@
 							<el-input class="input-new-tag" v-if="inputVisible[scope.$index]==1" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm(scope.$index)" @blur="handleInputBlur(scope.$index)">
 							</el-input>
 							<el-button v-else class="button-new-tag" size="small" @click="showInput(scope.$index)">+Note</el-button>
-							<div class="tool-tip" v-if="scope.row['comment']">comment</div>
-							<div v-if="scope.row['comment']">{{scope.row['comment']}}</div>
+							<div class="tool-tip" style="margin-top: 20px;" v-if="scope.row['comments']">comments</div>
+							<div v-if="scope.row['comments']">{{scope.row['comments']}}</div>
 							<div slot="reference" class="color">{{scope.row['payer']}}</div>
 						</el-popover>
 					</template>
 				</el-table-column>
 				<el-table-column header-align="left" width="160px" sortable prop="pay_time" label="pay_time">
 				</el-table-column>
-				<el-table-column header-align="left" prop="description" width="160px" label="description">
+				<el-table-column header-align="left" prop="description" width="300px" label="description">
+				<template slot-scope="scope">
+						<div v-html="scope.row['description']"></div>
+					</template>
 				</el-table-column>
 
 				<el-table-column prop="status" label="status" width="200px">
@@ -74,7 +77,7 @@
 						<el-button v-else class="button-new-tag" size="small" @click="showInput(scope.$index)">+Note</el-button>
 					</template>
 				</el-table-column> -->
-				<el-table-column label="operation" width="180px" cell-class-name="center" header-align="center">
+				<el-table-column label="operation" width="120px" cell-class-name="center" header-align="center">
 					<template slot-scope="scope">
 						<el-button type="text" size="small" @click="handleEdit(scope.row)">Edit</el-button>
 						<el-button type="text" class="clip" :data-clipboard-text="getFromData(scope.$index)" size="small" @click="copy(scope.row.id)">Copy</el-button>
