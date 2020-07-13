@@ -19,6 +19,8 @@ import * as types from '@/store/types'
 let loading;
 let i = 0;
 axios.interceptors.request.use(config => {
+	console.log(process.env.API_ROOT;)
+	console.log(config)
 	if(config.url.indexOf('/api/payment/paypal/info/' == -1)) {
 		i++;
 
