@@ -172,7 +172,7 @@
 		mounted() {
 
 			let that = this;
-			this.imgUrl = this.store.state.imgUrl;
+			this.imgUrl = window.imgUrl;
 
 		},
 		created() {

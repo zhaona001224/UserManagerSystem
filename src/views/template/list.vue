@@ -120,15 +120,15 @@
 				})
 				this.$forceUpdate();
 			},
-			handleInputClear(index){
-				this.tableData[index].price=this.originTable[index].price;
+			handleInputClear(index) {
+				this.tableData[index].price = this.originTable[index].price;
 				this.$forceUpdate();
 			},
 			handleInputConfirm(index) {
-				var that=this;
-				var data=this.originTable[index];
-				data.price=this.tableData[index].price
-				that.$post("/admin/v1/content?type=" + this.$route.params.key+"&id=" + data.id, data).then(response => {
+				var that = this;
+				var data = this.originTable[index];
+				data.price = this.tableData[index].price
+				that.$post("/admin/v1/content?type=" + this.$route.params.key + "&id=" + data.id, data).then(response => {
 					if(response.retCode == 0) {
 						that.$message({
 							type: 'success',
@@ -235,7 +235,7 @@
 				this.$get('/admin/v1/contents?type=' + this.$route.params.key + "&offset=" + this.pageNum + "&count=" + this.pageSize, {
 
 				}).then(response => {
-
+					this.imgUrl = window.imgUrl;
 					if(response.retCode == 0) {
 						this.notSearch = true;
 
@@ -358,7 +358,6 @@
 
 		},
 		created() {
-			this.imgUrl = this.store.state.imgUrl;
 			var menuTrees = JSON.parse(this.store.state.loginData);
 
 			menuTrees.map((item, index) => {

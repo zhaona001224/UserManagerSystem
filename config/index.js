@@ -4,7 +4,7 @@
 
 const path = require('path')
 module.exports = {
-	imgUrl: 'http://support.bk.cloudns.cc:8080/admin/v1/file?id=',
+
 	dev: {
 
 		// Paths
@@ -12,7 +12,7 @@ module.exports = {
 		assetsPublicPath: '/',
 		proxyTable: {
 			'/api': {
-				target: 'http://support.bk.cloudns.cc:8080',
+				target: 'http://193.22.152.235:8080',
 				changeOrigin: true,
 				pathRewrite: {
 					'^/api': '' //重定向

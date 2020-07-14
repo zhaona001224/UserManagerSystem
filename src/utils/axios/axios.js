@@ -10,7 +10,12 @@ import Vue from 'vue'
 Vue.use(ElementUI);
 import crypto from "crypto";
 import * as types from '@/store/types'
-
+window.imgUrl='http://support.bk.cloudns.cc:8081/admin/v1/file?id=';
+var config="http://support.bk.cloudns.cc:8081";
+console.log(process)
+if(window.origin.indexOf('localhost')>-1){
+	var config="/api";
+}
 /**
  * axios请求拦截器
  * @param {object} config axios请求配置对象
@@ -19,9 +24,7 @@ import * as types from '@/store/types'
 let loading;
 let i = 0;
 axios.interceptors.request.use(config => {
-	console.log(process.env.API_ROOT;)
-	console.log(config)
-	if(config.url.indexOf('/api/payment/paypal/info/' == -1)) {
+	if(config.url.indexOf('/payment/paypal/info/' == -1)) {
 		i++;
 
 		loading = Vue.prototype.$loading({
@@ -101,7 +104,7 @@ function errorMessaage(msg, noPushPageFlag) {
 export default {
 	axiosGet(url, params) {
 		return new Promise(function(resolve, reject) {
-			axios.get("/api" + url, params).then((response) => {
+			axios.get(config + url, params).then((response) => {
 				resolve(response);
 			})
 		})
@@ -109,7 +112,7 @@ export default {
 	axiosPost(url, params) {
 		return new Promise(function(resolve, reject) {
 
-			axios.post("/api" + url, params).then((response) => {
+			axios.post(config + url, params).then((response) => {
 				resolve(response);
 			})
 		})
@@ -117,7 +120,7 @@ export default {
 	axiosDelete(url, params) {
 		return new Promise(function(resolve, reject) {
 
-			axios.delete("/api" + url, {
+			axios.delete(config + url, {
 				data: params
 			}).then((response) => {
 				resolve(response);

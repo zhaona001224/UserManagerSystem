@@ -118,7 +118,7 @@
 			},
 		},
 		created() {
-			this.imgUrl =this.store.state.imgUrl;
+			this.imgUrl =window.imgUrl;
 			this.getPicData();
 		}
 	}
