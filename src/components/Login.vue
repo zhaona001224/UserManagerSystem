@@ -97,6 +97,7 @@
 							password: that.login.userPwd
 						}).then(response => {
 							if(response.retCode == 0) {
+								localStorage.setItem('token',response.data);
 								this.loginData = JSON.parse(response.contents);
 								this.menuTrees = [];
 								for(var key in this.loginData) {
