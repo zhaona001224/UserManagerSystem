@@ -31,7 +31,7 @@
 		created() {
 			this.doKeyCode();
 			this.menuTrees = this.store.state.loginData&&JSON.parse(this.store.state.loginData);
-			if(document.cookie.indexOf('lqcms_token') > -1) {
+			if(localStorage.token) {
 				this.$router.push('/template/List/' + this.menuTrees[0].name);
 			}
 

@@ -2,13 +2,13 @@
 
 	<div class="list">
 		<el-card class="box-card" style="margin-bottom: 20px;">
-			<el-input class="search-input" prefix-icon="el-icon-search" v-model="keyword" placeholder="请输入搜索内容" >
+			<el-input class="search-input" prefix-icon="el-icon-search" v-model="keyword" placeholder="请输入搜索内容">
 			</el-input>
 			<el-button type="primary" class="common-btn" @click="search">Search</el-button>
 		</el-card>
 		<div style="text-align: left;" class="el-upload-list el-upload-list--picture-card
 	">
-			<div style="position: relative;display: inline-block;" v-for="(item,index) in picSource" :key="item.id">
+			<div style="position: relative;display: inline-block;" v-for="(item,index) in picSource" onload="getWidth(item)" :key="item.id">
 				<div class="el-upload-list__item is-ready">
 					<div>
 						<img class="el-upload-list__item-thumbnail" :src="imgUrl+item.id" alt="">
@@ -32,6 +32,7 @@
 				</div>
 
 				<div class="hidden-style" style="width: 148px;text-align: center;margin:0 0 10px">{{item.name}}</div>
+				<div class="hidden-style" style="width: 148px;text-align: center;margin:0 0 10px">({{item.width}}*{{item.height}})</div>
 			</div>
 		</div>
 		<el-upload action="#" :show-file-list="false" :http-request="uploadImg" style="display: inline-block;">
@@ -52,7 +53,7 @@
 				picSource: [],
 				dialogVisible: false,
 				disabled: false,
-				keyword:''
+				keyword: ''
 			};
 		},
 		methods: {
@@ -81,13 +82,24 @@
 						});
 					}
 
-
 				})
 
 			},
 			handlePictureCardPreview(file) {
 				this.dialogImageUrl = file;
 				this.dialogVisible = true;
+			},
+			getWidth(item) {
+				var that=this;
+				var img = new Image();
+				img.src = this.imgUrl + item.id;
+				img.onload = function() {
+					item.height = img.height;
+					item.width = img.width;
+					that.$forceUpdate();
+
+				};
+
 			},
 			//获取图片库内容
 			getPicData() {
@@ -97,6 +109,9 @@
 
 					if(response.retCode == 0) {
 						this.picSource = response.data;
+						this.picSource.map((item) => {
+							this.getWidth(item);
+						})
 					} else {
 
 						this.$message({
@@ -118,7 +133,7 @@
 			},
 		},
 		created() {
-			this.imgUrl =window.imgUrl;
+			this.imgUrl = window.imgUrl;
 			this.getPicData();
 		}
 	}
@@ -127,5 +142,9 @@
 	@import "../assets/css/list.css";
 	.center {
 		text-align: center;
+	}
+	
+	.search-input {
+		width: 500px
 	}
 </style>

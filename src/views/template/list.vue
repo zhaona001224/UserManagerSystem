@@ -128,7 +128,7 @@
 				var that = this;
 				var data = this.originTable[index];
 				data.price = this.tableData[index].price
-				that.$post("/admin/v1/content?type=" + this.$route.params.key + "&id=" + data.id, data).then(response => {
+				that.$post("/admin/v1/content/update?type=" + this.$route.params.key + "&id=" + data.id, data).then(response => {
 					if(response.retCode == 0) {
 						that.$message({
 							type: 'success',
