@@ -10,10 +10,11 @@ import Vue from 'vue'
 Vue.use(ElementUI);
 import crypto from "crypto";
 import * as types from '@/store/types'
-window.imgUrl='http://193.22.152.235:8080/admin/v1/file?id=';
-var config="https://support.bk.cloudns.cc:8081";
-if(window.origin.indexOf('localhost')>-1){
-	var config="/api";
+window.imgUrl = 'https://support.bk.cloudns.cc:8081/admin/v1/file?id=';
+var config = "https://support.bk.cloudns.cc:8081";
+if(window.origin.indexOf('localhost') > -1) {
+	var config = "/api";
+	window.imgUrl = 'http://193.22.152.235:8080/admin/v1/file?id=';
 }
 /**
  * axios请求拦截器
@@ -49,7 +50,7 @@ axios.interceptors.request.use(config => {
 
 axios.interceptors.response.use(response => {
 	i--
-	if(i <=0) {
+	if(i <= 0) {
 		loading.close();
 	}
 	if(response.data && typeof response.data == "object") {
